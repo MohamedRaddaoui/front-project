@@ -1,0 +1,7 @@
+<ejs-schedule [selectedDate]='selectedDate'
+  [views]="['Day', 'Week', 'WorkWeek', 'Month', 'Agenda']"
+  [allowDragAndDrop]="true"
+  [allowResizing]="true"
+  (actionBegin)="onActionBegin($event)"
+  (actionComplete)="onActionComplete($event)"
+  [eventSettings]='eventSettings'></ejs-schedule>
