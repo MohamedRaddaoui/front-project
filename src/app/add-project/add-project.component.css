@@ -1,0 +1,179 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #eff6ff;
+    color: #333;
+  }
+.project-form-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10%;
+    margin-left: 20%;
+    border-radius: 3rem;
+    
+    
+    
+  }
+  .page-title {
+    align-self: flex-start;
+    margin-left: 0.75rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #9ca3af;
+  }
+  
+  .form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 2rem 2rem;
+    margin-top: 2.75rem;
+    width: 90%;
+    margin-left: 2%;
+    background-color: white;
+    border-radius: 1rem;
+    
+  }
+  
+  .form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    justify-content: space-between;
+    align-self: stretch;
+  }
+  
+  .form-group-row {
+    max-width: 100%;
+  }
+  
+  .form-group-labels {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    justify-content: space-between;
+    max-width: 100%;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #27272a;
+    width: 390px;
+  }
+  
+  .form-group-fields {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    justify-content: space-between;
+    margin-top: 0.625rem;
+  }
+  
+  .form-field {
+    display: flex;
+    flex-shrink: 0;
+    max-width: 100%;
+    border-radius: 1rem;
+    border: 2px solid #d4d4d8;
+    height: 42px;
+    width: 260px;
+  }
+  
+  .form-group-date {
+    display: flex;
+    flex-direction: column;
+    color: #27272a;
+  }
+  
+  .form-label {
+    align-self: flex-start;
+    font-size: 1rem;
+    font-weight: 100;
+  }
+  
+  .date-field {
+    display: flex;
+    gap: 1.25rem;
+    justify-content: space-between;
+    padding: 0.550rem;
+    margin-top: 0.625rem;
+    font-size: 0.75rem;
+    line-height: 1.5rem;
+    white-space: nowrap;
+    border-radius: 1rem;
+    border: 2px solid #d4d4d8;
+    
+  }
+  
+  .calendar-icon {
+    object-fit: contain;
+    flex-shrink: 0;
+    margin: auto 0;
+    aspect-ratio: 1;
+    width: 15px;
+  }
+  
+  .form-group {
+    margin-top: 2rem;
+  }
+  
+  .description-field {
+    display: flex;
+    flex-shrink: 0;
+    align-self: stretch;
+    margin-top: 0.625rem;
+    border-radius: 1rem;
+    border: 2px solid #d4d4d8;
+    height: 206px;
+    width: 970px;
+   
+  }
+  
+  .action-buttons {
+    display: flex;
+    gap: 1.75rem;
+    align-self: flex-end;
+    margin-top: 2rem;
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  
+  .create-button {
+    gap: 0.25rem;
+    align-self: stretch;
+    padding: 1rem 2rem;
+    color:#8BC34A  ;
+    background-color:#ebf7da;
+    border-radius: 1rem;
+    min-height: 2rem;
+    border: #8BC34A;
+  }
+  
+  .delete-button {
+    gap: 0.25rem;
+    align-self: stretch;
+    padding: 1rem 2rem;
+    color: #1A89C7;
+    border-radius: 1rem;
+    border: #1A89C7;
+    background-color: #cdebfc;
+    min-height: 3.5rem;
+  }
+  
+  @media (max-width: 768px) {
+    .project-form-container {
+      margin-top: 2.5rem;
+    }
+  
+    .page-title {
+      margin-left: 0.625rem;
+    }
+  
+    .form-container {
+      padding: 1.25rem;
+      margin-top: 2.5rem;
+    }
+  
+    .action-buttons {
+      margin-top: 2.5rem;
+    }
+  }
+  
