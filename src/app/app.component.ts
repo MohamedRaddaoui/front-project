@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';import { AIAssistViewModule, ChatUIModule } from '@syncfusion/ej2-angular-interactive-chat';
+import { Component } from '@angular/core';
+import { AIAssistViewModule, ChatUIModule } from '@syncfusion/ej2-angular-interactive-chat';
 import { DialogModule, TooltipModule } from '@syncfusion/ej2-angular-popups';
 import { TextBoxModule, TextAreaModule, NumericTextBoxModule, MaskedTextBoxModule, SliderModule, UploaderModule, ColorPickerModule, SignatureModule, RatingModule, OtpInputModule, SmartTextAreaModule, SpeechToTextModule } from '@syncfusion/ej2-angular-inputs';
 import { ButtonModule, CheckBoxModule, RadioButtonModule, SwitchModule, ChipListModule, FabModule, SpeedDialModule, SmartPasteButtonModule } from '@syncfusion/ej2-angular-buttons';
@@ -9,7 +10,9 @@ import {
 } from '@syncfusion/ej2-angular-schedule';
 
 import { RouterOutlet } from '@angular/router';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
+
+
 
 @Component({
   selector: 'app-root',
@@ -17,6 +20,14 @@ import { provideHttpClient, withFetch } from '@angular/common/http';
     ScheduleModule,
     RecurrenceEditorModule,
     RouterOutlet,
+    NavBarComponent,
+  
+    
+    
+ 
+    
+
+    
     
   ],
   templateUrl: './app.component.html',
