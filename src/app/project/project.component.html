@@ -1,0 +1,80 @@
+
+  <div class="app-container">
+    <div class="main-container">
+      <app-side-bar></app-side-bar>
+
+      <!-- Main Content -->
+      <main class="content">
+        <div class="content-header">
+          <h1 class="content-title">Projects</h1>
+          <!-- <div class="content-search">
+            <input type="text" class="search-input" placeholder="Search for anything...">
+          </div> -->
+        </div>
+
+        <div class="projects-container">
+          <div class="project-card" *ngFor="let u of paginatedProjects">
+            <div class="header">
+              <h2>{{ u.title }}</h2>
+              <span 
+                class="status completed"
+                [ngClass]="{
+                  'status-done': u.status === 'Done',
+                  'status-inprogress': u.status === 'In Progress',
+                  'status-notstarted': u.status === 'Not Started'
+                }">
+                {{ u.status }}
+              </span>
+            </div>
+            <hr>
+            <p class="description">{{ u.description }}</p>
+            <p class="deadline"><strong>Deadline:</strong> {{ formatDate(u.endDate) }}</p>
+            <div class="team">
+              <img src="avatar1.png" alt="Member 1">
+              <img src="avatar1.png" alt="Member 2">
+              <img src="avatar1.png" alt="Member 3">
+              <div class="more-avatars">+4</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Pagination -->
+        <div class="pagination">
+          <button class="pagination-btn prev" (click)="prevPage()" [disabled]="currentPage === 1">Previous</button>
+        
+          <button
+            class="pagination-btn page"
+            *ngFor="let page of totalPagesArray"
+            [class.active]="page === currentPage"
+            (click)="goToPage(page)">
+            {{ page }}
+          </button>
+        
+          <button class="pagination-btn next" (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
+        </div>
+        
+        
+      </main>
+    </div>
+  </div>
+
+
+ 
+  <script>
+    // Simple JavaScript for toggling mobile menu
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add mobile menu toggle functionality if needed
+      const navItems = document.querySelectorAll('.nav-item');
+
+      navItems.forEach(item => {
+        item.addEventListener('click', function() {
+          // Remove active class from all items
+          navItems.forEach(i => i.classList.remove('active'));
+          // Add active class to clicked item
+          this.classList.add('active');
+        });
+      });
+    });
+  </script>
+
+

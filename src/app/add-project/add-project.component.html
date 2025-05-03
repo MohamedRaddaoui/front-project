@@ -1,0 +1,46 @@
+<app-side-bar></app-side-bar>
+
+    <form class="project-form-container" [formGroup]="formProject">
+        <div class="page-title">
+          Projects / Create Project
+        </div>
+        <div class="form-container">
+          <div class="form-row">
+            <div class="form-group-row">
+              <div class="form-group-labels">
+                <div class="form-label">Project Title</div>
+                <div class="form-label">Project Type</div>
+              </div>
+              <div class="form-group-fields">
+                <input class="form-field" formControlName="title">
+                <input class="form-field" formControlName="typeProject">
+                
+              </div>
+            </div>
+            <div class="form-group-date">
+              <div class="form-label">Start Date</div>
+              <input class="date-field" type="datetime-local" formControlName="startDate">
+    
+            </div>
+            <div class="form-group-date">
+              <div class="form-label">End Date</div>
+              <input class="date-field" type="datetime-local" formControlName="endDate">
+            </div>
+          </div>
+      
+          <div class="form-group">
+            <div class="form-label">Project Description</div>
+            <input class="description-field" formControlName="description">
+            <div class="alert alert-danger" *ngIf="this.formProject.controls['description'].invalid && this.formProject.controls['description'].touched">
+              <p *ngIf="formProject.controls['description'].getError('minlength')"> Description must be at least 50 characters</p>
+          </div>
+          </div>
+      <div class="action-buttons">
+        <button class="create-button" type="submit" (click)="addProject()" >create</button>
+        <button type="reset" class="delete-button ">cancel</button>
+      </div>
+         
+        </div>
+      </form>
+      
+
