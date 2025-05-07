@@ -5,8 +5,7 @@ import { AiAssistantComponent } from './ai-assistant/ai-assistant.component';
 import { ProjectComponent } from './project/project.component';
 import { SideBarComponent } from './side-bar/side-bar.component';
 import { AddProjectComponent } from './add-project/add-project.component';
-
-
+import { TaskComponent } from './task/task.component';
 export const routes: Routes = [
   {
     path: 'calendar',
@@ -17,6 +16,10 @@ export const routes: Routes = [
     component: AiAssistantComponent,
   },
 
+{
+    path: 'tasks',
+    component: TaskComponent,
+  },
   {
     path: '',
     component:ProjectComponent,
