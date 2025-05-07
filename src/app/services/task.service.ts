@@ -15,9 +15,12 @@ export class TaskService {
   updateTask(id: string, data: Task): Observable<any> {
     return this.http.put(`${this.baseUrl}/update/${id}`, data);
   }
- getAllTasks(): Observable<Task[]> {
-  return this.http.get<{ tasks: Task[] }>(`${this.baseUrl}/getAll`).pipe(
-    map(response => response.tasks)
-  );
+  deleteTask(id: any): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/delete/${id}`, id);
+  }
+  getAllTasks(): Observable<Task[]> {
+    return this.http.get<{ tasks: Task[] }>(`${this.baseUrl}/getAll`).pipe(
+      map(response => response.tasks)
+    );  
 }
 }

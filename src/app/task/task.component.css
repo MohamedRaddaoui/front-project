@@ -187,3 +187,215 @@ a{
     min-height: 3.5rem;
         margin-left: 87%;
 }
+.fab {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 28px;
+    padding: 12px 20px;
+    font-size: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.fab-icon {
+    font-size: 20px;
+    line-height: 1;
+}
+
+.fab:hover {
+    background-color: #0056b3;
+}
+
+
+
+@media (max-width: 1300px) {
+    #kanbanObj .e-priority {
+        display: none;
+    }
+}
+
+@media (max-width: 1200px) {
+    #kanbanObj .e-story-points {
+        display: none;
+    }
+}
+
+#kanbanObj .e-text {
+    font-size: 13px;
+    font-weight: 400 !important;
+}
+
+#kanbanObj .e-custom-wrapper {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#kanbanObj .e-priority {
+    margin: auto;
+    width: 16px;
+    height: 16px;
+}
+
+#kanbanObj .e-story-points {
+    font-weight: 600 !important;
+}
+
+#kanbanObj .e-card-avatar,
+#kanbanObj .e-story-points,
+#kanbanObj .e-priority {
+    margin-left: 5px;
+}
+
+#kanbanObj .e-card-footer {
+    justify-content: space-between;
+}
+
+#kanbanObj .e-card .e-card-tag-field {
+    background: #ececec;
+    color: #6b6b6b;
+    margin-right: 5px;
+    line-height: 1.1;
+    font-size: 13px;
+    border-radius: 3px;
+    padding: 4px;
+}
+
+#kanbanObj .e-card-avatar,
+.e-story-points {
+    width: 23px;
+    height: 23px;
+    text-align: center;
+    background: gainsboro;
+    color: #6b6b6b;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 400;
+    padding: 3px;
+}
+
+#kanbanObj .e-link-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+#kanbanObj .e-custom-link {
+    margin-left: 10px;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+#kanbanObj .custom-header-wrapper .e-bug,
+#kanbanObj .custom-header-wrapper .e-story,
+#kanbanObj .custom-header-wrapper .e-epic {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+}
+
+#kanbanObj .custom-header-wrapper .e-bug {
+    background-image: url(https://syncfusion.atlassian.net/secure/viewavatar?size=medium&avatarId=15503&avatarType=issuetype);
+}
+
+#kanbanObj .custom-header-wrapper .e-story {
+    background-image: url(https://syncfusion.atlassian.net/secure/viewavatar?size=medium&avatarId=15503&avatarType=issuetype);
+}
+
+#kanbanObj .custom-header-wrapper .e-epic {
+    background-image: url(https://syncfusion.atlassian.net/secure/viewavatar?size=medium&avatarId=15503&avatarType=issuetype);
+}
+
+#kanbanObj .e-card.low,
+#kanbanObj .e-card.normal,
+#kanbanObj .e-card.high,
+#kanbanObj .e-card.critical,
+#kanbanObj .e-card.ultra-critical {
+    border-left-width: 4px;
+}
+
+#kanbanObj .e-low-icon {
+    background-image: url(https://syncfusion.atlassian.net/images/icons/priorities/trivial.svg);
+}
+
+#kanbanObj .e-high-icon {
+    background-image: url(https://syncfusion.atlassian.net/images/icons/priorities/major.svg);
+}
+
+#kanbanObj .e-critical-icon {
+    background-image: url(https://syncfusion.atlassian.net/images/icons/priorities/critical.svg);
+}
+
+#kanbanObj .e-ultra-critical-icon {
+    background-image: url(https://syncfusion.atlassian.net/images/icons/priorities/critical.svg);
+}
+
+#kanbanObj .e-normal-icon {
+    background-image: url(https://syncfusion.atlassian.net/images/icons/priorities/minor.svg);
+}
+
+#kanbanObj .e-story,
+#kanbanObj .e-epic,
+#kanbanObj .e-bug {
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 16px;
+    height: 16px;
+}
+
+#kanbanObj .e-story {
+    background-image: url(https://syncfusion.atlassian.net/secure/viewavatar?size=medium&avatarId=15515&avatarType=issuetype);
+}
+
+#kanbanObj .e-epic {
+    background-image: url(https://syncfusion.atlassian.net/secure/viewavatar?size=medium&avatarId=15507&avatarType=issuetype);
+}
+
+#kanbanObj .e-bug {
+    background-image: url(https://syncfusion.atlassian.net/secure/viewavatar?size=medium&avatarId=15503&avatarType=issuetype);
+}
+
+
+.material3 #kanbanObj .e-card-avatar,
+.material3 #kanbanObj .e-story-points,
+.material3-dark #kanbanObj .e-card-avatar,
+.material3-dark #kanbanObj .e-story-points {
+    padding: 5.5px 2.4px !important;
+}
+
+.material #kanbanObj .e-card-avatar,
+.material #kanbanObj .e-story-points,
+.material-dark #kanbanObj .e-card-avatar,
+.material-dark #kanbanObj .e-story-points {
+    padding: 4.5px 2.4px !important;
+}
+
+.tailwind #kanbanObj .e-card-avatar,
+.tailwind #kanbanObj .e-story-points,
+.tailwind-dark #kanbanObj .e-card-avatar,
+.tailwind-dark #kanbanObj .e-story-points,
+.tailwind3 #kanbanObj .e-card-avatar,
+.tailwind3 #kanbanObj .e-story-points,
+.tailwind3-dark #kanbanObj .e-card-avatar,
+.tailwind3-dark #kanbanObj .e-story-points {
+    padding: 4.75px 3.5px !important;
+}
+
+.bootstrap4 #kanbanObj .e-card-avatar,
+.bootstrap4 #kanbanObj .e-story-points {
+    padding: 4.75px 3.5px !important;
+}
+
+.bootstrap #kanbanObj .e-card-avatar,
+.bootstrap #kanbanObj .e-story-points,
+.bootstrap-dark #kanbanObj .e-card-avatar,
+.bootstrap-dark #kanbanObj .e-story-points {
+    padding: 5px 4px !important;
+}

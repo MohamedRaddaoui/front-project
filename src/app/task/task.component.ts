@@ -12,6 +12,8 @@ import {
   DialogSettingsModel,
   CardRenderedEventArgs
 } from '@syncfusion/ej2-angular-kanban';
+import { Router } from '@angular/router';
+
 import { addClass } from '@syncfusion/ej2-base';
 import { TaskService } from '../services/task.service';
 import { Task } from '../models/task.model';
@@ -21,6 +23,7 @@ import { SBActionDescriptionComponent } from '../common/adp/adp.component';
 import { SideBarComponent } from '../side-bar/side-bar.component';
 import { KanbanModule } from '@syncfusion/ej2-angular-kanban';
 import { TaskKanbanMapper } from '../util/task.mapper';
+import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
 
 @Component({
   selector: 'control-content',
@@ -33,19 +36,18 @@ import { TaskKanbanMapper } from '../util/task.mapper';
     SBDescriptionComponent,
     SBActionDescriptionComponent,
     SideBarComponent,
-    KanbanModule
+    KanbanModule,
+    DropDownListModule
   ]
 })
 export class TaskComponent implements OnInit {
   @ViewChild('kanbanObj', { static: false }) kanbanObj!: KanbanComponent;
 
   public kanbanData: Object[] = [];
-  public enableContent: boolean = true;
 
   public columns: ColumnsModel[] = [
     { headerText: 'To Do', keyField: 'Open', allowToggle: true },
     { headerText: 'In Progress', keyField: 'InProgress', allowToggle: true },
-    { headerText: 'In Review', keyField: 'Review', allowToggle: true },
     { headerText: 'Done', keyField: 'Close', allowToggle: true }
   ];
 
@@ -56,39 +58,18 @@ export class TaskComponent implements OnInit {
     // Pas besoin de `template` ici : tu l’as défini dans le HTML via `#cardSettingsTemplate`
   };
 
-  public dialogSettings: DialogSettingsModel = {
-    fields: [
-      { text: 'ID', key: 'Title', type: 'TextBox' },
-      { key: 'Status', type: 'DropDown' },
-      { key: 'Assignee', type: 'DropDown' },
-      { key: 'RankId', type: 'TextBox' },
-      { key: 'Summary', type: 'TextArea' }
-    ]
-  };
-
+ 
   public swimlaneSettings: SwimlaneSettingsModel = {
     keyField: 'Assignee'
   };
 
-  constructor(private taskService: TaskService) { 
-    this.taskService.getAllTasks().subscribe((tasks: Task[]) => {
-      this.kanbanData = tasks.map((task: Task) => ({
-        Id: task._id,
-        Title: task.title,
-        Summary: task.description,
-        Tags: 'Général',
-        Status: this.mapStatus(task.status),
-        Priority: task.priority,
-        Assignee: this.getAssigneeName(task.assignedUser),
-        idAssigned: this.getAssigneeId(task.assignedUser),
-      }));
-    });
+  constructor(private taskService: TaskService, private router:Router) { 
+    
 
   }
 
   ngOnInit(): void {
-    /*
-    this.taskService.getAllTasks().subscribe((tasks: Task[]) => {
+   this.taskService.getAllTasks().subscribe((tasks: Task[]) => {
       this.kanbanData = tasks.map((task: Task) => ({
         Id: task._id,
         Title: task.title,
@@ -98,8 +79,10 @@ export class TaskComponent implements OnInit {
         Priority: task.priority,
         Assignee: this.getAssigneeName(task.assignedUser),
         idAssigned: this.getAssigneeId(task.assignedUser),
+        Type: 'story',
+
       }));
-    });*/
+    });
   }
 
   mapStatus(status: string): string {
@@ -153,7 +136,7 @@ export class TaskComponent implements OnInit {
     if (event.requestType === 'cardChanged') {
       const updatedCard = event.changedRecords[0];
       const updatedTask = TaskKanbanMapper.toTaskObject(updatedCard); 
-console.log('Updated task:', updatedTask);
+      console.log('Updated task:', updatedTask);
       this.taskService.updateTask(updatedTask._id, updatedTask).subscribe({
         next: (res) => console.log('✅ Task updated', res),
         error: (err) => console.error('❌ Failed to update task', err),
@@ -164,19 +147,33 @@ console.log('Updated task:', updatedTask);
     // Optionnel : pour éviter que le Kanban remette les données locales à jour
     event.cancel = true;
   }
+  public statusData: string[] = ['Open', 'InProgress', 'Testing', 'Close'];
+  public priorityData: string[] = ['Low', 'Normal', 'Critical', 'Release Breaker', 'High'];
+  public assigneeData: string[] = [
+      'Nancy Davloio', 'Andrew Fuller', 'Janet Leverling',
+      'Steven walker', 'Robert King', 'Margaret hamilt', 'Michael Suyama'
+    ];
   addClick(): void {
-    const cardIds = this.kanbanObj.kanbanData.map((obj: { [key: string]: string }) => parseInt(obj['Id'].replace('Task ', ''), 10));
+    const url = `/task-details`;
+  window.open(url, '_blank');
+   /* const cardIds = this.kanbanObj.kanbanData.map((obj: { [key: string]: string }) => parseInt(obj['Id'].replace('Task ', ''), 10));
     const cardCount: number = Math.max.apply(Math, cardIds) + 1;
     const cardDetails = {
       Id: 'Task ' + cardCount, Status: 'Open', Priority: 'Normal',
       Assignee: 'Andrew Fuller', Estimate: 0, Tags: '', Summary: ''
     };
-    this.kanbanObj.openDialog('Add', cardDetails);
+    this.kanbanObj.openDialog('Add', cardDetails);*/
   } 
-   onDialogClose() {
-    this.enableContent = false;
+  cardDoubleClick(args: any): void { 
+    console.log('Card double-clicked:', args.data);
+    const taskId = args.data?.Id;
+  if (taskId) {
+    const url = `/task-details/${taskId}`;
+    window.open(url, '_blank'); // Ouvre dans un nouvel onglet
   }
-  onDialogOpen() {
-    this.enableContent = true;
   }
+  onOpen(args:any) { 
+    // Preventing the modal dialog Open 
+    args.cancel = true; 
+  } 
 }
