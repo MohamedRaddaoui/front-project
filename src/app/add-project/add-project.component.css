@@ -1,12 +1,28 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #eff6ff;
-    color: #333;
+
+  .form-error-message {
+    min-height: 20px;
+    color: red;
+    font-size: 0.875rem;
+    margin-top: 0.2rem;
+    margin-left: 0.2rem;
   }
+
+  .form-error-message p {
+  margin: 0;
+}
+
+
+  .input-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  
+  
 .project-form-container {
     display: flex;
     flex-direction: column;
-    margin-top: 10%;
+    margin-top: 5%;
     margin-left: 20%;
     border-radius: 3rem;
     
@@ -14,11 +30,12 @@ body {
     
   }
   .page-title {
+    margin-top: 6%;
     align-self: flex-start;
     margin-left: 0.75rem;
     font-size: 1.5rem;
     font-weight: 600;
-    color: #9ca3af;
+    color: #0f2a4a;
   }
   
   .form-container {
@@ -26,10 +43,10 @@ body {
     flex-direction: column;
     align-items: flex-start;
     padding: 2rem 2rem;
-    margin-top: 2.75rem;
+    margin-top: 3.25rem;
     width: 90%;
     margin-left: 2%;
-    background-color: white;
+    background-color: rgb(255, 255, 255);
     border-radius: 1rem;
     
   }
@@ -54,7 +71,7 @@ body {
     max-width: 100%;
     font-size: 1.5rem;
     font-weight: 600;
-    color: #27272a;
+    color: #1A89C7;
     width: 390px;
   }
   
@@ -79,10 +96,11 @@ body {
   .form-group-date {
     display: flex;
     flex-direction: column;
-    color: #27272a;
+    color: #1A89C7;
   }
   
   .form-label {
+     color: #1A89C7;
     align-self: flex-start;
     font-size: 1rem;
     font-weight: 100;
@@ -121,8 +139,11 @@ body {
     margin-top: 0.625rem;
     border-radius: 1rem;
     border: 2px solid #d4d4d8;
-    height: 206px;
-    width: 970px;
+    height: 100px;
+    width: 930px;
+    padding: 0.75rem;
+    font-size: 1rem;
+    line-height: 1.4;
    
   }
   
@@ -134,6 +155,7 @@ body {
     font-weight: 500;
     line-height: 1;
     white-space: nowrap;
+    margin-top: 3%;
   }
   
   .create-button {
@@ -143,8 +165,10 @@ body {
     color:#8BC34A  ;
     background-color:#ebf7da;
     border-radius: 1rem;
-    min-height: 2rem;
+    min-height: 1rem;
     border: #8BC34A;
+    
+
   }
   
   .delete-button {

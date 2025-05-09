@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { SideBarComponent } from '../side-bar/side-bar.component';
 import { CommonModule } from '@angular/common';
-import { Router, NavigationEnd } from '@angular/router';  // Ajout de Router et NavigationEnd
+import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';  // Ajout de Router et NavigationEnd
 import { filter } from 'rxjs/operators';  // Ajout du pipe
 import { ProjectService } from '../services/project.service';
 import { Project } from '../models/project.model';
@@ -13,9 +13,18 @@ import { Project } from '../models/project.model';
   styleUrl: './project.component.css'
 })
 export class ProjectComponent {
+  successMessage: string | null = null; // ✅ Ajoute cette ligne
 
-
-  constructor(private projectService: ProjectService) {}
+  constructor(private projectService: ProjectService, private router:Router, private route :ActivatedRoute) {
+    this.route.queryParams.subscribe(params => {
+      this.successMessage = params['message'] || null;
+      if (this.successMessage) {
+        setTimeout(() => {
+          this.successMessage = null;
+        }, 3000); // 3 secondes
+      }
+    });
+  }
   listProject: Project[]=[]
 
   
@@ -41,6 +50,8 @@ export class ProjectComponent {
   ngOnInit() {
     this.loadProjects();
   }
+  
+
   
   loadProjects() {
     this.projectService.getAllProject().subscribe((projects) => {
@@ -79,6 +90,21 @@ export class ProjectComponent {
   
   
 
+
+
+  onProjectClick(project: any) {
+    console.log('Projet cliqué:', project);
+    if (project.type === 'Scrum') {
+      this.router.navigate(['/scrum', project.id]);
+    } else {
+      if(project.type === 'Kanban'){
+        this.router.navigate(['/standard', project.id])
+
+      }else{
+      // autre traitement ou message d’erreur
+      alert('Type non pris en charge');
+    }
+  }}
   
 
 }

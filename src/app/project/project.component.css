@@ -4,22 +4,6 @@
   box-sizing: border-box;
 }
 
-/* body {
-  font-family: Arial, sans-serif;
-  background-color: #eff6ff;
-  color: #333;
-} */
-
-:host {
-  font-family: Arial, sans-serif;
-  background-color: #eff6ff;
-  color: #333;
-  display: block;
-  min-height: 100vh; /* Pour s'assurer que le fond couvre tout l'écran */
-}
-
-
-
 .projects-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* 3 cartes par ligne */
@@ -65,8 +49,8 @@
 
 
 .status-inprogress {
-  background-color: #faf2e7;
-  color: #F4A529;
+  background-color: #ebf7da;
+  color: #8BC34A;
 }
 
 .status-notstarted {
@@ -74,8 +58,8 @@
   color: #1A89C7;
 }
 .status-done{
-  background-color: #ebf7da;
-color: #8BC34A;
+  background-color: #faf2e7 ;
+color: #F4A529;
 
 }
 
@@ -179,12 +163,7 @@ color: #8BC34A;
   color: #71717a; 
 }
 
-/* Projects Container */
-/* .projects-container {
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
-} */
+
 
 .projects-row {
   display: flex;
@@ -241,6 +220,30 @@ color: #8BC34A;
 .pagination-btn.next {
   padding: 0.5rem;
 }
+
+
+.custom-success {
+  background-color: #effadf;
+  color: #a4d76a;
+  padding: 15px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 16px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  position: fixed;
+  margin-top: 20px;
+  right: 20px;
+  z-index: 2000;
+  animation: fadeOut 3s forwards;
+}
+
+/* Disparition douce */
+@keyframes fadeOut {
+  0%   { opacity: 1; }
+  70%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
 
 /* Media Queries for Responsiveness */
 @media (max-width: 1200px) {

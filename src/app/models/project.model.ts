@@ -1,4 +1,5 @@
 export class Project{
+  
     title?:String;
     description?:String;
     startDate?:String   
@@ -10,10 +11,11 @@ export class Project{
     usersID?:String
     archived?:Boolean
     summarySent?: Boolean;
-    typeProject?:String;
+    type?:String;
     categorie?:String;
 
   constructor( 
+    
     title?:String,
     description?:String,
     startDate?:String ,  
@@ -25,8 +27,9 @@ export class Project{
     usersID?:String,
     archived?:Boolean,
     summarySent?: Boolean,
-    typeProject?:String,
+    type?:String,
     categorie?:String,){
+        
         this.title=title,
         this.description=description,
         this.startDate=startDate,
@@ -38,7 +41,7 @@ export class Project{
         this.usersID=usersID,
         this.archived=archived,
         this.summarySent=summarySent,
-        this.typeProject=typeProject,
+        this.type=type,
         this.categorie=categorie
 
     }

@@ -25,16 +25,16 @@ export class ProjectService {
       return this.http.get<Project[]>(`${this.apiUrl}/listProject`);
      }
 
-     getByIdProject(id:String):Observable<Project[]>{
-      return this.http.get<Project[]>(`${this.apiUrl}/projectByID/${id}`);
+     getByIdProject(id:String):Observable<Project>{
+      return this.http.get<Project>(`${this.apiUrl}/projectByID/${id}`);
      }
 
-     updateProject(id:String,data:Project):Observable<Project[]>{
-      return this.http.put<Project[]>(`${this.apiUrl}/updateProject/${id}`, data);
+     updateProject(id:String,data:Project):Observable<Project>{
+      return this.http.put<Project>(`${this.apiUrl}/updateProject/${id}`, data);
      }
 
      deleteProject(id:String):Observable<Project[]>{
-      return this.http.delete<Project[]>(`${this.apiUrl}/deleteProjectremoveMember`);
+      return this.http.delete<Project[]>(`${this.apiUrl}/deleteProject/${id}`);
      }
      
      assignUserToProject(data:Project):Observable<Project[]>{

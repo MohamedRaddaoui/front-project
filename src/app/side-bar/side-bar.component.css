@@ -36,9 +36,9 @@
     transition: background-color 0.3s ease;
   }
   
-  .nav-item.active {
+  /* .nav-item.active {
     background-color: #eff6ff;
-  }
+  } */
   
   .nav-link {
     display: flex;
@@ -143,4 +143,7 @@
       width: 100%;
     }
   }
-  
+  a {
+    color: inherit; /* blue colors for links too */
+    text-decoration: inherit; /* no underline */
+  }

@@ -5,15 +5,15 @@
 
       <!-- Main Content -->
       <main class="content">
+        <div class="custom-success " *ngIf="successMessage" >
+          {{ successMessage }}
+        </div>
+        
         <div class="content-header">
           <h1 class="content-title">Projects</h1>
-          <!-- <div class="content-search">
-            <input type="text" class="search-input" placeholder="Search for anything...">
-          </div> -->
         </div>
-
         <div class="projects-container">
-          <div class="project-card" *ngFor="let u of paginatedProjects">
+          <div class="project-card" *ngFor="let u of paginatedProjects" (click)="onProjectClick(u)">
             <div class="header">
               <h2>{{ u.title }}</h2>
               <span 
