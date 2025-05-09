@@ -1,0 +1,588 @@
+/* Base styles and reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+
+
+.app-container {
+  width: 100%;
+ 
+}
+
+/* Header styles */
+.project-header {
+  background-color: white;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.16);
+  display: flex;
+  width: 100%;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 21px 35px 21px 80px;
+}
+
+.logo {
+  color: rgba(11, 48, 81, 1);
+  font-size: 25px;
+  font-weight: 600;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 100px;
+  font-weight: normal;
+}
+
+.search-input {
+  background-color: rgba(254, 254, 254, 1);
+  border: 1px solid rgba(154, 147, 179, 1);
+  font-size: 14px;
+  color: rgba(120, 116, 134, 1);
+  padding: 14px 55px;
+  border-radius: 6px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 21px;
+  text-align: right;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  color: rgba(13, 6, 45, 1);
+  font-size: 16px;
+}
+
+.user-location {
+  color: rgba(120, 116, 134, 1);
+  font-size: 14px;
+}
+
+.user-avatar {
+  width: 50px;
+  height: 50px;
+  aspect-ratio: 1.02;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+/* Main content layout */
+.main-content {
+  display: flex;
+  width: 100%;
+  gap: 20px;
+}
+
+/* Sidebar styles */
+.sidebar {
+  width: 18%;
+  background-color: white;
+  box-shadow: 0px 3px 35.16px 0px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  padding: 16px;
+}
+
+.sidebar-content {
+  display: flex;
+  width: 100%;
+  max-width: 269px;
+  flex-direction: column;
+}
+
+.nav-item {
+  border-radius: 4px;
+  display: flex;
+  width: 100%;
+  max-width: 253px;
+  align-items: center;
+  margin-top: 15px;
+  padding: 0 7px;
+}
+
+.nav-item.active {
+  background-color: rgba(240, 246, 255, 1);
+}
+
+.nav-item-inner {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+}
+
+.icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px;
+}
+
+.nav-icon {
+  width: 29px;
+  height: 30px;
+}
+
+.nav-label {
+  font-size: 15px;
+  color: rgba(93, 114, 133, 1);
+  letter-spacing: 0.15px;
+  padding: 7px;
+  font-weight: normal;
+}
+
+.nav-label.active {
+  font-weight: 600;
+}
+
+/* Project content styles */
+.project-content {
+  width: 78%;
+  align-self: stretch;
+}
+
+.project-header-section {
+  display: flex;
+  width: 100%;
+  align-items: stretch;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-left: 25%;
+  margin-top: 10%;
+}
+
+.project-title-section {
+  display: flex;
+  gap: 18px;
+  flex-direction: column;
+  
+}
+
+.project-path {
+  color: rgba(154, 147, 179, 1);
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.project-title-container {
+  display: flex;
+  gap: 14px;
+  font-size: 30px;
+  color: rgba(14, 32, 64, 1);
+  white-space: nowrap;
+  font-weight: 600;
+  align-items: center;
+}
+
+.project-title {
+  width: 107px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* ou center si tu veux centrer horizontalement */
+  gap: 0.5rem;
+  
+}
+
+.project-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: contain;
+}
+
+.team-members {
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+  color: rgba(210, 91, 104, 1);
+  white-space: nowrap;
+  margin-top: 40px;
+}
+
+.team-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: contain;
+}
+
+.more-members {
+  background-color: rgba(244, 215, 218, 1);
+  border: 1px solid white;
+  padding: 10px;
+  border-radius: 50%;
+}
+
+.status-badge {
+  background-color: rgba(75, 166, 101, 0.11);
+  color: rgba(75, 166, 101, 1);
+  font-size: 16px;
+  white-space: nowrap;
+  margin-top: 0px;
+  padding: 10px 24px 16px;
+  border-radius: 15px;
+  font-weight: 500;
+}
+
+.project-metrics {
+  display: flex;
+
+  gap: 20px;
+  font-size: 13px;
+  align-self: center;
+  margin-left: 90%;
+  
+  
+}
+
+.time-spent-section {
+  display: flex;
+  align-items: flex-end;
+  gap: 9px; 
+}
+
+.metric-icon {
+  width: 20px;
+  height: 24px;
+  object-fit: contain;
+  margin-top: 40px;
+  margin-left: 8px;
+}
+
+.metric-details {
+  display: flex;
+  flex-direction: column;
+  
+}
+
+.metric-label {
+  color: rgba(101, 101, 101, 1);
+}
+
+.metric-label.center {
+  text-align: center;
+}
+
+.metric-value {
+  color: rgba(75, 166, 101, 1);
+  margin-left: 7px;
+  margin-top: 21px;
+  font-weight: 400;
+  
+}
+
+.deadline-section {
+  display: flex;
+  flex-direction: column;
+  
+}
+
+.deadline-badge {
+  background-color: rgba(75, 166, 101, 0.11);
+  display: flex;
+  gap: 9px;
+  color: rgba(75, 166, 101, 1);
+  margin-top: 8px;
+  padding: 4px 3px;
+  border-radius: 15px;
+  align-items: center;
+}
+
+.deadline-badge .metric-icon {
+  margin-top: 0;
+}
+
+.deadline-badge .metric-value {
+  margin: 0;
+  width: 100px;
+}
+
+/* Tasks section styles */
+.tasks-container {
+  background-color: rgb(240, 252, 252);
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  overflow: hidden;
+  margin-top: 10px;
+  padding: 21px 43px;
+  border-radius: 15px;
+  margin-left: 25%
+  ;
+}
+
+.task-card {
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0px 3px 35px rgba(0, 0, 0, 0.08);
+  position: relative;
+  min-height: 101px;
+  width: 100%;
+  align-items: center;
+  gap: 20px;
+  justify-content: space-between;
+  padding: 24px 20px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  background-color: white;
+}
+
+.task-header {
+  align-self: stretch;
+  display: flex;
+  gap: 11px;
+  flex-wrap: wrap;
+}
+
+.task-icon {
+  aspect-ratio: 0.92;
+  object-fit: contain;
+  width: 23px;
+  align-self: center;
+}
+
+.task-details {
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: 0;
+  width: fit-content;
+}
+
+.task-title-row {
+  display: flex;
+  width: 573px;
+  max-width: 100%;
+  align-items: stretch;
+  gap: 52px;
+  font-weight: bold;
+  flex-wrap: wrap;
+}
+
+.task-title {
+  color: black;
+  font-size: 14px;
+  line-height: 25px;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: auto;
+}
+
+.date-label {
+  color: rgba(85, 82, 82, 1);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.task-meta-row {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 63px;
+  flex-wrap: wrap;
+}
+
+.task-id {
+  color: black;
+  font-size: 12px;
+  font-weight: normal;
+  line-height: 1.5;
+  flex-grow: 1;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.status-badges {
+  display: flex;
+  gap: 9px;
+}
+
+.status-badge.canceled {
+  background-color: rgba(251, 231, 232, 1);
+  color: rgba(163, 13, 17, 1);
+  min-height: 25px;
+  padding: 5px 8px;
+  border-radius: 22px;
+  font-weight: 500;
+}
+
+.status-badge.completed {
+  background-color: rgba(235, 249, 241, 1);
+  color: rgba(31, 146, 84, 1);
+  min-height: 25px;
+  padding: 5px 8px;
+  border-radius: 22px;
+  font-weight: 500;
+}
+
+.date-display {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-size: 14px;
+  color: rgba(85, 82, 82, 1);
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.calendar-icon {
+  aspect-ratio: 1.04;
+  object-fit: contain;
+  width: 23px;
+}
+
+.task-footer {
+  align-self: stretch;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.end-date-section {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  color: rgba(85, 82, 82, 1);
+  font-weight: bold;
+}
+
+.end-date-section .date-display {
+  margin-top: 4px;
+}
+
+.task-progress {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  font-size: 16px;
+  color: rgba(75, 166, 101, 1);
+  font-weight: 500;
+}
+
+.time-display {
+  background-color: rgba(75, 166, 101, 0.11);
+  display: flex;
+  gap: 8px;
+  margin-top: 7px;
+  padding: 7px 19px;
+  border-radius: 15px;
+  align-items: center;
+}
+
+.timer-icon {
+  aspect-ratio: 1.08;
+  object-fit: contain;
+  width: 26px;
+}
+
+.progress-bar {
+  aspect-ratio: 3.48;
+  object-fit: contain;
+  width: 157px;
+  max-width: 100%;
+}
+
+.task-counters {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  font-size: 14px;
+  color: rgba(92, 89, 103, 1);
+  font-weight: 500;
+  margin-top: 26px;
+}
+
+.file-count {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.files-icon {
+  aspect-ratio: 1.05;
+  object-fit: contain;
+  width: 22px;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .project-header {
+    padding: 21px 20px;
+  }
+
+  .header-right {
+    gap: 40px;
+    flex-wrap: wrap;
+    max-width: 100%;
+  }
+
+  .search-input {
+    padding: 14px 20px;
+  }
+
+  .main-content {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    margin-top: 40px;
+  }
+
+  .project-content {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 40px;
+  }
+
+  .project-path {
+    margin-right: 6px;
+  }
+
+  .status-badge {
+    margin-top: 40px;
+    padding: 10px 20px;
+  }
+
+  .tasks-container {
+    padding: 21px 20px;
+    margin-right: 8px;
+  }
+
+  .task-title-row {
+    width: 100%;
+  }
+
+  .task-counters {
+    margin-right: 10px;
+  }
+}
+
+.icons {
+  cursor: pointer;
+  display: flex;
+  flex-direction: row; /* tu peux mettre column si tu veux chaque icône sur sa propre ligne */
+  gap: 0.75rem;
+}

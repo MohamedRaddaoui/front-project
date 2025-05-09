@@ -1,0 +1,329 @@
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<div class="app-container">
+  <div class="main-container">
+    <app-side-bar></app-side-bar> -->
+
+    <!-- Main Content -->
+    <!-- <main class="content">
+      <div class="content-header">
+
+        <div class="title-header" *ngIf="project"> -->
+          <!-- Titre du projet -->
+          <!-- <div class="title-field">
+              <h1 class="content-title">{{ project.title }}</h1>
+          </div> -->
+          <!-- Statut du projet -->
+          <!-- <div class="header"> -->
+            <!-- Affichage du statut ou du select en mode édition -->
+            <!-- <span  > -->
+              
+              <!-- Not Started -->
+               <!-- <i *ngIf="project.status === 'Not Started'"
+                   class="fa-solid fa-circle"
+                   style="color: #adb5bd;"
+                   title="Not Started"></i> -->
+
+                <!-- In Progress -->
+                <!-- <i *ngIf="project.status === 'In Progress'"
+                  class="fa-solid fa-spinner fa-spin"
+                  style="color: #0d6efd;"
+                  title="In Progress"></i> -->
+
+                <!-- Done -->
+                <!-- <i *ngIf="project.status === 'Done'"
+                  class="fa-solid fa-circle-check"
+                  style="color: #198754;"
+                  title="Done"></i> -->
+
+                <!-- Canceled -->
+                <!-- <i *ngIf="project.status === 'Canceled'"
+                  class="fa-solid fa-circle-xmark"
+                  style="color: #dc3545;"
+                  title="Canceled"></i> -->
+
+                <!-- Overdue -->
+                <!-- <i *ngIf="project.status === 'Overdue'"
+                  class="fa-solid fa-triangle-exclamation"
+                  style="color: #fd7e14;"
+                  title="Overdue"></i> -->
+              
+
+
+            <!-- </span>
+
+          </div> -->
+          
+          <!-- Icônes d'action -->
+          <!-- <div class="icons">
+            <i class="fa-solid fa-trash" style="color: #dc3545;" title="Delete Project" (click)="deletePopup.open()"></i>
+            <i class="fa-solid fa-users" style="color: #198754;" title="Assign Users"></i>
+
+            <i class="fa-solid fa-folder" style="color: #6c757d;" title="Archived Project"  (click)="archivedFunction()"></i>
+            <i class="fa-solid fa-pen-to-square" style="color: #0d6efd;" title="Edit" (click)="editProject()"></i> -->
+
+            <!-- <img src="edit.png" width="20" height="20" (click)="editProject()"> -->
+
+
+            <!-- Not Started -->
+<!-- <i class="fa-solid fa-circle" style="color: #adb5bd;" title="Not Started"></i> -->
+
+<!-- In Progress (rotation animée) -->
+<!-- <i class="fa-solid fa-spinner fa-spin" style="color: #0d6efd;" title="In Progress"></i> -->
+
+<!-- Done -->
+<!-- <i class="fa-solid fa-circle-check" style="color: #198754;" title="Done"></i> -->
+
+<!-- Canceled -->
+<!-- <i class="fa-solid fa-circle-xmark" style="color: #dc3545;" title="Canceled"></i> -->
+
+<!-- Overdue -->
+<!-- <i class="fa-solid fa-triangle-exclamation" style="color: #fd7e14;" title="Overdue"></i> -->
+
+          <!-- </div>
+          <hr>
+        </div> -->
+
+      <!-- </div>
+
+      <div class="projects-container">
+        <div  *ngIf="project"> -->
+          
+          <!-- Description -->
+          <!-- <div class="">
+              <p class="description">{{ project.description }}</p>
+          </div> -->
+
+          <!-- Date de fin -->
+          <!-- <div class="deadline-field">
+              <p class="deadline"><strong>EndDate:</strong> {{ formatDate(project.endDate) }}</p>
+          </div>
+          <div class="deadline-field">
+            <p class="deadline"><strong>startDate:</strong> {{ formatDate(project.startDate) }}</p>
+        </div> -->
+
+          
+
+          <!-- Boutons d'action -->
+<!--           
+        </div>
+      </div>
+    </main>
+  </div>
+
+</div> -->
+
+<!-- <app-delete-project #deletePopup></app-delete-project> -->
+
+
+    <div class="app-container">
+      <div class="main-content">
+        <app-side-bar></app-side-bar>
+
+        <main class="project-content">
+          <div class="project-header-section">
+            
+            <div class="project-title-section">
+              <div class="project-path">
+                Projects / {{project.title}}
+              </div>
+              <div class="project-title-container">
+                <div class="project-title">{{project.title}}
+                  
+                </div>
+                <!-- <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/29227ba721a96171a92a718aa48b4f3e4e5972bd?placeholderIfAbsent=true"
+                  alt="Project avatar"
+                  class="project-avatar"
+                /> -->
+            <span   >
+              
+              <!-- Not Started -->
+               <i *ngIf="project.status === 'Not Started'"
+                   class="fa-solid fa-circle"
+                   style="color: #adb5bd;"
+                   title="Not Started"></i>
+
+                <!-- In Progress -->
+                <i *ngIf="project.status === 'In Progress'"
+                  class="fa-solid fa-spinner fa-spin"
+                  style="color: #0d6efd;"
+                  title="In Progress"></i>
+
+                <!-- Done -->
+                <i *ngIf="project.status === 'Done'"
+                  class="fa-solid fa-circle-check"
+                  style="color: #198754;"
+                  title="Done"  aria-label="Project done"></i>
+
+                <!-- Canceled -->
+                <i *ngIf="project.status === 'Canceled'"
+                  class="fa-solid fa-circle-xmark"
+                  style="color: #dc3545;"
+                  title="Canceled"></i>
+
+                <!-- Overdue -->
+                <i *ngIf="project.status === 'Overdue'"
+                  class="fa-solid fa-triangle-exclamation"
+                  style="color: #fd7e14;"
+                  title="Overdue"></i>
+            </span>
+            <div class="icons">
+              <i class="fa-solid fa-trash"  style="color: #dc3545; font-size: 15px" title="Delete Project" (click)="deletePopup.open()" ></i>
+              <i class="fa-solid fa-users" style="color: #198754; font-size: 15px" title="Assign Users"></i>
+              <i class="fa-solid fa-folder" style="color: #6c757d; font-size: 15px" title="Archived Project"  (click)="archivedFunction()"></i>
+              <i class="fa-solid fa-pen-to-square" style="color: #0d6efd; font-size: 15px" title="Edit" (click)="editProject()"></i>
+             </div>
+                <div class="project-metrics">
+                  <div class="time-spent-section">
+                    <div class="metric-details">
+                      <div class="metric-label center">Time spent</div>
+                      <div class="deadline-badge">
+                        <img
+                      src="https://cdn.builder.io/api/v1/image/assets/TEMP/8652dbec5ea598689f6f4f3b47411b253c93850f?placeholderIfAbsent=true"
+                      alt="Time icon"
+                      class="metric-icon"
+                    />
+                        <div class="metric-value">{{ formatDate(project.startDate) }}</div>
+                        
+                      </div>
+                      
+                    </div>
+                  </div>
+                  <div class="deadline-section">
+                    <div class="metric-label center">Deadline</div>
+                    <div class="deadline-badge">
+                      <img
+                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/152dd5be4fd9262a9964084d9f7ea0b815f57a48?placeholderIfAbsent=true"
+                        alt="Calendar icon"
+                        class="metric-icon"
+                      />
+                      <div class="metric-value">{{ formatDate(project.endDate) }}</div>
+                      
+                    </div>
+                    
+                  </div>
+                  
+                </div>
+                
+              </div>
+              
+
+              
+              <!-- <div class="team-members">
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/05c9801fe2a9cfae539a3634c618adef0a525173?placeholderIfAbsent=true"
+                  alt="Team member"
+                  class="team-avatar"
+                />
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/a0cf297a03ff7ffd2c864bdd46a942eff477fd23?placeholderIfAbsent=true"
+                  alt="Team member"
+                  class="team-avatar"
+                />
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/8408570356559b14842d17b62ae8e4b03b79000c?placeholderIfAbsent=true"
+                  alt="Team member"
+                  class="team-avatar"
+                />
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/ba69be818acbf1fe8dcdeecbfd4db80676dba024?placeholderIfAbsent=true"
+                  alt="Team member"
+                  class="team-avatar"
+                />
+                <div class="more-members">+2</div>
+              </div> -->
+              
+            </div>
+           
+          </div>
+
+
+          
+
+          <div class="tasks-container" >
+            <!-- Task Card -->
+            <div class="task-card" *ngIf="project">
+              <div class="task-header">
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/9df8fc697bd762ba26cec9712c361a5dddce2cd0?placeholderIfAbsent=true"
+                  alt="Task icon"
+                  class="task-icon"
+                />
+                <div class="task-details">
+                  <div class="task-title-row">
+                    <div class="task-title">
+                      Make an Automatic Payment System that enable the design
+                    </div>
+                    <div class="date-label">Start Date</div>
+                  </div>
+                  <div class="task-meta-row">
+                    <div class="task-id">
+                      #402235 Opened 10 days ago by <span class="bold">Yash Ghori</span>
+                    </div>
+                    <div class="status-badges">
+                      <div class="status-badge canceled">Canceled</div>
+                      <div class="status-badge completed">Completed</div>
+                    </div>
+                    <div class="date-display">
+                      <img
+                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/39c895c174086dce646d342bb200a4bfb9cf3ee8?placeholderIfAbsent=true"
+                        alt="Calendar icon"
+                        class="calendar-icon"
+                      />
+                      <div>25/3/2023</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="task-footer">
+                <div class="end-date-section">
+                  <div class="date-label">End Date</div>
+                  <div class="date-display">
+                    <img
+                      src="https://cdn.builder.io/api/v1/image/assets/TEMP/39a680638f294917f26aa1739272f015d739c652?placeholderIfAbsent=true"
+                      alt="Calendar icon"
+                      class="calendar-icon"
+                    />
+                    <div>25/3/2023</div>
+                  </div>
+                </div>
+                <div class="task-progress">
+                  <div class="time-display">
+                    <img
+                      src="URL_100"
+                      alt="Timer icon"
+                      class="timer-icon"
+                    />
+                    <div>00 : 30 : 00</div>
+                  </div>
+                  <img
+                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/8f94942e04f43f04a0f5fc9c310d37b4cb211a1f?placeholderIfAbsent=true"
+                    alt="Progress"
+                    class="progress-bar"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- Task counters -->
+            <div class="task-counters">
+              <div class="task-count">50 tasks</div>
+              <div class="file-count">
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/680975ffd361c29b5013ad03211e8f4ffdbf641f?placeholderIfAbsent=true"
+                  alt="Files icon"
+                  class="files-icon"
+                />
+                <div>15 files</div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
+    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
+
+
+<app-delete-project #deletePopup></app-delete-project>
