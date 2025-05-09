@@ -13,6 +13,8 @@ import { ResetPasswordComponent } from './resetpassword/resetpassword.component'
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { AdminGuard } from './guards/admin.guard';
 
+import { TaskComponent } from './task/task.component';
+import { TaskDetailsComponent } from './task-details/task-details.component';
 export const routes: Routes = [
   {
     path: 'calendar',
@@ -39,6 +41,17 @@ export const routes: Routes = [
   {
     path: 'reset-password/:token',
     component: ResetPasswordComponent,
+  },
+  {
+  path: 'task-details/:id',
+  component: TaskDetailsComponent
+  },
+  {path: 'task-details',
+  component: TaskDetailsComponent
+  },
+{
+    path: 'tasks',
+    component: TaskComponent,
   },
   {
     path: '',
