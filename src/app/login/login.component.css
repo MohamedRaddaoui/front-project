@@ -1,0 +1,360 @@
+:host {
+  display: contents;
+}
+
+.login-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  max-width: none;
+  margin-left: auto;
+  margin-right: auto;
+  justify-content: space-between;
+  width: 100%;
+  height: 100vh;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 991px) {
+  .login-container {
+    max-width: 991px;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .login-container {
+    max-width: 640px;
+  }
+}
+
+.illustration-section {
+  flex: 1;
+  background-color: #f2f8fc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+@media (max-width: 991px) {
+  .illustration-section {
+    display: none;
+  }
+}
+
+.illustration {
+  max-width: 100%;
+  height: auto;
+}
+
+.login-section {
+  flex: 1;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+}
+
+@media (max-width: 991px) {
+  .login-section {
+    align-items: center;
+  }
+}
+
+.logo-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+@media (max-width: 640px) {
+  .logo-header {
+    justify-content: center;
+  }
+}
+
+.brand-name {
+  font-family: "Manrope", sans-serif;
+  font-weight: 600;
+  font-size: 1.5rem;
+  color: #0074B7;
+}
+
+.login-form-container {
+  max-width: 400px;
+  width: 100%;
+}
+
+@media (max-width: 991px) {
+  .login-form-container {
+    width: 100%;
+    max-width: 431px;
+  }
+}
+
+@media (max-width: 640px) {
+  .login-form-container {
+    padding: 0 20px;
+  }
+}
+
+.welcome-heading {
+  font-family: "Manrope", sans-serif;
+  font-weight: 700;
+  font-size: 2.25rem;
+  color: #0074B7;
+  margin-bottom: 0.5rem;
+  margin-top: 0;
+}
+
+.welcome-text {
+  font-family: "Space Grotesk", sans-serif;
+  color: #666;
+  margin-bottom: 2.5rem;
+  margin-top: 0;
+}
+
+.login-form {
+  width: 100%;
+}
+
+.form-field {
+  margin-bottom: 1.5rem;
+}
+
+.form-field label {
+  display: block;
+  font-family: "Space Grotesk", sans-serif;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.input-field {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.input-field:focus {
+  border-color: #0074B7;
+  outline: none;
+}
+
+.password-input-wrapper {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+}
+
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.terms-checkbox {
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.forgot-password {
+  color: #0074B7;
+  background: none;
+  border: none;
+  font-family: "Space Grotesk", sans-serif;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.error-message {
+  background-color: #fee2e2;
+  color: #dc2626;
+  padding: 0.75rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.login-button {
+  width: 100%;
+  padding: 0.875rem;
+  background-color: #F6A623;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-bottom: 1.5rem;
+}
+
+.login-button:hover {
+  background-color: #e59816;
+}
+
+.signup-container {
+  text-align: center;
+  font-family: "Space Grotesk", sans-serif;
+}
+
+@media (max-width: 640px) {
+  .signup-container {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.signup-link {
+  color: #0074B7;
+  background: none;
+  border: none;
+  font-family: "Space Grotesk", sans-serif;
+  cursor: pointer;
+  text-decoration: underline;
+  margin-left: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .signup-link {
+    margin-top: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+  }
+
+  .illustration-section {
+    display: none;
+  }
+
+  .login-section {
+    padding: 2rem;
+  }
+}
+
+/* ------------------------------------------ */
+/* ✅ OVERRIDES FOR ANGULAR MATERIAL STYLING */
+/* ------------------------------------------ */
+
+::ng-deep .mat-checkbox-label {
+  font-family: "Space Grotesk", sans-serif !important;
+  font-size: 15px !important;
+  color: #0074B7 !important;
+}
+
+::ng-deep .mat-checkbox-frame {
+  border-color: #0074B7 !important;
+}
+
+::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background,
+::ng-deep .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+  background-color: #0074B7 !important;
+  border-color: #0074B7 !important;
+}
+
+::ng-deep .mat-form-field-label {
+  color: #0074B7 !important;
+}
+
+::ng-deep .mat-form-field-underline .mat-form-field-ripple {
+  background-color: #0074B7 !important;
+}
+
+.error-message {
+  color: #f44336;
+  font-size: 14px;
+  margin: 8px 0;
+  padding: 8px;
+  background-color: rgba(244, 67, 54, 0.1);
+  border-radius: 4px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.verification-form {
+  max-width: 400px;
+  width: 100%;
+}
+
+.verification-heading {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  font-size: 2rem;
+  color: #0074B7;
+  margin-bottom: 0.5rem;
+}
+
+.verification-text {
+  color: #666;
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 0.875rem;
+  background-color: #F6A623;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-bottom: 1.5rem;
+}
+
+.submit-button:hover {
+  background-color: #e59816;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(246, 166, 35, 0.2);
+}
+
+.submit-button:active {
+  transform: translateY(0);
+}
+
+.submit-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.terms-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.terms-checkbox.invalid {
+  color: #dc2626;
+}
+
+.validation-message {
+  color: #dc2626;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
