@@ -120,7 +120,9 @@
       <div class="main-content">
         <app-side-bar></app-side-bar>
 
-        <main class="project-content">
+        <main class="project-content" >
+  
+   
           <div class="project-header-section">
             
             <div class="project-title-section">
@@ -128,21 +130,25 @@
                 Projects / {{project.title}}
               </div>
               <div class="project-title-container">
-                <div class="project-title">{{project.title}}
+                <span class="project-title">{{project.title}}
                   
-                </div>
+                </span>
                 <!-- <img
                   src="https://cdn.builder.io/api/v1/image/assets/TEMP/29227ba721a96171a92a718aa48b4f3e4e5972bd?placeholderIfAbsent=true"
                   alt="Project avatar"
                   class="project-avatar"
                 /> -->
-            <span   >
-              
+            <span>
               <!-- Not Started -->
                <i *ngIf="project.status === 'Not Started'"
                    class="fa-solid fa-circle"
                    style="color: #adb5bd;"
                    title="Not Started"></i>
+
+                   <i *ngIf="project.status === 'Canceled'"
+                   class="fa-solid fa-circle"
+                   style="color: #f63858;"
+                   title="Canceled"></i>
 
                 <!-- In Progress -->
                 <i *ngIf="project.status === 'In Progress'"
@@ -172,19 +178,20 @@
               <i class="fa-solid fa-trash"  style="color: #dc3545; font-size: 15px" title="Delete Project" (click)="deletePopup.open()" ></i>
               <i class="fa-solid fa-users" style="color: #198754; font-size: 15px" title="Assign Users"></i>
               <i class="fa-solid fa-folder" style="color: #6c757d; font-size: 15px" title="Archived Project"  (click)="archivedFunction()"></i>
-              <i class="fa-solid fa-pen-to-square" style="color: #0d6efd; font-size: 15px" title="Edit" (click)="editProject()"></i>
+              <i class="fa-solid fa-pen-to-square" style="color: #0d6efd; font-size: 15px" title="Edit" [routerLink]="['/updateProject',project.id]"></i>
              </div>
+             
                 <div class="project-metrics">
                   <div class="time-spent-section">
                     <div class="metric-details">
                       <div class="metric-label center">Time spent</div>
-                      <div class="deadline-badge">
+                      <div class="deadline-badgev">
                         <img
                       src="https://cdn.builder.io/api/v1/image/assets/TEMP/8652dbec5ea598689f6f4f3b47411b253c93850f?placeholderIfAbsent=true"
                       alt="Time icon"
-                      class="metric-icon"
+                      class="metric-iconv"
                     />
-                        <div class="metric-value">{{ formatDate(project.startDate) }}</div>
+                        <div class="metric-value ">{{ formatDate(project.startDate) }}</div>
                         
                       </div>
                       
@@ -198,7 +205,7 @@
                         alt="Calendar icon"
                         class="metric-icon"
                       />
-                      <div class="metric-value">{{ formatDate(project.endDate) }}</div>
+                      <div class="value">{{ formatDate(project.endDate) }}</div>
                       
                     </div>
                     
@@ -237,29 +244,113 @@
             </div>
            
           </div>
-
-
           
+           
+           
+          <div class="description"> {{project.category}}</div>
+          
+         <div class="tasks-container" >
+          <!-- <h1 class="description"> Description</h1>
+           <div class="task-container"><p>{{project.description}} /</p></div> -->
+           List of tasks
 
-          <div class="tasks-container" >
-            <!-- Task Card -->
-            <div class="task-card" *ngIf="project">
-              <div class="task-header">
-                <img
+            <!--la version exacte -->
+<div class="task-container"  *ngFor="let task of project.tasksID">
+  <img
                   src="https://cdn.builder.io/api/v1/image/assets/TEMP/9df8fc697bd762ba26cec9712c361a5dddce2cd0?placeholderIfAbsent=true"
                   alt="Task icon"
                   class="task-icon"
                 />
-                <div class="task-details">
+  <div class="task-left">
+    <div class="task-title">{{task.title}}</div>
+     
+    <div class="task-meta">
+     {{task.description}}
+        
+      <span class="status cancelled" >Cancelled</span>
+      <span class="status completed">Completed</span>
+    </div>
+
+    
+   
+  </div>
+  
+  <div class="task-dates">
+    <div class="date-block">
+      <div class="label">Start Date</div>
+      <div class="date"> {{ formatDate(task.dueDate) }}</div>
+    </div>
+    <!-- <div class="date-block">
+      <div class="label">End Date</div>
+      <div class="date">25/9/2023</div>
+    </div> -->
+  </div>
+  <div class="task-right">
+    <div class="timer">⏱️ {{task.priority}}</div>
+    <img src="https://i.pravatar.cc/28" alt="avatar" class="avatar" />
+    <div class="menu-icon">⋮</div>
+    
+  </div>
+  
+  
+</div>
+
+
+            <!-- Task Card -->
+            <!-- <div class="task-card" >
+              <div class="task-header">
+                    <div class="task-content">
+                      <div class="task-info">
+                        <div class="task-title">
+                          <i class="icon">💡</i>
+                          <span>Make an Automatic Payment System that enable the design</span>
+                        </div>
+                        <div class="task-meta">
+                          <span class="status cancelled">Cancelled</span>
+                          <span class="status completed">Completed</span>
+                        </div>
+                        <div class="task-dates">
+                          <div>
+                            <label>Start Date</label>
+                            <span>25/9/2023</span>
+                          </div>
+                          <div>
+                            <label>End Date</label>
+                            <span>25/9/2023</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="task-footer">
+                        <span class="time">⏱️ 00:30:00</span>
+                        <img class="avatar" src="https://via.placeholder.com/32" alt="User" />
+                        <i class="more">⋮</i>
+                      </div>
+                    </div> -->
+
+
+                      
+
+                <!-- <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/9df8fc697bd762ba26cec9712c361a5dddce2cd0?placeholderIfAbsent=true"
+                  alt="Task icon"
+                  class="task-icon"
+                /> -->
+                <!-- <div class="task-details">
                   <div class="task-title-row">
-                    <div class="task-title">
-                      Make an Automatic Payment System that enable the design
+                    <div class="task-title" *ngIf="project.tasksID?.length">
+                     
+                       
+                        <div *ngFor="let task of project.tasksID">
+                          {{ task.title }}
+                        </div>
+                     
+                      
                     </div>
                     <div class="date-label">Start Date</div>
                   </div>
                   <div class="task-meta-row">
-                    <div class="task-id">
-                      #402235 Opened 10 days ago by <span class="bold">Yash Ghori</span>
+                    <div class="task-id" *ngFor="let task of project.tasksID">
+                      {{task.description}} 
                     </div>
                     <div class="status-badges">
                       <div class="status-badge canceled">Canceled</div>
@@ -274,9 +365,9 @@
                       <div>25/3/2023</div>
                     </div>
                   </div>
-                </div>
-              </div>
-              <div class="task-footer">
+                </div> -->
+              
+              <!-- <div class="task-footer">
                 <div class="end-date-section">
                   <div class="date-label">End Date</div>
                   <div class="date-display">
@@ -303,11 +394,11 @@
                     class="progress-bar"
                   />
                 </div>
-              </div>
-            </div>
+              </div> -->
+            <!-- </div> -->
 
             <!-- Task counters -->
-            <div class="task-counters">
+            <!-- <div class="task-counters">
               <div class="task-count">50 tasks</div>
               <div class="file-count">
                 <img
@@ -317,13 +408,57 @@
                 />
                 <div>15 files</div>
               </div>
-            </div>
-          </div>
-        </main>
-      </div>
+            </div> -->
+        
+      <!-- </div>-->
     </div>
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
 
 
 <app-delete-project #deletePopup></app-delete-project>
+
+
+
+    <!--la version exacte -->
+<!-- <div class="task-container">
+  <div class="task-left">
+    <div class="task-title">Make an Automatic Payment System that enable the design</div>
+    <div class="task-meta">
+      #45221 (posted 12 days ago by Yash Desi)
+      <span class="status cancelled">Cancelled</span>
+      <span class="status completed">Completed</span>
+    </div>
+  </div>
+  <div class="task-dates">
+    <div class="date-block">
+      <div class="label">Start Date</div>
+      <div class="date">25/9/2023</div>
+    </div>
+    <div class="date-block">
+      <div class="label">End Date</div>
+      <div class="date">25/9/2023</div>
+    </div>
+  </div>
+  <div class="task-right">
+    <div class="timer">⏱️ 00 : 30 : 00</div>
+    <img src="https://i.pravatar.cc/28" alt="avatar" class="avatar" />
+    <div class="menu-icon">⋮</div>
+  </div>
+</div> -->
+
+
+
+
+<!--version nombre des task-->
+ <!-- <div class="task-counters">
+              <div class="task-count">50 tasks</div>
+              <div class="file-count">
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/680975ffd361c29b5013ad03211e8f4ffdbf641f?placeholderIfAbsent=true"
+                  alt="Files icon"
+                  class="files-icon"
+                />
+                <div>15 files</div>
+              </div>
+            </div> -->

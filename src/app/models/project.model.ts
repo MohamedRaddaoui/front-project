@@ -1,34 +1,36 @@
+import { Task } from "./task.model";
+
 export class Project{
-  
-    title?:String;
-    description?:String;
-    startDate?:String   
-    endDate?:String
-    ownerID?:String
-    team?:Number 
-    status?:String
-    category?:String
-    usersID?:String
-    archived?:Boolean
-    summarySent?: Boolean;
-    type?:String;
-    categorie?:String;
+    id?:string;
+    title?:string;
+    description?:string;
+    startDate?:string   
+    endDate?:string
+    ownerID?:string
+    team?:number 
+    status?:string
+    category?:string
+    usersID?:[]
+    archived?:boolean
+    summarySent?: boolean;
+    type?:string;
+     tasksID?: Task[];
 
   constructor( 
     
-    title?:String,
-    description?:String,
-    startDate?:String ,  
-    endDate?:String,
-    ownerID?:String,
-    team?:Number ,
-    status?:String,
-    category?:String,
-    usersID?:String,
-    archived?:Boolean,
-    summarySent?: Boolean,
-    type?:String,
-    categorie?:String,){
+    title?:string,
+    description?:string,
+    startDate?:string ,  
+    endDate?:string,
+    ownerID?:string,
+    team?:number ,
+    status?:string,
+    category?:string,
+    usersID?:[],
+    archived?:boolean,
+    summarySent?: boolean,
+    type?:string,
+    tasksID?:[]){
         
         this.title=title,
         this.description=description,
@@ -42,7 +44,8 @@ export class Project{
         this.archived=archived,
         this.summarySent=summarySent,
         this.type=type,
-        this.categorie=categorie
+        this.tasksID=tasksID
+       
 
     }
 }

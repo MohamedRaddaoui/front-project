@@ -3,6 +3,7 @@ import { AIAssistViewModule, ChatUIModule } from '@syncfusion/ej2-angular-intera
 import { DialogModule, TooltipModule } from '@syncfusion/ej2-angular-popups';
 import { TextBoxModule, TextAreaModule, NumericTextBoxModule, MaskedTextBoxModule, SliderModule, UploaderModule, ColorPickerModule, SignatureModule, RatingModule, OtpInputModule, SmartTextAreaModule, SpeechToTextModule } from '@syncfusion/ej2-angular-inputs';
 import { ButtonModule, CheckBoxModule, RadioButtonModule, SwitchModule, ChipListModule, FabModule, SpeedDialModule, SmartPasteButtonModule } from '@syncfusion/ej2-angular-buttons';
+import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
 
 import {
   ScheduleModule,
@@ -16,18 +17,12 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
 
 @Component({
   selector: 'app-root',
-  imports: [AIAssistViewModule, ChatUIModule, DialogModule, TooltipModule, TextBoxModule, TextAreaModule, NumericTextBoxModule, MaskedTextBoxModule, SliderModule, UploaderModule, ColorPickerModule, SignatureModule, RatingModule, OtpInputModule, SmartTextAreaModule, SpeechToTextModule, ButtonModule, CheckBoxModule, RadioButtonModule, SwitchModule, ChipListModule, FabModule, SpeedDialModule, SmartPasteButtonModule, 
+  imports: [AIAssistViewModule, ChatUIModule, TooltipModule, TextBoxModule, TextAreaModule, NumericTextBoxModule, MaskedTextBoxModule, SliderModule, UploaderModule, ColorPickerModule, SignatureModule, RatingModule, OtpInputModule, SmartTextAreaModule, SpeechToTextModule, ButtonModule, CheckBoxModule, RadioButtonModule, SwitchModule, ChipListModule, FabModule, SpeedDialModule, SmartPasteButtonModule, 
     ScheduleModule,
     RecurrenceEditorModule,
     RouterOutlet,
     NavBarComponent,
-  
-    
-    
- 
-    
-
-    
+    DropDownListModule
     
   ],
   templateUrl: './app.component.html',

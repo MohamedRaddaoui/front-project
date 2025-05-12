@@ -10,6 +10,10 @@ import { StandardProjectComponent } from './standard-project/standard-project.co
 import { DeleteProjectComponent } from './delete-project/delete-project.component';
 
 
+import { TaskComponent } from './task/task.component';
+import { TaskDetailsComponent } from './task-details/task-details.component';
+import { EditProjectComponent } from './edit-project/edit-project.component';
+import { ProductOwnerComponent } from './product-owner/product-owner.component';
 export const routes: Routes = [
   {
     path: 'calendar',
@@ -19,7 +23,17 @@ export const routes: Routes = [
     path: 'chatbot',
     component: AiAssistantComponent,
   },
-
+  {
+  path: 'task-details/:id',
+  component: TaskDetailsComponent
+  },
+  {path: 'task-details',
+  component: TaskDetailsComponent
+  },
+{
+    path: 'tasks',
+    component: TaskComponent,
+  },
   {
     path: '',
     component:ProjectComponent,
@@ -40,8 +54,15 @@ export const routes: Routes = [
 
 
   {
-    path: 'scrum/:id',
+    path: 'scrum',
     component:ScrumProjectComponent,
+   
+
+  },
+
+   {
+    path: 'PO/:id',
+    component:ProductOwnerComponent,
    
 
   },
@@ -56,6 +77,14 @@ export const routes: Routes = [
   {
     path: 'delete/:id',
     component:DeleteProjectComponent,
+    
+
+  },
+
+
+   {
+    path: 'updateProject/:id',
+    component:EditProjectComponent,
     
 
   },

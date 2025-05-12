@@ -1,0 +1,313 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 2.5em;
+    color: #2E3A59; /* Gris foncé élégant */
+    font-weight: bold;
+}
+
+p {
+    font-size: 1.1em;
+    color: #6B7280; /* Gris moderne et lisible */
+    margin-top: 10px;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.column {
+    background-color: #ffffff;
+    padding: 20px;
+    width: 100%;
+    min-height: 00px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+.column h2 {
+    font-size: 1.6em;
+    color: #1F2937; /* Gris très foncé */
+    margin-bottom: 15px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* Modern task/card style */
+.task {
+    background-color: #F5F7FA;  /* Fond carte doux */
+    color: #2E3A59;             /* Texte anthracite élégant */
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    border-left: 5px solid #4F9DA6; /* Accent moderne */
+}
+
+.task:hover {
+    background-color: #EDF1F5;
+    transform: translateY(-3px);
+}
+
+.task:active {
+    background-color: #D9E2EC;
+    transform: translateY(1px);
+}
+
+/* Optional color variations by type */
+.task.story {
+    border-left: 5px solid  #ececec; /* Orange doux */
+}
+
+.task.backlog {
+    border-left: 5px solid #3B82F6; /* Bleu clair */
+}
+
+.task.sprint {
+    border-left: 5px solid #10B981; /* Vert doux */
+}
+
+/* Styling for Backlog */
+#backlog {
+    background-color: #E3F2FD;
+}
+#user-story {
+    background-color: #FFF8E1;
+}
+#sprint {
+    background-color: #E8F5E9;
+}
+
+#backlog h2 {
+    color: #0D47A1;
+}
+
+
+
+
+/* Responsive Design */
+@media screen and (max-width: 900px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .column {
+        width: 80%;
+        margin-bottom: 20px;
+    }
+}
+
+
+.projects-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 cartes par ligne */
+  gap: 1rem;
+  padding: 1rem;
+  width: 100%; /* Assure-toi que la largeur est suffisante pour 3 cartes */
+  box-sizing: border-box;
+}
+
+
+
+
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+
+
+
+
+
+.app-container {
+  margin-top: 5%;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin-left: 20%;
+}
+
+/* Content Styles */
+.content {
+  flex-grow: 1;
+  padding: 2rem;
+  max-width: 1560px;
+}
+
+.content-header {
+  margin-top: 3%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 5rem;
+}
+
+.pagination-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #a3a3a3;
+}
+
+.pagination-btn.page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 31px;
+  height: 31px;
+  border-radius: 0.5rem;
+  background-color: #e5e5e5;
+  color: #000;
+}
+
+.pagination-btn.page.active {
+  background-color: #1e3a8a;
+  color: #fff;
+}
+
+.pagination-btn.prev,
+.pagination-btn.next {
+  padding: 0.5rem;
+}
+
+
+.custom-success {
+  background-color: #effadf;
+  color: #a4d76a;
+  padding: 15px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 16px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  position: fixed;
+  margin-top: 20px;
+  right: 20px;
+  z-index: 2000;
+  animation: fadeOut 3s forwards;
+}
+
+/* Disparition douce */
+@keyframes fadeOut {
+  0%   { opacity: 1; }
+  70%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+
+/* Media Queries for Responsiveness */
+@media (max-width: 1200px) {
+ 
+
+  .content {
+    padding: 1.5rem;
+  }
+
+  
+}
+
+@media (max-width: 992px) {
+  
+  .content-header {
+    gap: 1.5rem;
+  }
+
+}
+
+@media (max-width: 768px) {
+
+
+ 
+ 
+ 
+
+
+
+  .main-container {
+    flex-direction: column;
+    margin-top: 140px; 
+  }
+
+ 
+  
+
+  .content {
+    padding: 1rem;
+  }
+
+  .content-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+ 
+
+  .pagination {
+    margin-top: 3rem;
+  }
+}
+
+@media (max-width: 480px) {
+ 
+
+
+
+ 
+
+  .pagination {
+    flex-wrap: wrap;
+  }
+}

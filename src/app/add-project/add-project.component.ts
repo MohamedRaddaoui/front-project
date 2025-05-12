@@ -23,7 +23,7 @@ export class AddProjectComponent {
   startDate : new FormControl('', [Validators.required,this.validateStartDate() ]),
   endDate : new FormControl('', [Validators.required,this.validateEndDate()]),
   type:new FormControl('', [Validators.required]),
-  categorie:new FormControl('dev'),
+  category:new FormControl('dev'),
   status:new FormControl('Not Started', [ Validators.pattern(/^(Not Started|In Progress|Done|Canceled)$/) 
  ]),
 },{ validators: this.dateConsistencyValidator() });
@@ -41,7 +41,7 @@ addProject() {
     startDate: FormValue.startDate ?? '',
     endDate: FormValue.endDate ?? '',
     type: FormValue.type ?? '',
-    categorie: FormValue.categorie ?? 'dev',
+    category: FormValue.category ?? 'dev',
     status: FormValue.status ?? 'Not Started'
   };
 

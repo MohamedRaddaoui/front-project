@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { SideBarComponent } from '../side-bar/side-bar.component';
 import { CommonModule } from '@angular/common';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';  // Ajout de Router et NavigationEnd
-import { filter } from 'rxjs/operators';  // Ajout du pipe
 import { ProjectService } from '../services/project.service';
 import { Project } from '../models/project.model';
 
@@ -95,7 +94,7 @@ export class ProjectComponent {
   onProjectClick(project: any) {
     console.log('Projet cliqué:', project);
     if (project.type === 'Scrum') {
-      this.router.navigate(['/scrum', project.id]);
+      this.router.navigate(['/PO', project.id]);
     } else {
       if(project.type === 'Kanban'){
         this.router.navigate(['/standard', project.id])

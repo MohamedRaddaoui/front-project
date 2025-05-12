@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ProjectService } from '../services/project.service';
 import { Project } from '../models/project.model';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SideBarComponent } from '../side-bar/side-bar.component';
 import { DeleteProjectComponent } from '../delete-project/delete-project.component';
@@ -9,11 +9,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-standard-project',
-  imports: [CommonModule,SideBarComponent,DeleteProjectComponent,ReactiveFormsModule,FormsModule],
+  imports: [CommonModule,SideBarComponent,DeleteProjectComponent,ReactiveFormsModule,FormsModule,RouterLink],
   templateUrl: './standard-project.component.html',
   styleUrl: './standard-project.component.css'
 })
 export class StandardProjectComponent {
+
 
   constructor(private projectService:ProjectService ,private route: ActivatedRoute,private router:Router){}
 

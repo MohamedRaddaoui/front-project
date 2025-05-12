@@ -21,7 +21,9 @@
                 [ngClass]="{
                   'status-done': u.status === 'Done',
                   'status-inprogress': u.status === 'In Progress',
-                  'status-notstarted': u.status === 'Not Started'
+                  'status-notstarted': u.status === 'Not Started',
+                   'status-canceled': u.status === 'Canceled'
+
                 }">
                 {{ u.status }}
               </span>
