@@ -6,7 +6,159 @@
             <div class="content-header">
                 <div class="control-section">
                     <div class="content-wrapper">
-<p>task-details works!</p>
+                            <!-- task-details.component.html -->
+                            <div class="task-page">
+                                <!-- Breadcrumb -->
+                                <div class="breadcrumb">
+                                    <a href="#">Tickets</a> / <span>{{ task.id }}</span>
+                                </div>
+
+                                <!-- Header -->
+                                <div class="task-header">
+                                    <div class="task-title-section">
+                                        <h2>{{ task.title }}</h2>
+                                        <div class="task-id">{{ task.id }}</div>
+                                    </div>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-primary" (click)="onEdit()">Modifier</button>
+                                        <button class="btn" (click)="onShare()">Partager</button>
+                                        <div class="dropdown">
+                                            <button class="btn">Plus ▼</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Main content -->
+                                <div class="task-content">
+                                    <div class="content-left">
+                                        <!-- Status Section -->
+                                        <div class="status-section">
+                                            <div class="status-buttons">
+                                                <button class="btn" [class.active]="task.status === 'EN COURS'">En cours</button>
+                                                <button class="btn">Soumettre MR</button>
+                                                <button class="btn">Demander un complément</button>
+                                                <button class="btn">Résoudre la demande</button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Details Section -->
+                                        <div class="details-section">
+                                            <div class="field-group">
+                                                <label>Type:</label>
+                                                <select [(ngModel)]="task.type" name="type">
+                                                    <option value="evolution">Demande d'évolution</option>
+                                                    <option value="bug">Bug</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="field-group">
+                                                <label>Priorité:</label>
+                                                <select [(ngModel)]="task.priority" name="priority">
+                                                    <option *ngFor="let p of priorities" [value]="p">{{ p }}</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="field-group">
+                                                <label>Description:</label>
+                                                <div class="rich-text-editor">
+                                                    <textarea [(ngModel)]="task.description" name="description" rows="5"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Comments and Activity Section -->
+                                        <div class="activity-section">
+                                            <div class="tabs">
+                                                <button class="tab-btn active">Commentaires</button>
+                                                <button class="tab-btn">Historique</button>
+                                            </div>
+
+                                            <!-- Add Comment Section -->
+                                            <div class="add-comment">
+                                                <button class="btn-add-comment" (click)="showCommentForm = true" *ngIf="!showCommentForm">
+                                                    <i class="icon-plus"></i> Ajouter un commentaire
+                                                </button>
+                                                
+                                                <form *ngIf="showCommentForm" (ngSubmit)="addComment()" class="comment-form">
+                                                    <div class="rich-text-editor">
+                                                        <textarea [(ngModel)]="newComment.text" name="commentText" 
+                                                                placeholder="Ajouter un commentaire..." required></textarea>
+                                                    </div>
+                                                    <div class="form-actions">
+                                                        <input type="file" (change)="onFileSelected($event)" multiple />
+                                                        <div class="buttons">
+                                                            <button type="button" class="btn-cancel" (click)="showCommentForm = false">Annuler</button>
+                                                            <button type="submit" class="btn-submit">Envoyer</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+
+                                            <!-- Comments List -->
+                                            <div class="comments-list">
+                                                <div *ngFor="let comment of task.comments" class="comment">
+                                                    <div class="comment-header">
+                                                        <div class="user-info">
+                                                            <img [src]="comment.user.avatar" class="avatar" alt="User avatar"/>
+                                                            <span class="username">{{ comment.user.firstname }} {{ comment.user.lastname }}</span>
+                                                        </div>
+                                                        <div class="comment-date">{{ comment.createdAt | date:'dd MMM yyyy HH:mm' }}</div>
+                                                    </div>
+                                                    <div class="comment-content">
+                                                        <p>{{ comment.text }}</p>
+                                                        <div *ngIf="comment.attachments?.length" class="attachments">
+                                                            <div *ngFor="let attachment of comment.attachments" class="attachment">
+                                                                <i class="icon-file"></i>
+                                                                <span>{{ attachment.name }}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="comment-actions">
+                                                        <button (click)="editComment(comment)">Modifier</button>
+                                                        <button (click)="deleteComment(comment._id)">Supprimer</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="content-right">
+                                        <!-- People Section -->
+                                        <div class="people-section">
+                                            <h3>Personnes</h3>
+                                            <div class="field-group">
+                                                <label>Responsable:</label>
+                                                <select [(ngModel)]="task.assignedUser" name="assignedUser">
+                                                    <option *ngFor="let user of users" [value]="user._id">
+                                                        {{ user.firstname }} {{ user.lastname }}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="field-group">
+                                                <label>Rapporteur:</label>
+                                                <div class="user-info">
+                                                    <img [src]="task.reporter?.avatar" class="avatar" alt="Reporter avatar"/>
+                                                    <span>{{ task.reporter?.firstname }} {{ task.reporter?.lastname }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Dates Section -->
+                                        <div class="dates-section">
+                                            <h3>Dates</h3>
+                                            <div class="field-group">
+                                                <label>Création:</label>
+                                                <span>{{ task.createdAt | date:'dd MMM yyyy' }}</span>
+                                            </div>
+                                            <div class="field-group">
+                                                <label>Mise à jour:</label>
+                                                <span>{{ task.updatedAt | date:'dd MMM yyyy' }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+    
                     </div>
                 </div>
             </div>

@@ -1,17 +1,11 @@
-.app-container {
-    margin-top: 6%;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    margin-left: 17%;
-}
 .task-page {
     padding: 24px;
     background: linear-gradient(to bottom, #f7f9fc, #ffffff);
     min-height: calc(100vh - 6%);
+    width: 100%;
     max-width: 1600px;
     margin: 0 auto;
-
+    
     .breadcrumb {
         margin-bottom: 24px;
         font-size: 14px;
@@ -19,19 +13,19 @@
         background: rgba(255, 255, 255, 0.8);
         border-radius: 6px;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-
+        
         a {
             color: #0065FF;
             text-decoration: none;
             font-weight: 500;
-
+            
             &:hover {
                 color: #0747A6;
                 text-decoration: underline;
             }
         }
     }
-
+    
     .task-header {
         display: flex;
         justify-content: space-between;
@@ -41,7 +35,7 @@
         background: white;
         border-radius: 8px;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-
+        
         .task-title-section {
             h2 {
                 font-size: 26px;
@@ -49,7 +43,7 @@
                 color: #172B4D;
                 font-weight: 600;
             }
-
+            
             .task-id {
                 color: #5E6C84;
                 font-size: 14px;
@@ -60,11 +54,11 @@
                 display: inline-block;
             }
         }
-
+        
         .action-buttons {
             display: flex;
             gap: 12px;
-
+            
             .btn {
                 padding: 10px 20px;
                 border-radius: 4px;
@@ -73,18 +67,18 @@
                 cursor: pointer;
                 font-weight: 500;
                 transition: all 0.2s ease;
-
+                
                 &:hover {
                     background: #F4F5F7;
                     transform: translateY(-1px);
                     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
                 }
-
+                
                 &.btn-primary {
                     background: #0065FF;
                     color: white;
                     border-color: #0065FF;
-
+                    
                     &:hover {
                         background: #0052CC;
                         box-shadow: 0 2px 4px rgba(0, 82, 204, 0.3);
@@ -93,12 +87,12 @@
             }
         }
     }
-
+    
     .task-content {
         display: grid;
         grid-template-columns: 1fr 320px;
         gap: 24px;
-
+        
         .content-left {
             background: white;
             border-radius: 8px;
@@ -107,11 +101,11 @@
 
             .status-section {
                 margin-bottom: 32px;
-
+                
                 .status-buttons {
                     display: flex;
                     gap: 12px;
-
+                    
                     .btn {
                         padding: 10px 20px;
                         border: 1px solid #DFE1E6;
@@ -120,19 +114,19 @@
                         cursor: pointer;
                         font-weight: 500;
                         transition: all 0.2s ease;
-
+                        
                         &:hover {
                             background: #F4F5F7;
                             transform: translateY(-1px);
                             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
                         }
-
+                        
                         &.active {
                             background: #0065FF;
                             color: white;
                             border-color: #0065FF;
                             box-shadow: 0 2px 4px rgba(0, 82, 204, 0.3);
-
+                            
                             &:hover {
                                 background: #0052CC;
                             }
@@ -141,10 +135,10 @@
                 }
             }
         }
-
+        
         .field-group {
             margin-bottom: 24px;
-
+            
             label {
                 display: block;
                 color: #5E6C84;
@@ -153,16 +147,15 @@
                 margin-bottom: 8px;
                 text-transform: uppercase;
             }
-
-            select,
-            textarea {
+            
+            select, textarea {
                 width: 100%;
                 padding: 10px;
                 border: 2px solid #DFE1E6;
                 border-radius: 4px;
                 font-size: 14px;
                 transition: all 0.2s ease;
-
+                
                 &:focus {
                     outline: none;
                     border-color: #4C9AFF;
@@ -174,16 +167,16 @@
                 }
             }
         }
-
+        
         .activity-section {
             margin-top: 40px;
-
+            
             .tabs {
                 margin-bottom: 24px;
                 border-bottom: 2px solid #DFE1E6;
                 display: flex;
                 gap: 32px;
-
+                
                 .tab-btn {
                     padding: 12px 4px;
                     border: none;
@@ -193,15 +186,15 @@
                     font-weight: 500;
                     position: relative;
                     transition: all 0.2s ease;
-
+                    
                     &:hover {
                         color: #172B4D;
                     }
-
+                    
                     &.active {
                         color: #0065FF;
                         font-weight: 600;
-
+                        
                         &:after {
                             content: '';
                             position: absolute;
@@ -215,10 +208,10 @@
                     }
                 }
             }
-
+            
             .add-comment {
                 margin-bottom: 32px;
-
+                
                 .btn-add-comment {
                     width: 100%;
                     padding: 16px;
@@ -229,7 +222,7 @@
                     cursor: pointer;
                     font-weight: 500;
                     transition: all 0.2s ease;
-
+                    
                     &:hover {
                         background: #F4F5F7;
                         border-color: #C1C7D0;
@@ -237,15 +230,15 @@
                         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
                     }
                 }
-
+                
                 .comment-form {
                     border: 2px solid #4C9AFF;
                     border-radius: 4px;
                     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-
+                    
                     .rich-text-editor {
                         padding: 16px;
-
+                        
                         textarea {
                             width: 100%;
                             min-height: 120px;
@@ -253,13 +246,13 @@
                             resize: vertical;
                             font-size: 14px;
                             line-height: 1.6;
-
+                            
                             &:focus {
                                 outline: none;
                             }
                         }
                     }
-
+                    
                     .form-actions {
                         padding: 16px;
                         background: #F4F5F7;
@@ -267,34 +260,34 @@
                         justify-content: space-between;
                         align-items: center;
                         border-top: 1px solid #DFE1E6;
-
+                        
                         .buttons {
                             display: flex;
                             gap: 12px;
-
+                            
                             button {
                                 padding: 10px 20px;
                                 border-radius: 4px;
                                 cursor: pointer;
                                 font-weight: 500;
                                 transition: all 0.2s ease;
-
+                                
                                 &.btn-cancel {
                                     background: transparent;
                                     border: none;
                                     color: #5E6C84;
-
+                                    
                                     &:hover {
                                         background: rgba(9, 30, 66, 0.08);
                                         color: #172B4D;
                                     }
                                 }
-
+                                
                                 &.btn-submit {
                                     background: #0065FF;
                                     color: white;
                                     border: none;
-
+                                    
                                     &:hover {
                                         background: #0052CC;
                                         transform: translateY(-1px);
@@ -306,7 +299,7 @@
                     }
                 }
             }
-
+            
             .comments-list {
                 .comment {
                     margin-bottom: 24px;
@@ -315,12 +308,12 @@
                     background: white;
                     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
                     transition: all 0.2s ease;
-
+                    
                     &:hover {
                         box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
                         transform: translateY(-1px);
                     }
-
+                    
                     .comment-header {
                         padding: 16px;
                         background: #F4F5F7;
@@ -328,43 +321,43 @@
                         justify-content: space-between;
                         align-items: center;
                         border-bottom: 1px solid #DFE1E6;
-
+                        
                         .user-info {
                             display: flex;
                             align-items: center;
                             gap: 12px;
-
+                            
                             .avatar {
                                 width: 32px;
                                 height: 32px;
                                 border-radius: 50%;
                                 box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
                             }
-
+                            
                             .username {
                                 font-weight: 600;
                                 color: #172B4D;
                             }
                         }
-
+                        
                         .comment-date {
                             color: #5E6C84;
                             font-size: 12px;
                             font-weight: 500;
                         }
                     }
-
+                    
                     .comment-content {
                         padding: 16px;
                         color: #172B4D;
                         font-size: 14px;
                         line-height: 1.6;
-
+                        
                         .attachments {
                             margin-top: 12px;
                             padding-top: 12px;
                             border-top: 1px solid #DFE1E6;
-
+                            
                             .attachment {
                                 display: flex;
                                 align-items: center;
@@ -376,21 +369,21 @@
                                 background: #F4F5F7;
                                 border-radius: 3px;
                                 transition: all 0.2s ease;
-
+                                
                                 &:hover {
                                     background: #DEEBFF;
                                 }
                             }
                         }
                     }
-
+                    
                     .comment-actions {
                         padding: 12px 16px;
                         border-top: 1px solid #DFE1E6;
                         display: flex;
                         gap: 12px;
                         background: #FAFBFC;
-
+                        
                         button {
                             padding: 6px 12px;
                             border: none;
@@ -401,7 +394,7 @@
                             font-weight: 500;
                             border-radius: 3px;
                             transition: all 0.2s ease;
-
+                            
                             &:hover {
                                 color: #0065FF;
                                 background: #DEEBFF;
@@ -411,9 +404,8 @@
                 }
             }
         }
-
+        
         .content-right {
-
             .people-section,
             .dates-section {
                 background: white;
@@ -421,7 +413,7 @@
                 padding: 20px;
                 margin-bottom: 24px;
                 box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-
+                
                 h3 {
                     font-size: 12px;
                     text-transform: uppercase;
@@ -430,14 +422,14 @@
                     margin: 0 0 20px;
                     letter-spacing: 0.5px;
                 }
-
+                
                 .field-group {
                     margin-bottom: 20px;
-
+                    
                     &:last-child {
                         margin-bottom: 0;
                     }
-
+                    
                     .user-info {
                         display: flex;
                         align-items: center;
@@ -445,11 +437,11 @@
                         padding: 8px;
                         border-radius: 4px;
                         transition: all 0.2s ease;
-
+                        
                         &:hover {
                             background: #F4F5F7;
                         }
-
+                        
                         .avatar {
                             width: 28px;
                             height: 28px;
@@ -479,10 +471,10 @@
 @media (max-width: 1200px) {
     .task-page {
         padding: 16px;
-
+        
         .task-content {
             grid-template-columns: 1fr;
-
+            
             .content-right {
                 order: -1;
             }
@@ -493,22 +485,22 @@
 @media (max-width: 768px) {
     .task-page {
         padding: 12px;
-
+        
         .task-header {
             flex-direction: column;
             gap: 16px;
-
+            
             .action-buttons {
                 width: 100%;
                 justify-content: flex-start;
                 flex-wrap: wrap;
             }
         }
-
+        
         .status-section {
             .status-buttons {
                 flex-wrap: wrap;
-
+                
                 .btn {
                     flex: 1 1 auto;
                     min-width: 150px;
@@ -516,4 +508,4 @@
             }
         }
     }
-}
+} 

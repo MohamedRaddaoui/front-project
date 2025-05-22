@@ -54,7 +54,7 @@ export class TaskComponent implements OnInit {
   public cardSettings: CardSettingsModel = {
     headerField: 'Id',
     contentField: 'Summary',
-    selectionType: 'Multiple'
+    selectionType: 'Multiple',
     // Pas besoin de `template` ici : tu l’as défini dans le HTML via `#cardSettingsTemplate`
   };
 
@@ -69,17 +69,19 @@ export class TaskComponent implements OnInit {
   }
 
   ngOnInit(): void {
-   this.taskService.getAllTasks().subscribe((tasks: Task[]) => {
+    this.taskService.getAllTasks().subscribe((tasks: Task[]) => {
+      console.log(tasks);
       this.kanbanData = tasks.map((task: Task) => ({
         Id: task._id,
         Title: task.title,
         Summary: task.description,
-        Tags: 'Général',
+        Tags: this.getTag(task.tags),
         Status: this.mapStatus(task.status),
         Priority: task.priority,
         Assignee: this.getAssigneeName(task.assignedUser),
         idAssigned: this.getAssigneeId(task.assignedUser),
         Type: 'story',
+        ProjectId:this.getProjectid(task.projectId)
 
       }));
     });
@@ -103,7 +105,12 @@ export class TaskComponent implements OnInit {
   getAssigneeName(assignee: any): string {
     return typeof assignee === 'string'
       ? assignee
-      : assignee?.firstname || 'Unassigned';
+      : assignee?.firstname + " " + assignee?.lastname || 'Unassigned';
+  }
+  getProjectid(project: any): string {
+    return typeof project === 'string'
+      ? project
+      : project?._id || 'Unassigned';
   }
   getAssigneeId(assignee: any): string {
     return typeof assignee === 'string'
@@ -111,6 +118,11 @@ export class TaskComponent implements OnInit {
       : assignee?._id || null;
   }
 
+  getTag(tag: any): string {
+    return typeof tag === 'string'
+    ? tag
+    : tag?.toUpperCase() || 'GENERAL';
+  }
   getString(assignee: string): string {
     return assignee.match(/\b(\w)/g)?.join('').toUpperCase() || '';
   }

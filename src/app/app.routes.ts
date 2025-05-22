@@ -7,6 +7,8 @@ import { SideBarComponent } from './side-bar/side-bar.component';
 import { AddProjectComponent } from './add-project/add-project.component';
 import { TaskComponent } from './task/task.component';
 import { TaskDetailsComponent } from './task-details/task-details.component';
+import { NgModule } from '@angular/core';
+
 export const routes: Routes = [
   {
     path: 'calendar',
