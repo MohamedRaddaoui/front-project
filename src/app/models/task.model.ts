@@ -17,10 +17,8 @@ export interface Task {
 export interface TaskHistory {
   _id?: string;
   task: Task | string;
-  updatedBy: {
+  updatedBy:{
     _id: string;
-    firstname: string;
-    lastname: string;
     email: string;
   };
   changes: {
