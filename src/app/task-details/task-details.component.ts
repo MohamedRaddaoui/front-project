@@ -1,92 +1,155 @@
 import { Component, OnInit } from '@angular/core';
 import { SideBarComponent } from '../side-bar/side-bar.component';
 import { CommonModule } from '@angular/common';
-import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TaskService } from '../services/task.service';
 
 @Component({
   selector: 'app-task-details',
-  imports: [SideBarComponent,CommonModule,FormsModule],
+  imports: [SideBarComponent, CommonModule, FormsModule],
   templateUrl: './task-details.component.html',
   styleUrl: './task-details.component.css'
 })
-export class TaskDetailsComponent implements OnInit  {
+export class TaskDetailsComponent implements OnInit {
   task: any = {
     title: '',
     description: '',
     priority: 'Medium',
     status: 'To Do',
     assignedUser: '',
+    projectId: '', // This should be set based on current project
     comments: []
   };
 
-  users: any[] = []; // à remplacer par les utilisateurs du backend
+  users: any[] = [];
   priorities = ['Low', 'Medium', 'High'];
   statuses = ['To Do', 'In Progress', 'Done'];
   isEditMode = false;
+  isCreateMode = false;
   newComment = {
     text: '',
     files: []
   };
   showCommentForm: boolean = false;
+  errorMessage: string = '';
 
-  constructor() { }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private taskService: TaskService
+  ) { }
 
   ngOnInit() {
+    this.route.params.subscribe(params => {
+      if (params['id']) {
+        this.fetchTask(params['id']);
+      } else {
+        this.isCreateMode = true;
+        // Set projectId from route or state management
+        this.task.projectId = this.route.snapshot.queryParams['projectId'];
+      }
+    });
     this.fetchUsers();
-    // charger les tâches si besoin
+  }
+
+  fetchTask(id: string) {
+    this.taskService.getTaskById(id).subscribe({
+      next: (response) => {
+        this.task = response.task;
+      },
+      error: (error) => {
+        this.errorMessage = error.error.message || 'Error fetching task';
+        console.error('Error fetching task:', error);
+      }
+    });
   }
 
   fetchUsers() {
-    // Appel à ton API pour récupérer les utilisateurs
+    // TODO: Implement user service to fetch users
+    this.users = [
+      { _id: '67d99644b4e02ca9a8b0991f', firstname: 'Mohamed', lastname: 'Raddaoui' },
+      { _id: '67dea703b0a765d6ff287d98', firstname: 'jean', lastname: 'philip' }
+    ];
+  }
+
+  onEdit() {
+    this.isEditMode = true;
   }
 
   onSubmit() {
-    if (this.isEditMode) {
-      // Mettre à jour la tâche via l'API
+    if (!this.task.title.trim()) {
+      this.errorMessage = 'Title is required';
+      return;
+    }
+
+    if (!this.task.projectId) {
+      this.errorMessage = 'Project ID is required';
+      return;
+    }
+
+    if (this.isCreateMode) {
+      this.taskService.createTask(this.task).subscribe({
+        next: (response) => {
+          console.log('Task created:', response);
+          this.router.navigate(['/tasks', response.task._id]);
+        },
+        error: (error) => {
+          this.errorMessage = error.error.message || 'Error creating task';
+          console.error('Error creating task:', error);
+        }
+      });
     } else {
-      // Créer une nouvelle tâche via l'API
+      this.taskService.updateTask(this.task._id, this.task).subscribe({
+        next: (response) => {
+          console.log('Task updated:', response);
+          this.isEditMode = false;
+          this.task = response.task;
+        },
+        error: (error) => {
+          this.errorMessage = error.error.message || 'Error updating task';
+          console.error('Error updating task:', error);
+        }
+      });
     }
   }
 
-  deleteTask() {
-    // Supprimer la tâche via l'API
+  onShare() {
+    // TODO: Implement share functionality
+    console.log('Share task:', this.task._id);
   }
 
   addComment() {
     if (this.newComment.text.trim()) {
-      const commentToAdd = {
+      this.taskService.addComment(this.task._id, {
         text: this.newComment.text,
         files: this.newComment.files
-      };
-      // Envoyer le commentaire via l'API
-      this.task.comments.push({
-        user: { firstname: 'Moi' },
-        text: this.newComment.text,
-        sentiment: 'pending...'
+      }).subscribe({
+        next: (response) => {
+          this.task.comments.push(response.comment);
+          this.showCommentForm = false;
+          this.newComment.text = '';
+          this.newComment.files = [];
+        },
+        error: (error) => {
+          this.errorMessage = error.error.message || 'Error adding comment';
+          console.error('Error adding comment:', error);
+        }
       });
-      this.showCommentForm = false;
-      this.newComment.text = '';
-      this.newComment.files = [];
     }
   }
 
   editComment(comment: any) {
-    // Logic to edit comment
+    // TODO: Implement comment editing
+    console.log('Edit comment:', comment);
   }
 
   deleteComment(commentId: string) {
-    // Supprimer le commentaire via l'API
+    // TODO: Implement comment deletion through API
+    console.log('Delete comment:', commentId);
   }
 
   onFileSelected(event: any) {
     this.newComment.files = Array.from(event.target.files);
-  }
-
-  onEdit(): void {
-    // Handle edit action
-  }
-
-  onShare(): void {
-    // Handle share action
   }
 }

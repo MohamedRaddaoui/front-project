@@ -517,3 +517,146 @@
         }
     }
 }
+
+.error-message {
+    background-color: #ffebee;
+    color: #c62828;
+    padding: 12px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    border: 1px solid #ef9a9a;
+}
+
+.title-input-wrapper {
+    position: relative;
+    margin-bottom: 12px;
+}
+
+.title-input-wrapper i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #5E6C84;
+}
+
+.title-input {
+    width: 100%;
+    padding: 12px 12px 12px 36px;
+    font-size: 24px;
+    font-weight: 500;
+    border: 2px solid #DFE1E6;
+    border-radius: 4px;
+    color: #172B4D;
+    background: white;
+    transition: all 0.2s ease;
+}
+
+.title-input:focus {
+    outline: none;
+    border-color: #4C9AFF;
+    box-shadow: 0 0 0 2px rgba(76, 154, 255, 0.2);
+}
+
+.input-field {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 14px;
+    border: 2px solid #DFE1E6;
+    border-radius: 4px;
+    color: #172B4D;
+    background: white;
+    transition: all 0.2s ease;
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: #4C9AFF;
+    box-shadow: 0 0 0 2px rgba(76, 154, 255, 0.2);
+}
+
+.select-field {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 14px;
+    border: 2px solid #DFE1E6;
+    border-radius: 4px;
+    color: #172B4D;
+    background: white;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.select-field:focus {
+    outline: none;
+    border-color: #4C9AFF;
+    box-shadow: 0 0 0 2px rgba(76, 154, 255, 0.2);
+}
+
+.textarea-field {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+    line-height: 1.6;
+    border: 2px solid #DFE1E6;
+    border-radius: 4px;
+    color: #172B4D;
+    background: white;
+    transition: all 0.2s ease;
+    resize: none;
+    min-height: 120px;
+}
+
+.textarea-field:focus {
+    outline: none;
+    border-color: #4C9AFF;
+    box-shadow: 0 0 0 2px rgba(76, 154, 255, 0.2);
+}
+
+/* File upload styling */
+.file-upload {
+    position: relative;
+}
+
+.file-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: #F4F5F7;
+    border: 1px solid #DFE1E6;
+    border-radius: 4px;
+    color: #172B4D;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.file-label:hover {
+    background: #EBECF0;
+}
+
+.file-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+/* Icon styles */
+i {
+    margin-right: 8px;
+}
+
+.field-group label i {
+    color: #5E6C84;
+    width: 16px;
+    text-align: center;
+}
+
+.btn i {
+    font-size: 14px;
+}

@@ -9,18 +9,38 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class TaskService {
-  private baseUrl = `${environment.baseUrl}/tasks`; 
+  private apiUrl = `${environment.baseUrl}/tasks`;
 
   constructor(private http: HttpClient) {}
-  updateTask(id: string, data: Task): Observable<any> {
-    return this.http.put(`${this.baseUrl}/update/${id}`, data);
+
+  // Create a new task
+  createTask(taskData: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/create`, taskData);
   }
-  deleteTask(id: any): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/delete/${id}`, id);
+
+  // Get task by ID
+  getTaskById(id: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/getbyId/${id}`);
   }
+
+  // Update task
+  updateTask(id: string, taskData: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/update/${id}`, taskData);
+  }
+
+  // Delete task
+  deleteTask(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/delete/${id}`);
+  }
+
+  // Add comment to task
+  addComment(taskId: string, commentData: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/${taskId}/comments`, commentData);
+  }
+
   getAllTasks(): Observable<Task[]> {
-    return this.http.get<{ tasks: Task[] }>(`${this.baseUrl}/getAll`).pipe(
+    return this.http.get<{ tasks: Task[] }>(`${this.apiUrl}/getAll`).pipe(
       map(response => response.tasks)
     );  
-}
+  }
 }
