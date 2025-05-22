@@ -103,7 +103,7 @@ export class TaskDetailsComponent implements OnInit {
       this.taskService.createTask(this.task).subscribe({
         next: (response) => {
           console.log('Task created:', response);
-          this.router.navigate(['/tasks', response.task._id]);
+          this.router.navigate(['/tasks']);
         },
         error: (error) => {
           this.errorMessage = error.error.message || 'Error creating task';
