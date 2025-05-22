@@ -23,6 +23,7 @@ export class TaskDetailsComponent implements OnInit {
   };
 
   users: any[] = [];
+  projects: any[] = [];
   priorities = ['Low', 'Medium', 'High'];
   statuses = ['To Do', 'In Progress', 'Done'];
   isEditMode = false;
@@ -51,6 +52,16 @@ export class TaskDetailsComponent implements OnInit {
       }
     });
     this.fetchUsers();
+    this.fetchProjects();
+  }
+
+  fetchProjects() {
+    // Static project list for now
+    this.projects = [
+      { _id: '67f7a640d4ce6fae00468f18', name: 'Application dev' },
+      { _id: '68014b8ea4e327735c69ec8f', name: 'project test mail' },
+      { _id: '68150a984ed88e831b86d362', name: 'test' }
+    ];
   }
 
   fetchTask(id: string) {

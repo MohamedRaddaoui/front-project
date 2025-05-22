@@ -233,13 +233,19 @@
                                             </div>
                                             <div class="field-group">
                                                 <label>
-                                                    <i class="fas fa-user"></i>
-                                                    Reporter
+                                                    <i class="fas fa-project-diagram"></i>
+                                                    Project
                                                 </label>
-                                                <div class="user-info">
-                                                    <img [src]="task.reporter?.avatar" class="avatar" alt="Reporter avatar"/>
-                                                    <span>{{ task.reporter?.firstname }} {{ task.reporter?.lastname }}</span>
-                                                </div>
+                                                <select [(ngModel)]="task.projectId" 
+                                                        name="projectId"
+                                                        [disabled]="!isEditMode && !isCreateMode"
+                                                        class="select-field"
+                                                        required>
+                                                    <option value="">Select a project</option>
+                                                    <option *ngFor="let project of projects" [value]="project._id">
+                                                        {{ project.name }}
+                                                    </option>
+                                                </select>
                                             </div>
                                         </div>
 
