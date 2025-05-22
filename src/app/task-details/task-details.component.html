@@ -102,8 +102,8 @@
                                                     name="priority"
                                                     [disabled]="!isEditMode && !isCreateMode"
                                                     class="select-field">
-                                                <option *ngFor="let p of priorities" [value]="p">{{ p }}</option>
-                                            </select>
+                                        <option *ngFor="let p of priorities" [value]="p">{{ p }}</option>
+                                    </select>
                                         </div>
 
                                         <div class="field-group">
@@ -196,7 +196,7 @@
                                                             <textarea [(ngModel)]="newComment.text" 
                                                                       name="commentText" 
                                                                       placeholder="Add a comment..."
-                                                                      required></textarea>
+                                            required></textarea>
                                                         </div>
                                                         <div class="form-actions">
                                                             <div class="file-upload">
@@ -231,7 +231,7 @@
                                                                 </button>
                                                             </div>
                                                         </div>
-                                                    </form>
+                                    </form>
                                                 </div>
                                             </div>
 
@@ -517,54 +517,56 @@
     box-shadow: 0 0 0 3px rgba(0,82,204,0.2);
 }
 
-/* Activity Section */
+/* Activity Section and Tabs */
 .activity-section {
     background: white;
     border-radius: 3px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     margin-top: 24px;
-    overflow: hidden;
+    overflow: visible;
+    border: 1px solid #DFE1E6;
 }
 
 .activity-tabs {
     display: flex;
-    background: #FAFBFC;
-    border-bottom: 2px solid #DFE1E6;
-    padding: 0;
+    align-items: center;
+    border-bottom: 1px solid #DFE1E6;
+    padding: 0 20px;
     margin: 0;
-    height: 48px;
+    height: 36px;
+    background: transparent;
 }
 
 .tab-button {
-    height: 48px;
-    padding: 0 24px;
+    height: 36px;
+    padding: 0 12px;
     border: none;
     background: transparent;
     color: #42526E;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     position: relative;
     cursor: pointer;
     transition: all 0.2s ease;
+    margin-right: 8px;
 }
 
 .tab-button i {
-    font-size: 16px;
+    font-size: 14px;
     opacity: 0.8;
 }
 
 .tab-button:hover {
     color: #0052CC;
-    background: rgba(9, 30, 66, 0.04);
+    background: transparent;
 }
 
 .tab-button.active {
     color: #0052CC;
-    font-weight: 600;
-    background: white;
+    font-weight: 500;
+    background: transparent;
 }
 
 .tab-button.active::after {
@@ -577,9 +579,11 @@
     background: #0052CC;
 }
 
-/* Comments Section - Matching History Style */
+/* Comments Container Adjustment */
 .comments-container {
-    padding: 12px 20px;
+    padding: 16px 20px;
+    background: transparent;
+    border-radius: 0 0 3px 3px;
 }
 
 .comments-list {
@@ -848,9 +852,11 @@
     background: #F4F5F7;
 }
 
-/* History Section Redesign */
+/* History Container Adjustment */
 .history-container {
-    padding: 12px 20px;
+    padding: 16px 20px;
+    background: transparent;
+    border-radius: 0 0 3px 3px;
 }
 
 .history-list {
@@ -940,159 +946,6 @@
     font-style: italic;
     background: #F4F5F7;
     border-radius: 8px;
-}
-
-/* Activity Tabs Refinement */
-.activity-tabs {
-    background: #F4F5F7;
-    padding: 0;
-    border-bottom: none;
-}
-
-.tab-button {
-    padding: 12px 20px;
-    font-weight: 500;
-    font-size: 14px;
-    color: #42526E;
-    position: relative;
-    transition: all 0.2s ease;
-}
-
-.tab-button.active {
-    background: white;
-    color: #0052CC;
-    border-radius: 3px 3px 0 0;
-}
-
-.tab-button:hover:not(.active) {
-    background: rgba(9,30,66,0.04);
-    color: #172B4D;
-}
-
-.tab-button i {
-    margin-right: 6px;
-    font-size: 14px;
-}
-
-/* Add Comment Section Refinement */
-.add-comment {
-    padding: 16px 20px;
-    background: white;
-    margin: 0;
-    border-top: 1px solid #DFE1E6;
-}
-
-.btn-add-comment {
-    width: 100%;
-    padding: 8px 12px;
-    text-align: left;
-    background: #F4F5F7;
-    border: 1px solid #DFE1E6;
-    border-radius: 3px;
-    color: #42526E;
-    font-size: 14px;
-}
-
-.btn-add-comment:hover {
-    background: #EBECF0;
-    transform: none;
-    box-shadow: none;
-}
-
-.comment-form {
-    margin-top: 12px;
-}
-
-.rich-text-editor textarea {
-    min-height: 80px;
-    border-radius: 3px;
-    background: white;
-    border: 1px solid #DFE1E6;
-    padding: 12px;
-    font-size: 14px;
-}
-
-.form-actions {
-    margin-top: 12px;
-}
-
-.buttons {
-    margin-top: 12px;
-    gap: 8px;
-}
-
-.buttons button {
-    padding: 8px 12px;
-    font-size: 14px;
-    border-radius: 3px;
-}
-
-/* Fix Input Fields Alignment */
-.field-group {
-    max-width: 100%;
-    overflow: hidden;
-}
-
-.input-field, 
-.select-field, 
-.textarea-field {
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-    margin: 0;
-    font-family: inherit;
-}
-
-.textarea-field {
-    min-height: 120px;
-    resize: vertical;
-}
-
-/* Tags Input Specific Style */
-.field-group input[name="tags"] {
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-    padding: 12px 16px;
-    border: 2px solid #DFE1E6;
-    border-radius: 12px;
-    font-size: 15px;
-    background: #F4F5F7;
-    transition: all 0.3s ease;
-}
-
-.field-group input[name="tags"]:focus {
-    border-color: #0052CC;
-    background: white;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(0,82,204,0.2);
-}
-
-/* Content Layout Fix */
-.content-left {
-    padding-right: 24px;
-    flex: 1;
-    min-width: 0; /* Prevents flex item from overflowing */
-}
-
-.content-right {
-    width: 300px;
-    flex-shrink: 0;
-}
-
-.task-content {
-    display: flex;
-    gap: 24px;
-    margin-top: 24px;
-}
-
-/* Make sure all containers respect max-width */
-.field-group,
-.activity-section,
-.comment,
-.add-comment {
-    max-width: 100%;
-    box-sizing: border-box;
 }
 
 /* Action Buttons */
