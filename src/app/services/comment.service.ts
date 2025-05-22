@@ -11,11 +11,23 @@ export class CommentService {
 
   constructor(private http: HttpClient) { }
 
+  getCommentsByTaskId(taskId: string): Observable<any> {
+    console.log('Fetching comments for task:', taskId);
+    return this.http.get(`${this.apiUrl}/getCommentsbyTaskId/${taskId}`);
+  }
+
   addComment(formData: FormData): Observable<any> {
     return this.http.post(`${this.apiUrl}/add`, formData);
   }
 
   deleteComment(taskId: string, commentId: string): Observable<any> {
+    console.log(`Deleting comment. TaskID: ${taskId}, CommentID: ${commentId}`);
+    console.log('Task ID:', taskId);
+    console.log('Comment ID:', commentId);
+    // Assurez-vous que les IDs sont des chaînes valides
+    if (!taskId?.trim() || !commentId?.trim()) {
+      throw new Error('Invalid task or comment ID');
+    }
     return this.http.delete(`${this.apiUrl}/delete/${taskId}/${commentId}`);
   }
 

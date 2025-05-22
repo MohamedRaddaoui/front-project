@@ -73,10 +73,25 @@ export class TaskDetailsComponent implements OnInit {
     this.taskService.getTaskById(id).subscribe({
       next: (response) => {
         this.task = response.task;
+        // Après avoir chargé la tâche, charger les commentaires
+        this.loadComments(id);
       },
       error: (error) => {
         this.errorMessage = error.error.message || 'Error fetching task';
         console.error('Error fetching task:', error);
+      }
+    });
+  }
+
+  loadComments(taskId: string) {
+    this.commentService.getCommentsByTaskId(taskId).subscribe({
+      next: (response) => {
+        console.log('Comments loaded:', response);
+        this.task.comments = response.comments || [];
+      },
+      error: (error) => {
+        console.error('Error loading comments:', error);
+        this.errorMessage = 'Error loading comments';
       }
     });
   }
@@ -151,10 +166,9 @@ export class TaskDetailsComponent implements OnInit {
     if (this.newComment.text.trim() && this.task.assignedUser) {
       const formData = new FormData();
       formData.append('taskId', this.task._id);
-      formData.append('userId', this.task.assignedUser); // Utiliser l'ID de l'utilisateur assigné
+      formData.append('userId', this.task.assignedUser);
       formData.append('text', this.newComment.text);
 
-      // Append files if any
       this.newComment.files.forEach((file) => {
         formData.append('files', file);
       });
@@ -164,8 +178,10 @@ export class TaskDetailsComponent implements OnInit {
           if (response.isFlagged) {
             this.errorMessage = 'Comment added but flagged as inappropriate';
           }
-          // Update the task's comments array with the new comment
-          this.task.comments.push(response.comment);
+          // Recharger tous les commentaires après l'ajout
+          this.loadComments(this.task._id);
+          
+          // Reset the form
           this.showCommentForm = false;
           this.newComment.text = '';
           this.newComment.files = [];
@@ -186,16 +202,24 @@ export class TaskDetailsComponent implements OnInit {
   }
 
   deleteComment(commentId: string) {
+    console.log('Deleting comment with ID:', commentId);
+    console.log('Task ID:', this.task._id);
+    
+    if (!commentId || !this.task._id) {
+      this.errorMessage = 'Invalid comment or task ID';
+      return;
+    }
+
     if (confirm('Are you sure you want to delete this comment?')) {
       this.commentService.deleteComment(this.task._id, commentId).subscribe({
         next: () => {
-          this.task.comments = this.task.comments.filter(
-            (comment: any) => comment._id !== commentId
-          );
+          console.log('Comment deleted successfully');
+          // Recharger les commentaires après la suppression
+          this.loadComments(this.task._id);
         },
         error: (error) => {
-          this.errorMessage = error.error.message || 'Error deleting comment';
           console.error('Error deleting comment:', error);
+          this.errorMessage = error.error?.message || 'Error deleting comment';
         }
       });
     }
