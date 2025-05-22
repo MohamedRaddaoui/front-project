@@ -7,7 +7,7 @@ import { environment } from '../../environment/env';
   providedIn: 'root'
 })
 export class CommentService {
-  private apiUrl = `${environment.baseUrl}/comments`;
+  private apiUrl = `${environment.baseUrl}/taskcomments`;
 
   constructor(private http: HttpClient) { }
 
