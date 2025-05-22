@@ -120,110 +120,149 @@
                                         </div>
 
                                         <!-- Comments Section -->
-                                        <div class="activity-section" *ngIf="!isCreateMode">
-                                            <div class="tabs">
-                                                <button class="tab-btn active">
+                                        <div class="activity-section">
+                                            <div class="activity-tabs">
+                                                <button 
+                                                    [class.active]="activeTab === 'comments'"
+                                                    (click)="switchTab('comments')"
+                                                    class="tab-button">
                                                     <i class="fas fa-comments"></i>
                                                     Comments
                                                 </button>
-                                                <button class="tab-btn">
+                                                <button 
+                                                    [class.active]="activeTab === 'history'"
+                                                    (click)="switchTab('history')"
+                                                    class="tab-button">
                                                     <i class="fas fa-history"></i>
                                                     History
                                                 </button>
                                             </div>
 
-                                            <div class="comments-list">
-                                                <div *ngFor="let comment of task.comments" class="comment">
-                                                    <div class="comment-header">
-                                                        <div class="user-info">
-                                                            <img [src]="comment.user?.avatar" class="avatar" alt="User avatar"/>
-                                                            <span class="username">{{ comment.user?.firstname }} {{ comment.user?.lastname }}</span>
+                                            <!-- Comments Tab -->
+                                            <div *ngIf="activeTab === 'comments'" class="comments-container">
+                                                <div class="comments-list">
+                                                    <div *ngFor="let comment of task.comments" class="comment">
+                                                        <div class="comment-header">
+                                                            <div class="user-info">
+                                                                <img [src]="comment.user?.avatar" class="avatar" alt="User avatar"/>
+                                                                <span class="username">{{ comment.user?.firstname }} {{ comment.user?.lastname }}</span>
+                                                            </div>
+                                                            <div class="comment-metadata">
+                                                                <span class="comment-date">
+                                                                    <i class="far fa-clock"></i>
+                                                                    {{ comment.createdAt | date:'MMM d, y HH:mm' }}
+                                                                </span>
+                                                                <span class="sentiment-badge" [class]="comment.sentiment">
+                                                                    <i class="fas" 
+                                                                       [class.fa-smile]="comment.sentiment === 'positive'"
+                                                                       [class.fa-meh]="comment.sentiment === 'neutral'"
+                                                                       [class.fa-frown]="comment.sentiment === 'negative'">
+                                                                    </i>
+                                                                </span>
+                                                            </div>
                                                         </div>
-                                                        <div class="comment-metadata">
-                                                            <span class="comment-date">
-                                                                <i class="far fa-clock"></i>
-                                                                {{ comment.createdAt | date:'MMM d, y HH:mm' }}
-                                                            </span>
-                                                            <span class="sentiment-badge" [class]="comment.sentiment">
-                                                                <i class="fas" 
-                                                                   [class.fa-smile]="comment.sentiment === 'positive'"
-                                                                   [class.fa-meh]="comment.sentiment === 'neutral'"
-                                                                   [class.fa-frown]="comment.sentiment === 'negative'">
-                                                                </i>
-                                                            </span>
+                                                        <div class="comment-content">
+                                                            <p [class.flagged]="comment.isFlagged">{{ comment.text }}</p>
+                                                            <div *ngIf="comment.attachments?.length" class="attachments">
+                                                                <div *ngFor="let attachment of comment.attachments" class="attachment">
+                                                                    <i class="fas fa-file"></i>
+                                                                    <span class="filename">{{ attachment.filename }}</span>
+                                                                    <button class="btn-icon" 
+                                                                            (click)="deleteAttachment(comment._id, attachment._id)">
+                                                                        <i class="fas fa-times"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="comment-actions">
+                                                            <button (click)="deleteComment(comment._id)">
+                                                                <i class="fas fa-trash"></i>
+                                                                Delete
+                                                            </button>
                                                         </div>
                                                     </div>
-                                                    <div class="comment-content">
-                                                        <p [class.flagged]="comment.isFlagged">{{ comment.text }}</p>
-                                                        <div *ngIf="comment.attachments?.length" class="attachments">
-                                                            <div *ngFor="let attachment of comment.attachments" class="attachment">
-                                                                <i class="fas fa-file"></i>
-                                                                <span class="filename">{{ attachment.filename }}</span>
-                                                                <button class="btn-icon" 
-                                                                        (click)="deleteAttachment(comment._id, attachment._id)">
+                                                </div>
+
+                                                <div class="add-comment">
+                                                    <button class="btn-add-comment" 
+                                                            (click)="showCommentForm = true" 
+                                                            *ngIf="!showCommentForm">
+                                                        <i class="fas fa-plus"></i>
+                                                        Add comment
+                                                    </button>
+
+                                                    <form *ngIf="showCommentForm" (ngSubmit)="addComment()" class="comment-form">
+                                                        <div class="rich-text-editor">
+                                                            <textarea [(ngModel)]="newComment.text" 
+                                                                      name="commentText" 
+                                                                      placeholder="Add a comment..."
+                                                                      required></textarea>
+                                                        </div>
+                                                        <div class="form-actions">
+                                                            <div class="file-upload">
+                                                                <label for="file-input" class="file-label">
+                                                                    <i class="fas fa-paperclip"></i>
+                                                                    Attach files
+                                                                </label>
+                                                                <input id="file-input" 
+                                                                       type="file" 
+                                                                       (change)="onFileSelected($event)" 
+                                                                       multiple 
+                                                                       class="file-input" />
+                                                            </div>
+                                                            <div class="selected-files" *ngIf="newComment.files.length">
+                                                                <div *ngFor="let file of newComment.files" class="selected-file">
+                                                                    <i class="fas fa-file"></i>
+                                                                    <span>{{ file.name }} ({{ formatFileSize(file.size) }})</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="buttons">
+                                                                <button type="button" 
+                                                                        class="btn-cancel" 
+                                                                        (click)="showCommentForm = false">
                                                                     <i class="fas fa-times"></i>
+                                                                    Cancel
+                                                                </button>
+                                                                <button type="submit" 
+                                                                        class="btn-submit"
+                                                                        [disabled]="!newComment.text.trim()">
+                                                                    <i class="fas fa-paper-plane"></i>
+                                                                    Submit
                                                                 </button>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="comment-actions">
-                                                        <button (click)="deleteComment(comment._id)">
-                                                            <i class="fas fa-trash"></i>
-                                                            Delete
-                                                        </button>
-                                                    </div>
+                                                    </form>
                                                 </div>
                                             </div>
 
-                                            <div class="add-comment">
-                                                <button class="btn-add-comment" 
-                                                        (click)="showCommentForm = true" 
-                                                        *ngIf="!showCommentForm">
-                                                    <i class="fas fa-plus"></i>
-                                                    Add comment
-                                                </button>
-
-                                                <form *ngIf="showCommentForm" (ngSubmit)="addComment()" class="comment-form">
-                                                    <div class="rich-text-editor">
-                                                        <textarea [(ngModel)]="newComment.text" 
-                                                                  name="commentText" 
-                                                                  placeholder="Add a comment..."
-                                                                  required></textarea>
-                                                    </div>
-                                                    <div class="form-actions">
-                                                        <div class="file-upload">
-                                                            <label for="file-input" class="file-label">
-                                                                <i class="fas fa-paperclip"></i>
-                                                                Attach files
-                                                            </label>
-                                                            <input id="file-input" 
-                                                                   type="file" 
-                                                                   (change)="onFileSelected($event)" 
-                                                                   multiple 
-                                                                   class="file-input" />
-                                                        </div>
-                                                        <div class="selected-files" *ngIf="newComment.files.length">
-                                                            <div *ngFor="let file of newComment.files" class="selected-file">
-                                                                <i class="fas fa-file"></i>
-                                                                <span>{{ file.name }} ({{ formatFileSize(file.size) }})</span>
+                                            <!-- History Tab -->
+                                            <div *ngIf="activeTab === 'history'" class="history-container">
+                                                <div class="history-list">
+                                                    <div *ngFor="let entry of taskHistory" class="history-entry">
+                                                        <div class="history-header">
+                                                            <div class="user-info">
+                                                                <span class="user-name">{{ entry.updatedBy.firstname }} {{ entry.updatedBy.lastname }}</span>
+                                                                <span class="timestamp">{{ formatDate(entry.createdAt) }}</span>
                                                             </div>
                                                         </div>
-                                                        <div class="buttons">
-                                                            <button type="button" 
-                                                                    class="btn-cancel" 
-                                                                    (click)="showCommentForm = false">
-                                                                <i class="fas fa-times"></i>
-                                                                Cancel
-                                                            </button>
-                                                            <button type="submit" 
-                                                                    class="btn-submit"
-                                                                    [disabled]="!newComment.text.trim()">
-                                                                <i class="fas fa-paper-plane"></i>
-                                                                Submit
-                                                            </button>
+                                                        <div class="changes">
+                                                            <div *ngFor="let field of entry.changes | keyvalue" class="change-item">
+                                                                <div class="field-name">{{ getFieldLabel(field.key) }}</div>
+                                                                <div class="change-details">
+                                                                    <div class="old-value">
+                                                                        <span class="value">{{ field.value.oldValue || 'Not set' }}</span>
+                                                                        <span class="arrow">→</span>
+                                                                        <span class="value new">{{ field.value.newValue }}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </form>
+                                                    
+                                                    <div *ngIf="taskHistory.length === 0" class="no-history">
+                                                        No changes have been recorded for this task.
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -325,3 +364,124 @@
         </div>
     </div>
 </div>
+
+<style>
+.activity-section {
+    margin-top: 2rem;
+    border: 1px solid #dfe1e6;
+    border-radius: 3px;
+    background: white;
+}
+
+.activity-tabs {
+    display: flex;
+    border-bottom: 1px solid #dfe1e6;
+}
+
+.tab-button {
+    padding: 8px 16px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: #42526E;
+    border-bottom: 2px solid transparent;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tab-button i {
+    font-size: 16px;
+}
+
+.tab-button:hover {
+    background-color: #f4f5f7;
+}
+
+.tab-button.active {
+    color: #0052CC;
+    border-bottom: 2px solid #0052CC;
+}
+
+.history-container {
+    padding: 16px;
+}
+
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.history-entry {
+    padding: 12px;
+    border-radius: 3px;
+    background: #f4f5f7;
+}
+
+.history-header {
+    margin-bottom: 8px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.user-name {
+    font-weight: 500;
+    color: #42526E;
+}
+
+.timestamp {
+    color: #6B778C;
+    font-size: 12px;
+}
+
+.changes {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.change-item {
+    font-size: 13px;
+}
+
+.field-name {
+    font-weight: 500;
+    color: #42526E;
+    margin-bottom: 4px;
+}
+
+.change-details {
+    color: #6B778C;
+}
+
+.old-value {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.value {
+    color: #42526E;
+}
+
+.value.new {
+    color: #00875A;
+}
+
+.arrow {
+    color: #6B778C;
+}
+
+.no-history {
+    text-align: center;
+    color: #6B778C;
+    padding: 16px;
+    font-style: italic;
+}
+</style>

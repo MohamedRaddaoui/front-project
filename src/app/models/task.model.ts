@@ -13,3 +13,21 @@ export interface Task {
   updatedAt?: string;
 
 }
+
+export interface TaskHistory {
+  _id?: string;
+  task: Task | string;
+  updatedBy: {
+    _id: string;
+    firstname: string;
+    lastname: string;
+    email: string;
+  };
+  changes: {
+    [key: string]: {
+      oldValue: any;
+      newValue: any;
+    };
+  };
+  createdAt: Date;
+}

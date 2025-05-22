@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environment/env';
-import { Task } from '../models/task.model';
+import { Task, TaskHistory } from '../models/task.model';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -25,7 +25,7 @@ export class TaskService {
 
   // Update task
   updateTask(id: string, taskData: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/update/${id}`, taskData);
+    return this.http.put(`${this.apiUrl}/updateTaskAndSendEmail/${id}`, taskData);
   }
 
   // Delete task
@@ -42,5 +42,9 @@ export class TaskService {
     return this.http.get<{ tasks: Task[] }>(`${this.apiUrl}/getAll`).pipe(
       map(response => response.tasks)
     );  
+  }
+
+  getTaskHistory(taskId: string): Observable<TaskHistory[]> {
+    return this.http.get<TaskHistory[]>(`${this.apiUrl}/taskhistory/${taskId}`);
   }
 }

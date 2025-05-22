@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TaskService } from '../services/task.service';
 import { CommentService } from '../services/comment.service';
+import { Task, TaskHistory } from '../models/task.model';
 
 @Component({
   selector: 'app-task-details',
@@ -36,6 +37,8 @@ export class TaskDetailsComponent implements OnInit {
   };
   showCommentForm: boolean = false;
   errorMessage: string = '';
+  taskHistory: TaskHistory[] = [];
+  activeTab: 'comments' | 'history' = 'comments';
   // Pour utilisation future avec l'authentification
   // currentUserId: string = '';
 
@@ -58,6 +61,7 @@ export class TaskDetailsComponent implements OnInit {
     });
     this.fetchUsers();
     this.fetchProjects();
+    this.loadTaskHistory();
   }
 
   fetchProjects() {
@@ -252,5 +256,39 @@ export class TaskDetailsComponent implements OnInit {
     if (size < 1024) return size + ' B';
     if (size < 1024 * 1024) return (size / 1024).toFixed(1) + ' KB';
     return (size / (1024 * 1024)).toFixed(1) + ' MB';
+  }
+
+  loadTaskHistory() {
+    if (this.task._id) {
+      this.taskService.getTaskHistory(this.task._id).subscribe({
+        next: (history) => {
+          this.taskHistory = history;
+        },
+        error: (error) => {
+          console.error('Error loading task history:', error);
+        }
+      });
+    }
+  }
+
+  getFieldLabel(field: string): string {
+    const labels: { [key: string]: string } = {
+      title: 'Title',
+      description: 'Description',
+      status: 'Status',
+      priority: 'Priority',
+      assignedUser: 'Assigned User',
+      dueDate: 'Due Date',
+      tags: 'Tags'
+    };
+    return labels[field] || field;
+  }
+
+  formatDate(date: string | Date): string {
+    return new Date(date).toLocaleString();
+  }
+
+  switchTab(tab: 'comments' | 'history') {
+    this.activeTab = tab;
   }
 }
