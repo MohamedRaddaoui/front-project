@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TaskService } from '../services/task.service';
+import { CommentService } from '../services/comment.service';
 
 @Component({
   selector: 'app-task-details',
@@ -12,6 +13,7 @@ import { TaskService } from '../services/task.service';
   styleUrl: './task-details.component.css'
 })
 export class TaskDetailsComponent implements OnInit {
+  showDeleteModal = false;
   task: any = {
     title: '',
     description: '',
@@ -30,15 +32,18 @@ export class TaskDetailsComponent implements OnInit {
   isCreateMode = false;
   newComment = {
     text: '',
-    files: []
+    files: [] as File[]
   };
   showCommentForm: boolean = false;
   errorMessage: string = '';
+  // Pour utilisation future avec l'authentification
+  // currentUserId: string = '';
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private taskService: TaskService
+    private taskService: TaskService,
+    private commentService: CommentService
   ) { }
 
   ngOnInit() {
@@ -125,18 +130,41 @@ export class TaskDetailsComponent implements OnInit {
     }
   }
 
-  onShare() {
-    // TODO: Implement share functionality
-    console.log('Share task:', this.task._id);
+  onDelete() {
+    this.showDeleteModal = true;
+  }
+
+  confirmDelete() {
+    this.taskService.deleteTask(this.task._id).subscribe({
+      next: () => {
+        console.log('Task deleted successfully');
+        this.router.navigate(['/tasks']);
+      },
+      error: (error) => {
+        this.errorMessage = error.error.message || 'Error deleting task';
+        console.error('Error deleting task:', error);
+      }
+    });
   }
 
   addComment() {
-    if (this.newComment.text.trim()) {
-      this.taskService.addComment(this.task._id, {
-        text: this.newComment.text,
-        files: this.newComment.files
-      }).subscribe({
+    if (this.newComment.text.trim() && this.task.assignedUser) {
+      const formData = new FormData();
+      formData.append('taskId', this.task._id);
+      formData.append('userId', this.task.assignedUser); // Utiliser l'ID de l'utilisateur assigné
+      formData.append('text', this.newComment.text);
+
+      // Append files if any
+      this.newComment.files.forEach((file) => {
+        formData.append('files', file);
+      });
+
+      this.commentService.addComment(formData).subscribe({
         next: (response) => {
+          if (response.isFlagged) {
+            this.errorMessage = 'Comment added but flagged as inappropriate';
+          }
+          // Update the task's comments array with the new comment
           this.task.comments.push(response.comment);
           this.showCommentForm = false;
           this.newComment.text = '';
@@ -147,6 +175,8 @@ export class TaskDetailsComponent implements OnInit {
           console.error('Error adding comment:', error);
         }
       });
+    } else if (!this.task.assignedUser) {
+      this.errorMessage = 'Please assign a user to the task before adding comments';
     }
   }
 
@@ -156,11 +186,47 @@ export class TaskDetailsComponent implements OnInit {
   }
 
   deleteComment(commentId: string) {
-    // TODO: Implement comment deletion through API
-    console.log('Delete comment:', commentId);
+    if (confirm('Are you sure you want to delete this comment?')) {
+      this.commentService.deleteComment(this.task._id, commentId).subscribe({
+        next: () => {
+          this.task.comments = this.task.comments.filter(
+            (comment: any) => comment._id !== commentId
+          );
+        },
+        error: (error) => {
+          this.errorMessage = error.error.message || 'Error deleting comment';
+          console.error('Error deleting comment:', error);
+        }
+      });
+    }
+  }
+
+  deleteAttachment(commentId: string, attachmentId: string) {
+    this.commentService.deleteAttachment(commentId, attachmentId).subscribe({
+      next: () => {
+        const comment = this.task.comments.find((c: any) => c._id === commentId);
+        if (comment) {
+          comment.attachments = comment.attachments.filter(
+            (att: any) => att._id !== attachmentId
+          );
+        }
+      },
+      error: (error) => {
+        this.errorMessage = error.error.message || 'Error deleting attachment';
+        console.error('Error deleting attachment:', error);
+      }
+    });
   }
 
   onFileSelected(event: any) {
-    this.newComment.files = Array.from(event.target.files);
+    const files = event.target.files;
+    this.newComment.files = Array.from(files);
+  }
+
+  // Helper method to display file size
+  formatFileSize(size: number): string {
+    if (size < 1024) return size + ' B';
+    if (size < 1024 * 1024) return (size / 1024).toFixed(1) + ' KB';
+    return (size / (1024 * 1024)).toFixed(1) + ' MB';
   }
 }

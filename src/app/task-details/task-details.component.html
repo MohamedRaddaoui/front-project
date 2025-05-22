@@ -50,9 +50,11 @@
                                             <i class="fas fa-save"></i>
                                             Save
                                         </button>
-                                        <button class="btn" (click)="onShare()">
-                                            <i class="fas fa-share-alt"></i>
-                                            Share
+                                        <button *ngIf="isEditMode || !isCreateMode" 
+                                                class="btn btn-danger" 
+                                                (click)="onDelete()">
+                                            <i class="fas fa-trash"></i>
+                                            Delete
                                         </button>
                                     </div>
                                 </div>
@@ -130,6 +132,49 @@
                                                 </button>
                                             </div>
 
+                                            <div class="comments-list">
+                                                <div *ngFor="let comment of task.comments" class="comment">
+                                                    <div class="comment-header">
+                                                        <div class="user-info">
+                                                            <img [src]="comment.user?.avatar" class="avatar" alt="User avatar"/>
+                                                            <span class="username">{{ comment.user?.firstname }} {{ comment.user?.lastname }}</span>
+                                                        </div>
+                                                        <div class="comment-metadata">
+                                                            <span class="comment-date">
+                                                                <i class="far fa-clock"></i>
+                                                                {{ comment.createdAt | date:'MMM d, y HH:mm' }}
+                                                            </span>
+                                                            <span class="sentiment-badge" [class]="comment.sentiment">
+                                                                <i class="fas" 
+                                                                   [class.fa-smile]="comment.sentiment === 'positive'"
+                                                                   [class.fa-meh]="comment.sentiment === 'neutral'"
+                                                                   [class.fa-frown]="comment.sentiment === 'negative'">
+                                                                </i>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="comment-content">
+                                                        <p [class.flagged]="comment.isFlagged">{{ comment.text }}</p>
+                                                        <div *ngIf="comment.attachments?.length" class="attachments">
+                                                            <div *ngFor="let attachment of comment.attachments" class="attachment">
+                                                                <i class="fas fa-file"></i>
+                                                                <span class="filename">{{ attachment.filename }}</span>
+                                                                <button class="btn-icon" 
+                                                                        (click)="deleteAttachment(comment._id, attachment._id)">
+                                                                    <i class="fas fa-times"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="comment-actions">
+                                                        <button (click)="deleteComment(comment._id)">
+                                                            <i class="fas fa-trash"></i>
+                                                            Delete
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                             <div class="add-comment">
                                                 <button class="btn-add-comment" 
                                                         (click)="showCommentForm = true" 
@@ -157,6 +202,12 @@
                                                                    multiple 
                                                                    class="file-input" />
                                                         </div>
+                                                        <div class="selected-files" *ngIf="newComment.files.length">
+                                                            <div *ngFor="let file of newComment.files" class="selected-file">
+                                                                <i class="fas fa-file"></i>
+                                                                <span>{{ file.name }} ({{ formatFileSize(file.size) }})</span>
+                                                            </div>
+                                                        </div>
                                                         <div class="buttons">
                                                             <button type="button" 
                                                                     class="btn-cancel" 
@@ -165,47 +216,14 @@
                                                                 Cancel
                                                             </button>
                                                             <button type="submit" 
-                                                                    class="btn-submit">
+                                                                    class="btn-submit"
+                                                                    [disabled]="!newComment.text.trim()">
                                                                 <i class="fas fa-paper-plane"></i>
                                                                 Submit
                                                             </button>
                                                         </div>
                                                     </div>
                                                 </form>
-                                            </div>
-
-                                            <div class="comments-list">
-                                                <div *ngFor="let comment of task.comments" class="comment">
-                                                    <div class="comment-header">
-                                                        <div class="user-info">
-                                                            <img [src]="comment.user.avatar" class="avatar" alt="User avatar"/>
-                                                            <span class="username">{{ comment.user.firstname }}</span>
-                                                        </div>
-                                                        <div class="comment-date">
-                                                            <i class="far fa-clock"></i>
-                                                            {{ comment.createdAt | date:'MMM d, y HH:mm' }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="comment-content">
-                                                        <p>{{ comment.text }}</p>
-                                                        <div *ngIf="comment.attachments?.length" class="attachments">
-                                                            <div *ngFor="let attachment of comment.attachments" class="attachment">
-                                                                <i class="fas fa-file"></i>
-                                                                <span>{{ attachment.name }}</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="comment-actions">
-                                                        <button (click)="editComment(comment)">
-                                                            <i class="fas fa-edit"></i>
-                                                            Edit
-                                                        </button>
-                                                        <button (click)="deleteComment(comment._id)">
-                                                            <i class="fas fa-trash"></i>
-                                                            Delete
-                                                        </button>
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -278,5 +296,32 @@
                 </div>
             </div>
         </main>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal-overlay" *ngIf="showDeleteModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>
+                <i class="fas fa-exclamation-triangle"></i>
+                Confirm Deletion
+            </h3>
+        </div>
+        <div class="modal-body">
+            <p>Are you sure you want to delete this task?</p>
+            <p class="task-title">"{{ task.title }}"</p>
+            <p class="warning-text">This action cannot be undone.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" (click)="showDeleteModal = false">
+                <i class="fas fa-times"></i>
+                Cancel
+            </button>
+            <button class="btn btn-danger" (click)="confirmDelete()">
+                <i class="fas fa-trash"></i>
+                Delete
+            </button>
+        </div>
     </div>
 </div>
