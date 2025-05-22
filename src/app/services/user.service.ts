@@ -2,55 +2,84 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environment/env';
 import { Observable } from 'rxjs';
-import { User } from '../models/user'; 
+import { TokenService } from './token.service';
+
+interface VerificationData {
+  email: string;
+  code: string;
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
   private apiUrl = `${environment.baseUrl}/users`;
-  private token = environment.jwtToken;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private tokenService: TokenService
+  ) {}
 
   private getAuthHeaders(): HttpHeaders {
+    const token = this.tokenService.getToken();
     return new HttpHeaders({
-      Authorization: `Bearer ${this.token}`,
+      'Authorization': `Bearer ${token}`,
+      // 'Content-Type': 'application/json'  <-- on retire ici car FormData ne doit pas avoir ce header
     });
   }
 
-  // Ajouter un user
-  addUser(userData: User): Observable<any> {
-    return this.http.post(`${this.apiUrl}/`, userData, {
-      headers: this.getAuthHeaders(),
+  // Add a new user (avec FormData)
+  addUser(userData: FormData): Observable<any> {
+    // On n'ajoute pas les headers pour Content-Type, Angular s'en charge automatiquement
+    return this.http.post(`${this.apiUrl}/adduser`, userData);
+  }
+
+  // Login route (with 2FA)
+  login(userData: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/login`, userData);
+  }
+
+  verify2FA(verificationData: VerificationData): Observable<any> {
+    return this.http.post(`${this.apiUrl}/verify-2fa`, verificationData);
+  }
+
+  // Protected routes that require authentication
+  getAllUsers(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/showuser`, {
+      headers: this.getAuthHeaders()
     });
   }
 
-  // Afficher users
-  getAllUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.apiUrl}/`, {
-      headers: this.getAuthHeaders(),
+  getUserById(id: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/showById/${id}`, {
+      headers: this.getAuthHeaders()
     });
   }
 
-  // Afficher userbyID
-  getUserById(id: string): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/getUserById/${id}`, {
-      headers: this.getAuthHeaders(),
-    });
-  }
-
-  // update user
-  updateUser(id: string, updatedData: Partial<User>): Observable<any> {
-    return this.http.patch(`${this.apiUrl}/updateUserById/${id}`, updatedData, {
-      headers: this.getAuthHeaders(),
-    });
-  }
-
-  // delete user
   deleteUser(id: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/deleteUserById/${id}`, {
-      headers: this.getAuthHeaders(),
+    return this.http.delete(`${this.apiUrl}/deleteuser/${id}`, {
+      headers: this.getAuthHeaders()
     });
+  }
+
+  updateUser(id: string, updatedData: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/updateuser/${id}`, updatedData, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  logout() {
+    this.tokenService.removeToken();
+  }
+
+  forgetPassword(email: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/forgot-password`, { email });
+  }
+
+  resetPassword(token: string, newPassword: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/reset-password/${token}`, 
+      { newPassword },
+      { headers: this.getAuthHeaders() }
+    );
   }
 }
