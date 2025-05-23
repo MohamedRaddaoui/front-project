@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ScheduleModule } from '@syncfusion/ej2-angular-schedule';
-import { TokenService } from '../services/token.service';
-import { JwtHelperService } from '@auth0/angular-jwt';
 
 import {
   EventSettingsModel,
@@ -32,55 +30,39 @@ import { EventService } from '../services/event.service';
   styleUrls: ['./calendar-page.component.css'],
 })
 export class CalendarPageComponent implements OnInit {
-  private jwtHelper = new JwtHelperService();
   public eventData: Event[] = [];
   public eventSettings: EventSettingsModel = { dataSource: [] };
   public selectedDate: Date = new Date(2025, 6, 15);
-  private userId: string | null = null;
-  private token: string | null = null;
-  constructor(
-    private eventService: EventService,
-    private tokenService: TokenService
-  ) {
-    this.token = this.tokenService.getToken();
-    if (this.token) {
-      const decodedToken = this.jwtHelper.decodeToken(this.token);
-      this.userId = decodedToken.userId;
-    }
-  }
+
+  constructor(private eventService: EventService) {}
 
   ngOnInit(): void {
     this.loadEvents();
   }
 
   loadEvents(): void {
-    if (this.token) {
-      const decodedToken = this.jwtHelper.decodeToken(this.token);
-      const userId = decodedToken.userId;
+    this.eventService.getAllEvents().subscribe({
+      next: (events: any[]) => {
+        const mappedEvents = events.map((event) => ({
+          Id: event._id,
+          Subject: event.title,
+          StartTime: new Date(event.startTime),
+          EndTime: new Date(event.endTime),
+          Location: event.location,
+          Description: event.description,
+          Type: event.type,
+          Status: event.status,
+          Visibility: event.visibility,
+        }));
 
-      this.eventService.getUserEvents(userId).subscribe({
-        next: (events: any[]) => {
-          const mappedEvents = events.map((event) => ({
-            Id: event._id,
-            Subject: event.title,
-            StartTime: new Date(event.startTime),
-            EndTime: new Date(event.endTime),
-            Location: event.location,
-            Description: event.description,
-            Type: event.type,
-            Status: event.status,
-            Visibility: event.visibility,
-          }));
-
-          this.eventSettings = {
-            dataSource: mappedEvents,
-          };
-        },
-        error: (err) => {
-          console.error('Error fetching user events:', err);
-        },
-      });
-    }
+        this.eventSettings = {
+          dataSource: mappedEvents,
+        };
+      },
+      error: (err) => {
+        console.error('Error fetching events:', err);
+      },
+    });
   }
 
   onViewChange(args: any): void {
@@ -146,7 +128,7 @@ export class CalendarPageComponent implements OnInit {
         type: updatedEvent.Type,
         visibility: updatedEvent.Visibility,
         status: updatedEvent.Status,
-        createdBy: this.userId || '',
+        createdBy: '67d99644b4e02ca9a8b0991f',
       };
 
       this.eventService.updateEvent(updatedEvent.Id, payload).subscribe(() => {

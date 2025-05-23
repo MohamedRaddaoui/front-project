@@ -3,21 +3,19 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environment/env';
 import { Observable } from 'rxjs';
 import { Event } from '../models/event.model';
-import { TokenService } from './token.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EventService {
   private apiUrl = `${environment.baseUrl}/events`;
+  private token = environment.jwtToken;
 
-  constructor(private http: HttpClient, private tokenService: TokenService) {}
+  constructor(private http: HttpClient) {}
 
   private getAuthHeaders(): HttpHeaders {
-    const token = this.tokenService.getToken();
     return new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
+      Authorization: `Bearer ${this.token}`,
     });
   }
 
@@ -49,13 +47,6 @@ export class EventService {
   // Get event by ID
   getEventById(id: string): Observable<Event> {
     return this.http.get<Event>(`${this.apiUrl}/getEventById/${id}`, {
-      headers: this.getAuthHeaders(),
-    });
-  }
-
-  // Get events by user ID
-  getUserEvents(userId: string): Observable<Event[]> {
-    return this.http.get<Event[]>(`${this.apiUrl}/user/${userId}`, {
       headers: this.getAuthHeaders(),
     });
   }
@@ -108,13 +99,13 @@ export class EventService {
   }
 
   //Chat with AI Assistant
-  chatWithAI(prompt: string): Observable<any> {
-    return this.http.post(
-      `${environment.baseUrl}/chatbot`,
-      { prompt: prompt },
-      {
-        headers: this.getAuthHeaders(),
-      }
-    );
+  chatWithAI(prompt: string): Observable<any>{
+        return this.http.post(
+          `${this.apiUrl}/chatbot`,
+          { prompt: prompt },
+          {
+            headers: this.getAuthHeaders(),
+          }
+        );
   }
 }
