@@ -17,15 +17,21 @@ import { ProductOwnerComponent } from './product-owner/product-owner.component';
 import { AuthGuard } from './guards/auth.guard';
 import { ForgetPasswordComponent } from './forgetpassword/forgetpassword.component';
 import { ResetPasswordComponent } from './resetpassword/resetpassword.component';
+
+import { AdminGuard } from './guards/admin.guard';
+
+
+import { EventdashboardComponent } from './eventdashboard/eventdashboard.component';
+
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 
 
 
-import { TaskComponent } from './task/task.component';
-import { TaskDetailsComponent } from './task-details/task-details.component';
+
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
+
 
 export const routes: Routes = [
   {
@@ -33,16 +39,13 @@ export const routes: Routes = [
     component: CalendarPageComponent,
     canActivate: [AuthGuard],
   },
-  {
-    path: 'admin-dashboard',
-    component: AdminDashboardComponent,
-    // canActivate: [AdminGuard],
-  },
+
   {
     path: 'user-dashboard',
     component: UserDashboardComponent,
   },
   {
+
     path: 'signup',
     component: SignupComponent,
   },
@@ -59,13 +62,11 @@ export const routes: Routes = [
     component: ResetPasswordComponent,
   },
   {
-  path: 'task-details/:id',
-  component: TaskDetailsComponent
+    path: 'task-details/:id',
+    component: TaskDetailsComponent,
   },
-  {path: 'task-details',
-  component: TaskDetailsComponent
-  },
-{
+  { path: 'task-details', component: TaskDetailsComponent },
+  {
     path: 'tasks',
     component: TaskComponent,
   },
@@ -98,6 +99,13 @@ export const routes: Routes = [
       },
     ],
   },
+
+  {
+    path: 'event-dashboard',
+    component: EventdashboardComponent,
+    // canActivate: [AuthGuard, AdminGuard],
+  },
+
 
 
   {
@@ -143,5 +151,5 @@ export const routes: Routes = [
 
 
   
-  
+
 ];

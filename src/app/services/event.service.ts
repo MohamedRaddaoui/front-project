@@ -13,12 +13,15 @@ export class EventService {
 
   constructor(private http: HttpClient, private tokenService: TokenService) {}
 
-  private getAuthHeaders(): HttpHeaders {
+  private getAuthHeaders(isFormData = false): HttpHeaders {
     const token = this.tokenService.getToken();
-    return new HttpHeaders({
+    const headersConfig: any = {
       Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    });
+    };
+    if (!isFormData) {
+      headersConfig['Content-Type'] = 'application/json';
+    }
+    return new HttpHeaders(headersConfig);
   }
 
   // Create a new event with optional attachments
@@ -35,7 +38,7 @@ export class EventService {
     }
 
     return this.http.post(`${this.apiUrl}/`, formData, {
-      headers: this.getAuthHeaders(),
+      headers: this.getAuthHeaders(true),
     });
   }
 
@@ -72,9 +75,8 @@ export class EventService {
         formData.append(key, updatedData[key]);
       }
     }
-
     return this.http.patch(`${this.apiUrl}/updateEventById/${id}`, formData, {
-      headers: this.getAuthHeaders(),
+      headers: this.getAuthHeaders(true),
     });
   }
 
@@ -86,7 +88,7 @@ export class EventService {
   }
 
   // Participate in an event
-  participate(eventId: string, userId: string): Observable<any> {
+  participateEvent(eventId: string, userId: string): Observable<any> {
     return this.http.post(
       `${this.apiUrl}/${eventId}/participate`,
       { userId },
@@ -115,6 +117,17 @@ export class EventService {
       {
         headers: this.getAuthHeaders(),
       }
+    );
+  }
+
+  // Add participants to an event
+  addParticipants(eventId: string, userIds: string[]): Observable<any> {
+    console.log('Adding participants:', userIds);
+    console.log('Event ID:', eventId);
+    return this.http.post(
+      `${this.apiUrl}/${eventId}/add-participants`,
+      { userIds },
+      { headers: this.getAuthHeaders() }
     );
   }
 }
