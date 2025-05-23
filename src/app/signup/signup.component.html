@@ -1,0 +1,98 @@
+<main class="signup-container">
+  <section class="illustration-section">
+    <img src="assets/images/logo.jpeg" alt="Signup Illustration" class="illustration" />
+  </section>
+
+  <section class="signup-section">
+    <!-- <header class="logo-header">
+      <div class="logo">
+        <img src="assets/images/logo.svg" alt="Orkestra Logo" />
+      </div>
+      <span class="brand-name">Orkestra</span>
+    </header> -->
+
+    <div class="signup-form-container">
+      <h1 class="welcome-heading">Create Account</h1>
+      <p class="welcome-text">Please enter your details to get started.</p>
+
+      <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="signup-form">
+        <div class="form-field">
+          <label for="firstname">First Name</label>
+          <input 
+            id="firstname"
+            type="text"
+            formControlName="firstname"
+            class="input-field"
+            placeholder="Enter your first name"
+          >
+          <div class="validation-message" *ngIf="formControls['firstname'].invalid && formControls['firstname'].touched">
+            First Name is required.
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="lastname">Last Name</label>
+          <input 
+            id="lastname"
+            type="text"
+            formControlName="lastname"
+            class="input-field"
+            placeholder="Enter your last name"
+          >
+          <div class="validation-message" *ngIf="formControls['lastname'].invalid && formControls['lastname'].touched">
+            Last Name is required.
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="email">Email</label>
+          <input 
+            id="email"
+            type="email"
+            formControlName="email"
+            class="input-field"
+            placeholder="Enter your email"
+          >
+          <div class="validation-message" *ngIf="formControls['email'].invalid && formControls['email'].touched">
+            <span *ngIf="formControls['email'].hasError('required')">Email is required.</span>
+            <span *ngIf="formControls['email'].hasError('email')">Please enter a valid email.</span>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="password">Password</label>
+          <div class="password-input-wrapper">
+            <input 
+              id="password"
+              [type]="hidePassword ? 'password' : 'text'"
+              formControlName="password"
+              class="input-field"
+              placeholder="Enter your password"
+            >
+            <button type="button" class="password-toggle" (click)="togglePasswordVisibility()">
+              <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+          </div>
+          <div class="validation-message" *ngIf="formControls['password'].invalid && formControls['password'].touched">
+            Password must contain uppercase letters, numbers, and symbols.
+          </div>
+        </div>
+
+        <div *ngIf="errorMessage" class="error-message">
+          {{ errorMessage }}
+        </div>
+
+        <button type="submit" class="submit-button" [disabled]="signupForm.invalid">
+          Create Account
+        </button>
+
+        <div class="login-container">
+          <span>Already have an account?</span>
+          <a routerLink="/login" class="login-link">
+            Log in
+          </a>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>

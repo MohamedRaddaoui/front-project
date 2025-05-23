@@ -4,12 +4,13 @@ import { ProjectService } from '../services/project.service';
 import { Project } from '../models/project.model';
 import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { Router } from '@angular/router';import { CommonModule } from '@angular/common';
+import { NavBarComponent } from '../nav-bar/nav-bar.component';
  ;
 
 @Component({
   selector: 'app-add-project',
   standalone: true,
-  imports: [CommonModule,SideBarComponent,ReactiveFormsModule],
+  imports: [CommonModule,SideBarComponent,NavBarComponent, ReactiveFormsModule],
   templateUrl: './add-project.component.html',
   styleUrl: './add-project.component.css'
 })
@@ -45,7 +46,7 @@ addProject() {
     status: FormValue.status ?? 'Not Started'
   };
 
-  this.projectService.addProject(project).subscribe(() => this.route.navigateByUrl('/'));
+  this.projectService.addProject(project).subscribe(() => this.route.navigateByUrl('/project'));
 }
 
  // Validate startDate: must not be in the past

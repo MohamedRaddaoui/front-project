@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ProjectService } from '../services/project.service';
 import { Project } from '../models/project.model';
 import { ActivatedRoute } from '@angular/router';
@@ -15,44 +15,23 @@ export class DeleteProjectComponent {
 
   constructor(private route:ActivatedRoute,private projectService: ProjectService, private router: Router) { }
 
+    @Input() visible = false;
+  @Input() title = 'Are you sure?';
+  @Input() message = 'This action cannot be undone.';
+  @Input() confirmLabel = 'Confirm';
+  @Input() cancelLabel = 'Cancel';
 
-  project!: Project;
-  
-  id!:string;
+  @Output() onConfirm = new EventEmitter<void>();
+  @Output() onCancel = new EventEmitter<void>();
 
-  visible = false;
-  ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this.id = params['id'];
-    });
-  }
-
-  open() {
-    this.visible = true;
+  confirm() {
+    this.onConfirm.emit();
   }
 
   close() {
-    this.visible = false;
+    this.onCancel.emit();
   }
 
-  confirm() {
-    
-    if (this.id) {
-      this.projectService.deleteProject(this.id).subscribe({
-        next: () => {
-          console.log("Suppression confirmée");
-          this.router.navigate(['/'], {
-            queryParams: { message: 'Project deleted successfully' }
-          });
-        },
-        error: (err) => {
-          console.error('Erreur de suppression :', err);
-        }
-      });
-    }
-    this.close();
-  }
-  
 
 }
 

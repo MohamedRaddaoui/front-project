@@ -1,3 +1,5 @@
+<app-nav-bar></app-nav-bar>
+
 <app-side-bar></app-side-bar>
 
     <form class="project-form-container" [formGroup]="formProject">
@@ -82,6 +84,23 @@
                   <p *ngIf="formProject.controls['category'].hasError('required')">Type is required</p>
                 </div>
                 </div>
+
+
+
+
+                   <div class="input-wrapper">
+                  <select class="form-field" formControlName="status">
+                    <option value="">-- Select a status --</option>
+                    <option value="Done">Done</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Not Started">Not Started</option>
+                    
+                  </select>
+                <div class="form-error-message" *ngIf="formProject.controls['status'].invalid && formProject.controls['status'].touched">
+                  <p *ngIf="formProject.controls['status'].hasError('required')">Type is required</p>
+                </div>
+                </div>
+
 
                 <div class="input-wrapper">
                     <label>

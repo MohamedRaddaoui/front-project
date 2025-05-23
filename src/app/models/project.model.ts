@@ -1,3 +1,4 @@
+import { Sprint } from "./sprint.model";
 import { Task } from "./task.model";
 
 export class Project{
@@ -15,6 +16,7 @@ export class Project{
     summarySent?: boolean;
     type?:string;
      tasksID?: Task[];
+     sprintsID?: Sprint[];
 
   constructor( 
     
@@ -30,7 +32,9 @@ export class Project{
     archived?:boolean,
     summarySent?: boolean,
     type?:string,
-    tasksID?:[]){
+    tasksID?:[],
+    sprintsID?: Sprint[],){
+        
         
         this.title=title,
         this.description=description,
@@ -45,6 +49,7 @@ export class Project{
         this.summarySent=summarySent,
         this.type=type,
         this.tasksID=tasksID
+        this.sprintsID=sprintsID
        
 
     }

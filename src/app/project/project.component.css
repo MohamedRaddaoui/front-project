@@ -33,6 +33,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+ 
 }
 
 .header h2 {
@@ -140,10 +141,11 @@ color: #F4A529;
 
 .content-header {
   margin-top: 3%;
-  display: flex;
+  
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
+   display: block;
 }
 
 .content-title {
@@ -377,3 +379,38 @@ color: #F4A529;
     flex-wrap: wrap;
   }
 }
+
+
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+
+  
+}
+
+.tab {
+  text-decoration: none;
+  color: #1a1a1a;
+  padding: 6px 12px;
+
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.tab.active {
+  background-color: white;
+  border-bottom: 2px solid #0073e6;
+}
+
+
+
+
+
+
+
+
+
+
+

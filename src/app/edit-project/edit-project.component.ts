@@ -5,10 +5,11 @@ import { ActivatedRoute, Router,  } from '@angular/router';
 import { ProjectService } from '../services/project.service';
 import { Project } from '../models/project.model';
 import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { NavBarComponent } from '../nav-bar/nav-bar.component';
 
 @Component({
   selector: 'app-edit-project',
-  imports: [SideBarComponent,CommonModule,ReactiveFormsModule,FormsModule],
+  imports: [SideBarComponent,NavBarComponent, CommonModule,ReactiveFormsModule,FormsModule],
   templateUrl: './edit-project.component.html',
   styleUrl: './edit-project.component.css'
 })

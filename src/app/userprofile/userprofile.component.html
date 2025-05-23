@@ -1,0 +1,308 @@
+<div class="user-profile">
+  <main class="main-content" [attr.space]="26">
+    <div class="content-container">
+      <section class="profile-card">
+        <button class="edit-button" (click)="toggleEditMode()" aria-label="Edit profile">
+          <span class="edit-icon">✎</span>
+          {{ isEditMode ? 'Save' : 'Edit' }}
+        </button>
+        <div class="profile-image-container">
+          <img
+            [src]="userData.profileImage"
+            class="profile-image"
+            alt="Profile picture"
+          />
+          <div class="profile-image-overlay" *ngIf="isEditMode">
+            <label for="profile-image-upload" class="profile-image-edit-label">
+              <span class="edit-icon">✎</span>
+              Change Photo
+            </label>
+            <input
+              type="file"
+              id="profile-image-upload"
+              class="profile-image-input"
+              accept="image/*"
+              (change)="onProfileImageChange($event)"
+            >
+          </div>
+        </div>
+
+        <h2 class="profile-name" *ngIf="!isEditMode">{{ userData.firstName }} {{ userData.lastName }}</h2>
+        <div class="edit-field" *ngIf="isEditMode">
+          <label for="user-first-name">First Name:</label>
+          <input type="text" id="user-first-name" [(ngModel)]="userData.firstName" class="edit-input">
+        </div>
+
+        <div class="edit-field" *ngIf="isEditMode">
+          <label for="user-last-name">Last Name:</label>
+          <input type="text" id="user-last-name" [(ngModel)]="userData.lastName" class="edit-input">
+        </div>
+
+        <hr class="separator" />
+
+        <div class="profile-detail" *ngIf="!isEditMode">
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/9399856ed07b99fe059adda9d3595c03d2fd3dd9?placeholderIfAbsent=true&apiKey=6cd8224d56d844fb8789e8857a0e03e8"
+            class="detail-icon"
+            alt="Email icon"
+          />
+          <p class="profile-email">{{ userData.email }}</p>
+        </div>
+        <div class="edit-field" *ngIf="isEditMode">
+          <label for="user-email">Email:</label>
+          <input type="email" id="user-email" [(ngModel)]="userData.email" class="edit-input">
+        </div>
+
+        <div class="button-group" *ngIf="isEditMode">
+          <button class="cancel-button" (click)="cancelEdit()">Cancel</button>
+        </div>
+      </section>
+      <section class="main-profile-content">
+        <nav class="breadcrumb">
+          <span class="breadcrumb-item">Início</span>
+          <span class="breadcrumb-separator">&gt;</span>
+          <span class="breadcrumb-item">Profile</span>
+        </nav>
+        <h2 class="job-title">UI Developer</h2>
+        <div class="bio-container">
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/54840c12e0856720f3444527c79847c8bdda8517?placeholderIfAbsent=true&apiKey=6cd8224d56d844fb8789e8857a0e03e8"
+            class="bio-background"
+            alt="Background decoration"
+          />
+          <p class="bio-text">Lorem Ispum is the best sentence in the world of dummy text</p>
+        </div>
+        <div class="section-header">
+          <h3 class="section-title">Worked with</h3>
+          <a href="#" class="view-all-link">View all</a>
+        </div>
+        <div class="collaborators-grid" [attr.space]="45">
+          <div class="collaborators-row">
+            <div class="collaborator-column">
+              <div class="collaborator-list">
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/2d410669b152c782d624b5436f28e9c79d31846c?placeholderIfAbsent=true&apiKey=6cd8224d56d844fb8789e8857a0e03e8"
+                  class="company-logo"
+                  alt="Addodle company logo"
+                />
+                <p class="company-name">Addodle</p>
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/e95e2c15b28f4ac707ba8059ee3e2e8d0cb2208b?placeholderIfAbsent=true&apiKey=6cd8224d56d844fb8789e8857a0e03e8"
+                  class="collaborator-avatar"
+                  alt="John Joestar avatar"
+                />
+                <p class="collaborator-name">John Joestar</p>
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/e95e2c15b28f4ac707ba8059ee3e2e8d0cb2208b?placeholderIfAbsent=true&apiKey=6cd8224d56d844fb8789e8857a0e03e8"
+                  class="collaborator-avatar"
+                  alt="John Joestar avatar"
+                />
+                <p class="collaborator-name">John Joestar</p>
+              </div>
+            </div>
+            <div class="collaborator-column">
+              <div class="collaborator-list">
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/36f4a1ea4391a916bb3a155884151b8d4709eec0?placeholderIfAbsent=true&apiKey=6cd8224d56d844fb8789e8857a0e03e8"
+                  class="company-logo"
+                  alt="Marketplace company logo"
+                />
+                <p class="company-name">Marketplace.</p>
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/4be9844c0974c1167dcf595a03356542ace82585?placeholderIfAbsent=true&apiKey=6cd8224d56d844fb8789e8857a0e03e8"
+                  class="collaborator-avatar"
+                  alt="Akali Jin avatar"
+                />
+                <p class="collaborator-name">Akali Jin</p>
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/4be9844c0974c1167dcf595a03356542ace82585?placeholderIfAbsent=true&apiKey=6cd8224d56d844fb8789e8857a0e03e8"
+                  class="collaborator-avatar"
+                  alt="Akali Jin avatar"
+                />
+                <p class="collaborator-name">Akali Jin</p>
+              </div>
+            </div>
+            <div class="collaborator-column">
+              <div class="collaborator-list">
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/dd8f59a8c19a1581057b312dba4152b3dcc75783?placeholderIfAbsent=true&apiKey=6cd8224d56d844fb8789e8857a0e03e8"
+                  class="company-logo"
+                  alt="Von Dracula company logo"
+                />
+                <p class="company-name">Von Dracula</p>
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/9672192e29612712d91ac3ed19fad4eae12a41ad?placeholderIfAbsent=true&apiKey=6cd8224d56d844fb8789e8857a0e03e8"
+                  class="collaborator-avatar"
+                  alt="Kayn Vampyr avatar"
+                />
+                <p class="collaborator-name">Kayn Vampyr</p>
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/9672192e29612712d91ac3ed19fad4eae12a41ad?placeholderIfAbsent=true&apiKey=6cd8224d56d844fb8789e8857a0e03e8"
+                  class="collaborator-avatar"
+                  alt="Kayn Vampyr avatar"
+                />
+                <p class="collaborator-name">Kayn Vampyr</p>
+              </div>
+            </div>
+            <div class="collaborator-column">
+              <div class="collaborator-list">
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/9152470fb473057ec38f55bb41f9f8f50208f77c?placeholderIfAbsent=true&apiKey=6cd8224d56d844fb8789e8857a0e03e8"
+                  class="company-logo"
+                  alt="Von Dracula company logo"
+                />
+                <p class="company-name">Von Dracula</p>
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/10fdeaed2a2c2d5ddcdbebd84b92612a07d05409?placeholderIfAbsent=true&apiKey=6cd8224d56d844fb8789e8857a0e03e8"
+                  class="collaborator-avatar"
+                  alt="Kayn Vampyr avatar"
+                />
+                <p class="collaborator-name">Kayn Vampyr</p>
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/10fdeaed2a2c2d5ddcdbebd84b92612a07d05409?placeholderIfAbsent=true&apiKey=6cd8224d56d844fb8789e8857a0e03e8"
+                  class="collaborator-avatar"
+                  alt="Kayn Vampyr avatar"
+                />
+                <p class="collaborator-name">Kayn Vampyr</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="collaborators-grid additional" [attr.space]="45">
+          <div class="collaborators-row">
+            <div class="collaborator-column">
+              <div class="collaborator-list">
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/e95e2c15b28f4ac707ba8059ee3e2e8d0cb2208b?placeholderIfAbsent=true&apiKey=6cd8224d56d844fb8789e8857a0e03e8"
+                  class="collaborator-avatar"
+                  alt="John Joestar avatar"
+                />
+                <p class="collaborator-name">John Joestar</p>
+              </div>
+            </div>
+            <div class="collaborator-column">
+              <div class="collaborator-list">
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/4be9844c0974c1167dcf595a03356542ace82585?placeholderIfAbsent=true&apiKey=6cd8224d56d844fb8789e8857a0e03e8"
+                  class="collaborator-avatar"
+                  alt="Akali Jin avatar"
+                />
+                <p class="collaborator-name">Akali Jin</p>
+              </div>
+            </div>
+            <div class="collaborator-column">
+              <div class="collaborator-list">
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/9672192e29612712d91ac3ed19fad4eae12a41ad?placeholderIfAbsent=true&apiKey=6cd8224d56d844fb8789e8857a0e03e8"
+                  class="collaborator-avatar"
+                  alt="Kayn Vampyr avatar"
+                />
+                <p class="collaborator-name">Kayn Vampyr</p>
+              </div>
+            </div>
+            <div class="collaborator-column">
+              <div class="collaborator-list">
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/10fdeaed2a2c2d5ddcdbebd84b92612a07d05409?placeholderIfAbsent=true&apiKey=6cd8224d56d844fb8789e8857a0e03e8"
+                  class="collaborator-avatar"
+                  alt="Kayn Vampyr avatar"
+                />
+                <p class="collaborator-name">Kayn Vampyr</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <aside class="side-content">
+        <section class="projects-section">
+          <div class="projects-container" [attr.space]="43">
+            <div class="projects-grid">
+              <div class="project-column">
+                <div class="project-list">
+                  <h3 class="projects-title">Projects</h3>
+                  <img
+                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/aba4917380413968a113bd2654da5a5b06d59530?placeholderIfAbsent=true&apiKey=6cd8224d56d844fb8789e8857a0e03e8"
+                    class="project-image"
+                    alt="Emo stuff project"
+                  />
+                  <p class="project-name">Emo stuff</p>
+                  <img
+                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/5605d1c14755053bfc28d9f5eef853836a9c616f?placeholderIfAbsent=true&apiKey=6cd8224d56d844fb8789e8857a0e03e8"
+                    class="project-image"
+                    alt="Spooky Art project"
+                  />
+                  <p class="project-name">Spooky Art</p>
+                  <img
+                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/4b4665cbc1f6f6b9345e9f4df024bcce074a275d?placeholderIfAbsent=true&apiKey=6cd8224d56d844fb8789e8857a0e03e8"
+                    class="project-image"
+                    alt="Happy project"
+                  />
+                  <p class="project-name">- happy :3</p>
+                </div>
+              </div>
+              <div class="project-column">
+                <div class="project-list">
+                  <img
+                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/85e9c993b84e0d51c663cfe78d696cdbe790106f?placeholderIfAbsent=true&apiKey=6cd8224d56d844fb8789e8857a0e03e8"
+                    class="project-image"
+                    alt="Tim Burton project"
+                  />
+                  <p class="project-name">Tim Burton</p>
+                  <img
+                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/a831c8e0aaa150c041cb5af6890943fe469252f1?placeholderIfAbsent=true&apiKey=6cd8224d56d844fb8789e8857a0e03e8"
+                    class="project-image"
+                    alt="Dark Art project"
+                  />
+                  <p class="project-name">Dark Art</p>
+                  <img
+                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/cc4bd3d1827f2c49bea683200b5ced9c6453344b?placeholderIfAbsent=true&apiKey=6cd8224d56d844fb8789e8857a0e03e8"
+                    class="project-image"
+                    alt="V4MPYR project"
+                  />
+                  <p class="project-name">*V4MPYR*</p>
+                </div>
+              </div>
+              <div class="project-column">
+                <div class="project-list">
+                  <a href="#" class="view-all-link projects-view-all">View all</a>
+                  <img
+                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/8cd7bb6b883e4d1f77265661f608310d8194a566?placeholderIfAbsent=true&apiKey=6cd8224d56d844fb8789e8857a0e03e8"
+                    class="project-image"
+                    alt="Halloween project"
+                  />
+                  <p class="project-name">Halloween!</p>
+                  <img
+                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/26f0974927c9b471136593ed565724eadcb9e241?placeholderIfAbsent=true&apiKey=6cd8224d56d844fb8789e8857a0e03e8"
+                    class="project-image"
+                    alt="Gothic art project"
+                  />
+                  <p class="project-name">Gothic art</p>
+                  <img
+                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/ae3a8474a6b1f46cbcd90cf8b9bbfc061a959f1f?placeholderIfAbsent=true&apiKey=6cd8224d56d844fb8789e8857a0e03e8"
+                    class="project-image"
+                    alt="I love Art project"
+                  />
+                  <p class="project-name">I &lt;3 Art</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <section class="work-summary">
+            <div class="work-header">
+              <h3 class="work-title">Total work done</h3>
+              <div class="time-filter">
+                <span>This Week</span>
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/b5ba51afa681fb82ebf4feb55d1d866389365375?placeholderIfAbsent=true&apiKey=6cd8224d56d844fb8789e8857a0e03e8"
+                  class="dropdown-icon"
+                  alt="Dropdown icon"
+                />
+              </div>
+            </div>
+            <p class="work-time">5w: 2d</p>
+          </section>
+        </section>
+      </aside>
+    </div>
+  </main>
+</div>

@@ -415,3 +415,12 @@
   color: #333;        /* Couleur du texte (facultatif) */
   margin-left: 25%;
 }
+
+
+
+.project-icons {
+  display: flex;
+  gap: 10px;
+  margin-top: 5px;
+ 
+}

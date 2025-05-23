@@ -1,22 +1,35 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { SideBarComponent } from '../side-bar/side-bar.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { StandardProjectComponent } from '../standard-project/standard-project.component';
+import { Project } from '../models/project.model';
+import { ProjectService } from '../services/project.service';
 
 @Component({
   selector: 'app-scrum-project',
-  imports: [CommonModule,SideBarComponent],
+  imports: [CommonModule,StandardProjectComponent,RouterLink],
   templateUrl: './scrum-project.component.html',
   styleUrl: './scrum-project.component.css'
 })
 export class ScrumProjectComponent {
 
-  constructor(private route: ActivatedRoute){}
+  constructor(private projectService:ProjectService, private route: ActivatedRoute){}
+  @Input() sprints: any[] = [];
+  @Input() project!: Project;
+    @Input() isScrum: boolean = false;
 
   projetId! :string;
-  ngOnInit(): void {
-    this.projetId = this.route.snapshot.paramMap.get('id') ??'';
-    // Charger les infos du projet ici
+  id!: string;
+
+    ngOnInit(){
+    this.id = this.route.snapshot.params['id'];
+    if (this.id) {
+      this.projectService.getByIdProject(this.id).subscribe((data: Project) => {
+        this.project = data;
+      });
+    }
+  
   }
 
 }

@@ -14,14 +14,39 @@ import { TaskComponent } from './task/task.component';
 import { TaskDetailsComponent } from './task-details/task-details.component';
 import { EditProjectComponent } from './edit-project/edit-project.component';
 import { ProductOwnerComponent } from './product-owner/product-owner.component';
+import { AuthGuard } from './guards/auth.guard';
+import { ForgetPasswordComponent } from './forgetpassword/forgetpassword.component';
+import { ResetPasswordComponent } from './resetpassword/resetpassword.component';
+import { LoginComponent } from './login/login.component';
+import { SignupComponent } from './signup/signup.component';
+import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
+
 export const routes: Routes = [
   {
     path: 'calendar',
     component: CalendarPageComponent,
+    canActivate: [AuthGuard],
   },
   {
-    path: 'chatbot',
-    component: AiAssistantComponent,
+    path: 'admin-dashboard',
+    component: AdminDashboardComponent,
+    // canActivate: [AdminGuard],
+  },
+  {
+    path: 'signup',
+    component: SignupComponent,
+  },
+  {
+    path: 'login',
+    component: LoginComponent,
+  },
+  {
+    path: 'forget-password',
+    component: ForgetPasswordComponent,
+  },
+  {
+    path: 'reset-password/:token',
+    component: ResetPasswordComponent,
   },
   {
   path: 'task-details/:id',
@@ -34,27 +59,39 @@ export const routes: Routes = [
     path: 'tasks',
     component: TaskComponent,
   },
-  {
-    path: '',
-    component:ProjectComponent,
 
-  },
+
+
+
 
   {
-    path: 'add',
-    component:AddProjectComponent,
+    path: 'project',
+    component: ProjectComponent,
+    canActivate: [AuthGuard],
     children: [
       {
         path: '',
         component: SideBarComponent,
-      }
-    ]
+      },
+    ],
+  },
 
+  
+  {
+    path: 'add',
+    component: AddProjectComponent,
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: '',
+        component: SideBarComponent,
+      },
+    ],
   },
 
 
   {
-    path: 'scrum',
+    path: 'scrum/:id',
     component:ScrumProjectComponent,
    
 
@@ -88,6 +125,8 @@ export const routes: Routes = [
     
 
   },
+
+
 
 
 
