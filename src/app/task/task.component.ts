@@ -219,6 +219,19 @@ export class TaskComponent implements OnInit {
     this.taskService.filterTasks(filters).subscribe({
       next: (response) => {
         this.filteredTasks = response.tasks;
+        // Map filtered tasks to kanban format and update kanbanData
+        this.kanbanData = this.filteredTasks.map((task: Task) => ({
+          Id: task._id,
+          Title: task.title,
+          Summary: task.description,
+          Tags: this.getTag(task.tags),
+          Status: this.mapStatus(task.status),
+          Priority: task.priority,
+          Assignee: this.getAssigneeName(task.assignedUser),
+          idAssigned: this.getAssigneeId(task.assignedUser),
+          Type: 'story',
+          ProjectId: this.getProjectid(task.projectId)
+        }));
       },
       error: (error) => {
         console.error('Error filtering tasks:', error);
