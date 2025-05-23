@@ -1,20 +1,31 @@
 import { Component } from '@angular/core';
 import { SideBarComponent } from '../side-bar/side-bar.component';
 import { CommonModule } from '@angular/common';
-import { Router, NavigationEnd } from '@angular/router'; // Ajout de Router et NavigationEnd
-import { filter } from 'rxjs/operators'; // Ajout du pipe
+import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';  // Ajout de Router et NavigationEnd
 import { ProjectService } from '../services/project.service';
 import { Project } from '../models/project.model';
+import { NavBarComponent } from '../nav-bar/nav-bar.component';
 
 @Component({
   selector: 'app-project',
-  imports: [SideBarComponent, CommonModule],
+  imports: [SideBarComponent,NavBarComponent, CommonModule],
   templateUrl: './project.component.html',
   styleUrl: './project.component.css',
 })
 export class ProjectComponent {
-  constructor(private projectService: ProjectService) {}
-  listProject: Project[] = [];
+  successMessage: string | null = null; // ✅ Ajoute cette ligne
+
+  constructor(private projectService: ProjectService, private router:Router, private route :ActivatedRoute) {
+    this.route.queryParams.subscribe(params => {
+      this.successMessage = params['message'] || null;
+      if (this.successMessage) {
+        setTimeout(() => {
+          this.successMessage = null;
+        }, 3000); // 3 secondes
+      }
+    });
+  }
+  listProject: Project[]=[]
 
   //extraire le date d'un date de type iso
   formatDate(isoDate: String | undefined): string {
@@ -35,9 +46,26 @@ export class ProjectComponent {
   totalPagesArray: number[] = [];
 
   ngOnInit() {
-    this.loadProjects();
-  }
+  this.route.queryParams.subscribe(params => {
+    this.successMessage = params['message'] || null;
 
+    const isArchived = params['archived'] === 'true'; // ← récupère le paramètre
+    if (isArchived) {
+      this.loadArchivedProjects();
+    } else {
+      this.loadProjects();
+    }
+
+    if (this.successMessage) {
+      setTimeout(() => {
+        this.successMessage = null;
+      }, 3000);
+    }
+  });
+}
+
+
+  
   loadProjects() {
     this.projectService.getAllProject().subscribe((projects) => {
       this.listProject = projects;
@@ -52,6 +80,23 @@ export class ProjectComponent {
       this.updatePaginatedProjects();
     });
   }
+
+
+  loadArchivedProjects() {
+  this.projectService.listOfArchiveProject().subscribe((projects) => {
+      this.listProject = projects;
+      console.log(this.listProject);
+      this.totalPages = Math.ceil(
+        this.listProject.length / this.projectsPerPage
+      );
+      this.totalPagesArray = Array.from(
+        { length: this.totalPages },
+        (_, i) => i + 1
+      );
+      this.updatePaginatedProjects();
+    });
+}
+
 
   updatePaginatedProjects() {
     const start = (this.currentPage - 1) * this.projectsPerPage;
@@ -77,4 +122,25 @@ export class ProjectComponent {
       this.updatePaginatedProjects();
     }
   }
+  
+  
+  
+
+
+
+  onProjectClick(project: any) {
+    console.log('Projet cliqué:', project);
+    if (project.type === 'Scrum') {
+      this.router.navigate(['/scrum', project.id]);
+    } else {
+      if(project.type === 'Kanban'){
+        this.router.navigate(['/standard', project.id])
+
+      }else{
+      // autre traitement ou message d’erreur
+      alert('Type non pris en charge');
+    }
+  }}
+  
+
 }

@@ -1,0 +1,119 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<body>
+  <div class="scrum-container">
+    <header>
+      <h1>Scrum Sprint Dashboard</h1>
+      <p>Track progress across sprints and ceremonies</p>
+    </header> -->
+
+    <!-- Sprint Panel -->
+    <!-- <section class="sprint-panel">
+      <div class="sprint-info">
+        <h2>Current Sprint: Sprint 5</h2>
+        <p>Start: May 1, 2025 — End: May 14, 2025</p>
+      </div>
+      <div class="roles">
+        <span><strong>Scrum Master:</strong> Alice</span>
+        <span><strong>Product Owner:</strong> Bob</span>
+        <span><strong>Dev Team:</strong> Charlie, Dana, Eve</span>
+      </div>
+    </section> -->
+
+    <!-- Scrum Board -->
+    <!-- <section class="scrum-board">
+      <div class="scrum-column">
+        <h3>Product Backlog</h3>
+        <div class="scrum-card">
+          <h4>Feature X</h4>
+          <p>As a user, I want to...</p>
+        </div>
+      </div>
+
+      <div class="scrum-column">
+        <h3>To Do</h3>
+        <div class="scrum-card">
+          <h4>Implement Login</h4>
+          <p>Basic login logic using JWT.</p>
+        </div>
+      </div>
+
+      <div class="scrum-column">
+        <h3>In Progress</h3>
+        <div class="scrum-card">
+          <h4>UI Redesign</h4>
+          <p>Apply new mockup to homepage.</p>
+        </div>
+      </div>
+
+      <div class="scrum-column">
+        <h3>Done</h3>
+        <div class="scrum-card">
+          <h4>Setup CI/CD</h4>
+          <p>Automatic deployment via GitHub Actions.</p>
+        </div>
+      </div>
+    </section> -->
+
+    <!-- Scrum Ceremonies -->
+    <!-- <section class="ceremonies">
+      <h2>Scrum Ceremonies</h2>
+      <ul>
+        <li><strong>Sprint Planning:</strong> May 1  10:00</li>
+        <li><strong>Daily Scrum:</strong> Every day  9:30</li>
+        <li><strong>Sprint Review:</strong> May 14  15:00</li>
+        <li><strong>Retrospective:</strong> May 14  16:00</li>
+      </ul>
+    </section>
+  </div>
+</body>
+</html> -->
+
+
+<app-standard-project [project]="project" [customTasksTemplate]="taskTemplate"></app-standard-project>
+
+<ng-template #taskTemplate  class="tasks-container">    
+
+ <div class="project-icons">
+    <i class="fa-solid fa-list-check" style="color: #0d6efd;" title="Sprint" [routerLink]="['/PO', project.id]"></i>
+    <!-- <i class="fa-solid fa-file-lines" style="color: #6c757d;" title="Résumé"></i> -->
+  </div>  
+<div>
+    
+    List of sprint
+    <div class="task-container" *ngFor="let task of project.sprintsID">
+       
+     
+      <div class="task-left">
+        <div class="task-title">{{task.title}}</div>
+        <div class="task-meta">
+          {{task.goal}}
+          <span class="status cancelled">Cancelled</span>
+          <span class="status completed">Completed</span>
+        </div>
+      </div>
+      <!-- <div class="task-dates">
+        <div class="date-block">
+          <div class="label">Start Date</div>
+          <div class="date"> {{ formatDate(task.dueDate) }}</div>
+        </div>
+      </div> -->
+      <div class="task-right">
+        <div class="timer">⏱️ {{task.status}}</div>
+        <img src="https://i.pravatar.cc/28" alt="avatar" class="avatar" />
+        <div class="menu-icon">⋮</div>
+      </div>
+    </div>
+  
+</div>
+
+
+    
+    <!-- ici tu peux mettre n’importe quel contenu, dynamique, complexe -->
+  
+</ng-template>
+
+
+
+

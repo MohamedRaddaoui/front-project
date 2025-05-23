@@ -26,18 +26,18 @@
     margin-left: 20%;
     border-radius: 3rem;
     
+    
+    
   }
   .page-title {
-    margin-top: 3%;
+    margin-top: 6%;
     align-self: flex-start;
     margin-left: 0.75rem;
     font-size: 1.5rem;
     font-weight: 600;
-   color: rgba(154, 147, 179, 1);
-   font-size: 20px;
-  
+    color: #0f2a4a;
   }
-   
+  
   .form-container {
     display: flex;
     flex-direction: column;

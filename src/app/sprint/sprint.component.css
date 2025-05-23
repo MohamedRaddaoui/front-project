@@ -1,0 +1,148 @@
+/* Bouton d'ouverture (+) */
+.open-btn {
+  font-size: 24px;
+  padding: 12px;
+  border-radius: 50%;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+.open-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Style général de la modale */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.modal-content {
+  position: relative;
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 400px;  /* Taille réduite, modale plus compacte */
+  max-height: 80vh;  /* Hauteur limitée pour ne pas prendre trop d’espace */
+  overflow-y: auto;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease-out;
+}
+
+
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Bouton de fermeture */
+.close {
+  position: absolute;
+  right: 20px;
+  top: 15px;
+  font-size: 28px;
+  color: #555;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.close:hover {
+  color: #000;
+}
+
+/* Titres */
+h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  color: #003366;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 0.5rem;
+}
+
+/* Formulaire */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+label {
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+input[type="text"],
+input[type="datetime-local"],
+textarea,
+select {
+  padding: 0.6rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  transition: border-color 0.2s ease;
+}
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Grille des champs */
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.form-group {
+  flex: 1 1 45%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Bouton d'action */
+.btn-container {
+  display: flex;
+  justify-content: flex-end;
+}
+button[type="submit"] {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+/* Scrollbar custom */
+section::-webkit-scrollbar {
+  width: 8px;
+}
+section::-webkit-scrollbar-thumb {
+  background: #bbb;
+  border-radius: 4px;
+}

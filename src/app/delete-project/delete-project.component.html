@@ -1,0 +1,15 @@
+
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+   <div class="overlay" *ngIf="visible">
+    <div class="popup">
+      <div class="icon"><i class="fas fa-exclamation-circle"></i></div>
+      <h2 class="popup-title">{{title}}</h2>
+      <p>{{message}}</p>
+      <div class="buttons">
+        <button class="confirm" (click)="confirm()">{{ confirmLabel }}</button>
+      <button class="cancel" (click)="close()">{{ cancelLabel }}</button>
+      </div>
+    </div>
+  </div>
+  

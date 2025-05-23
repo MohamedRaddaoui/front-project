@@ -1,19 +1,64 @@
-
+<app-nav-bar></app-nav-bar>
   <div class="app-container">
     <div class="main-container">
       <app-side-bar></app-side-bar>
 
       <!-- Main Content -->
       <main class="content">
+        <div class="custom-success " *ngIf="successMessage" >
+          {{ successMessage }}
+        </div>
+        
         <div class="content-header">
           <h1 class="content-title">Projects</h1>
-          <!-- <div class="content-search">
-            <input type="text" class="search-input" placeholder="Search for anything...">
-          </div> -->
-        </div>
+          
+    
+      <!-- <h2>📌 Orkestra</h2> -->
+      <!-- <div class="tabs"> -->
+        <!-- <a href="#" class="tab active"> 🌐 Résumé</a>
+        <a href="#" class="tab"> 📊 Tableau</a>
+        <a href="#" class="tab">📋 Liste</a>
+        <a href="#" class="tab">📅 Calendrier</a> -->
+        <!-- <button class="tab a"> Résumé</button> -->
+        <!-- <button class="tab"> Tableau</button>
+        <button class="tab"> Liste</button> -->
+        <!-- <button class="tab"> Calendrier</button>
+        <button class="tab">🕒 Chronologie</button>
+        <button class="tab">📝 Formulaires</button>
+        <button class="tab">📄 Pages</button>
+        <button class="tab">📎 Pièces jointes</button>
+        <button class="tab">⋯ More <span class="badge">3</span></button> -->
+      <!-- </div> -->
+  
 
+    <!-- <div class="content">
+      <button class="filter-btn">⛛ Filtrer</button>
+      <div class="stats">
+        <div class="card">
+          <p><strong>0 élément(s)</strong> terminé(s)</p>
+          <span>au cours des 7 derniers jours</span>
+        </div>
+        <div class="card">
+          <p><strong>0 élément(s)</strong> mis à jour</p>
+          <span>au cours des 7 derniers jours</span>
+        </div>
+        <div class="card">
+          <p><strong>0 élément(s)</strong> créé(s)</p>
+          <span>au cours des 7 derniers jours</span>
+        </div>
+        <div class="card">
+          <p><strong>0 à échéance proche</strong></p>
+          <span>dans les 7 prochains jours</span>
+        </div>
+      </div>
+    </div> -->
+  
+        </div>
         <div class="projects-container">
-          <div class="project-card" *ngFor="let u of paginatedProjects">
+
+
+
+          <div class="project-card" *ngFor="let u of paginatedProjects" (click)="onProjectClick(u)">
             <div class="header">
               <h2>{{ u.title }}</h2>
               <span 
@@ -21,7 +66,9 @@
                 [ngClass]="{
                   'status-done': u.status === 'Done',
                   'status-inprogress': u.status === 'In Progress',
-                  'status-notstarted': u.status === 'Not Started'
+                  'status-notstarted': u.status === 'Not Started',
+                   'status-canceled': u.status === 'Canceled'
+
                 }">
                 {{ u.status }}
               </span>

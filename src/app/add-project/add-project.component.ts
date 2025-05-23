@@ -4,12 +4,13 @@ import { ProjectService } from '../services/project.service';
 import { Project } from '../models/project.model';
 import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { Router } from '@angular/router';import { CommonModule } from '@angular/common';
+import { NavBarComponent } from '../nav-bar/nav-bar.component';
  ;
 
 @Component({
   selector: 'app-add-project',
   standalone: true,
-  imports: [CommonModule,SideBarComponent,ReactiveFormsModule],
+  imports: [CommonModule,SideBarComponent,NavBarComponent, ReactiveFormsModule],
   templateUrl: './add-project.component.html',
   styleUrl: './add-project.component.css'
 })
@@ -22,8 +23,8 @@ export class AddProjectComponent {
   description : new FormControl ('', [Validators.required, Validators.minLength(50)]),
   startDate : new FormControl('', [Validators.required,this.validateStartDate() ]),
   endDate : new FormControl('', [Validators.required,this.validateEndDate()]),
-  typeProject:new FormControl('', [Validators.required]),
-  categorie:new FormControl('dev'),
+  type:new FormControl('', [Validators.required]),
+  category:new FormControl('dev'),
   status:new FormControl('Not Started', [ Validators.pattern(/^(Not Started|In Progress|Done|Canceled)$/) 
  ]),
 },{ validators: this.dateConsistencyValidator() });
@@ -40,12 +41,12 @@ addProject() {
     description: FormValue.description ?? '',
     startDate: FormValue.startDate ?? '',
     endDate: FormValue.endDate ?? '',
-    typeProject: FormValue.typeProject ?? '',
-    categorie: FormValue.categorie ?? 'dev',
+    type: FormValue.type ?? '',
+    category: FormValue.category ?? 'dev',
     status: FormValue.status ?? 'Not Started'
   };
 
-  this.projectService.addProject(project).subscribe(() => this.route.navigateByUrl('/'));
+  this.projectService.addProject(project).subscribe(() => this.route.navigateByUrl('/project'));
 }
 
  // Validate startDate: must not be in the past

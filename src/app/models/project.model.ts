@@ -1,32 +1,41 @@
+import { Sprint } from "./sprint.model";
+import { Task } from "./task.model";
+
 export class Project{
-    title?:String;
-    description?:String;
-    startDate?:String   
-    endDate?:String
-    ownerID?:String
-    team?:Number 
-    status?:String
-    category?:String
-    usersID?:String
-    archived?:Boolean
-    summarySent?: Boolean;
-    typeProject?:String;
-    categorie?:String;
+    id?:string;
+    title?:string;
+    description?:string;
+    startDate?:string   
+    endDate?:string
+    ownerID?:string
+    team?:number 
+    status?:string
+    category?:string
+    usersID?:[]
+    archived?:boolean
+    summarySent?: boolean;
+    type?:string;
+     tasksID?: Task[];
+     sprintsID?: Sprint[];
 
   constructor( 
-    title?:String,
-    description?:String,
-    startDate?:String ,  
-    endDate?:String,
-    ownerID?:String,
-    team?:Number ,
-    status?:String,
-    category?:String,
-    usersID?:String,
-    archived?:Boolean,
-    summarySent?: Boolean,
-    typeProject?:String,
-    categorie?:String,){
+    
+    title?:string,
+    description?:string,
+    startDate?:string ,  
+    endDate?:string,
+    ownerID?:string,
+    team?:number ,
+    status?:string,
+    category?:string,
+    usersID?:[],
+    archived?:boolean,
+    summarySent?: boolean,
+    type?:string,
+    tasksID?:[],
+    sprintsID?: Sprint[],){
+        
+        
         this.title=title,
         this.description=description,
         this.startDate=startDate,
@@ -38,8 +47,10 @@ export class Project{
         this.usersID=usersID,
         this.archived=archived,
         this.summarySent=summarySent,
-        this.typeProject=typeProject,
-        this.categorie=categorie
+        this.type=type,
+        this.tasksID=tasksID
+        this.sprintsID=sprintsID
+       
 
     }
 }

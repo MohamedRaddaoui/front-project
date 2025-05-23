@@ -5,17 +5,28 @@ import { AiAssistantComponent } from './ai-assistant/ai-assistant.component';
 import { ProjectComponent } from './project/project.component';
 import { SideBarComponent } from './side-bar/side-bar.component';
 import { AddProjectComponent } from './add-project/add-project.component';
-import { SignupComponent } from './signup/signup.component';
-import { LoginComponent } from './login/login.component';
+import { ScrumProjectComponent } from './scrum-project/scrum-project.component';
+import { StandardProjectComponent } from './standard-project/standard-project.component';
+import { DeleteProjectComponent } from './delete-project/delete-project.component';
+
+
+import { TaskComponent } from './task/task.component';
+import { TaskDetailsComponent } from './task-details/task-details.component';
+import { EditProjectComponent } from './edit-project/edit-project.component';
+import { ProductOwnerComponent } from './product-owner/product-owner.component';
 import { AuthGuard } from './guards/auth.guard';
 import { ForgetPasswordComponent } from './forgetpassword/forgetpassword.component';
 import { ResetPasswordComponent } from './resetpassword/resetpassword.component';
+import { LoginComponent } from './login/login.component';
+import { SignupComponent } from './signup/signup.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
-import { AdminGuard } from './guards/admin.guard';
+
+
 
 import { TaskComponent } from './task/task.component';
 import { TaskDetailsComponent } from './task-details/task-details.component';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
+
 export const routes: Routes = [
   {
     path: 'calendar',
@@ -58,8 +69,13 @@ export const routes: Routes = [
     path: 'tasks',
     component: TaskComponent,
   },
+
+
+
+
+
   {
-    path: '',
+    path: 'project',
     component: ProjectComponent,
     canActivate: [AuthGuard],
     children: [
@@ -69,6 +85,8 @@ export const routes: Routes = [
       },
     ],
   },
+
+  
   {
     path: 'add',
     component: AddProjectComponent,
@@ -80,4 +98,50 @@ export const routes: Routes = [
       },
     ],
   },
+
+
+  {
+    path: 'scrum/:id',
+    component:ScrumProjectComponent,
+   
+
+  },
+
+   {
+    path: 'PO/:id',
+    component:ProductOwnerComponent,
+   
+
+  },
+
+  {
+    path: 'standard/:id',
+    component:StandardProjectComponent,
+    
+
+  },
+
+  {
+    path: 'delete/:id',
+    component:DeleteProjectComponent,
+    
+
+  },
+
+
+   {
+    path: 'updateProject/:id',
+    component:EditProjectComponent,
+    
+
+  },
+
+
+
+
+
+
+
+  
+  
 ];
