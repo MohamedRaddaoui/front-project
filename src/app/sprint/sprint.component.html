@@ -1,0 +1,89 @@
+<div class="modal" *ngIf="visible">
+  <div class="modal-content">
+    <span class="close" (click)="closeModal()">&times;</span>
+    <section id="user-stories">
+      <h2>Create New Sprint</h2>
+      <form id="userStoryForm" [formGroup]="formSprint" >
+        <input type="hidden" id="us-id" />
+
+        <label for="us-title">Title</label>
+        <input type="text" id="us-title" required placeholder="Ex: Ajouter authentification" formControlName="title" />
+
+        <label for="us-description">Goal</label>
+        <textarea id="us-description" placeholder="Décrire la fonctionnalité" formControlName="goal"></textarea>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="start-date">Start Date</label>
+            <input type="date" id="start-date" formControlName="start_date" />
+          </div>
+          <div class="form-group">
+            <label for="deadline">Deadline</label>
+            <input type="date" id="deadline" formControlName="end_date" />
+          </div>
+        </div>
+
+        <!-- Daily Meeting -->
+        <fieldset class="event-fieldset">
+          <legend>Daily Meeting</legend>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="daily-date">Date</label>
+              <input type="date" id="daily-date" formControlName="planning" />
+            </div> 
+            <div class="form-group">
+              <label for="daily-start">Start Time</label>
+              <input type="time" id="daily-start" formControlName="dailyStartTime" />
+            </div>
+            <div class="form-group">
+              <label for="daily-end">End Time</label>
+              <input type="time" id="daily-end" formControlName="dailyEndTime" />
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Review -->
+        <fieldset class="event-fieldset">
+          <legend>Review</legend>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="review-date">Date</label>
+              <input type="date" id="review-date" formControlName="reviews" />
+            </div>
+            <div class="form-group">
+              <label for="review-start">Start Time</label>
+              <input type="time" id="review-start" formControlName="reviewStartTime" />
+            </div>
+            <div class="form-group">
+              <label for="review-end">End Time</label>
+              <input type="time" id="review-end" formControlName="reviewEndTime" />
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Retrospective -->
+        <fieldset class="event-fieldset">
+          <legend>Retrospective</legend>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="retro-date">Date</label>
+              <input type="date" id="retro-date" formControlName="retrospectives" />
+            </div>
+            <div class="form-group">
+              <label for="retro-start">Start Time</label>
+              <input type="time" id="retro-start" formControlName="retroStartTime" />
+            </div>
+            <div class="form-group">
+              <label for="retro-end">End Time</label>
+              <input type="time" id="retro-end" formControlName="retroEndTime" />
+            </div>
+          </div>
+        </fieldset>
+
+        <div class="btn-container">
+          <button type="submit" (click)="addSprint()">Save Sprint</button>
+        </div>
+      </form>
+    </section>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+<div class="popup" [ngStyle]="position">
+    <span class="close" (click)="onClose()">&times;</span>
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <label>Email:</label>
+    <input type="email" formControlName="email" />
+
+    <label>Role:</label>
+    <select formControlName="role">
+      <option value="" disabled selected>Select a role</option>
+      <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+    </select>
+
+    <button type="submit" (click)="assignUser()" [disabled]="userForm.invalid">Add User</button>
+   
+  </form>
+</div>

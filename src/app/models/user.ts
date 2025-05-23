@@ -1,0 +1,30 @@
+export class User{
+  firstname:String;
+  lastname: String;
+  email: String;
+  password: String;
+  role: String;
+  status: String;
+  twoFACode:  String;
+  twoFACodeExpires: Date;
+  constructor(
+    firstname:String,
+    lastname: String,
+    email: String,
+    password: String,
+    role: String,
+    status: String,
+    twoFACode:  String,
+    twoFACodeExpires: Date,
+  ) {
+    this.firstname=firstname;
+    this.lastname= lastname;
+    this.email= email;
+    this.password=password;
+    this.role= role;
+    this.status= status;
+    this.twoFACode= twoFACode;
+    this.twoFACodeExpires= twoFACodeExpires;
+}
+  
+}

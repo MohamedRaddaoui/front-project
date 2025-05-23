@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-questions-list',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './questions-list.component.html',
   styleUrl: './questions-list.component.css'
 })
