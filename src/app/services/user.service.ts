@@ -20,13 +20,16 @@ export class UserService {
   private getAuthHeaders(): HttpHeaders {
     const token = this.tokenService.getToken();
     return new HttpHeaders({
+
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
+
     });
   }
 
-  // Add a new user
-  addUser(userData: any): Observable<any> {
+  // Add a new user (avec FormData)
+  addUser(userData: FormData): Observable<any> {
+    // On n'ajoute pas les headers pour Content-Type, Angular s'en charge automatiquement
     return this.http.post(`${this.apiUrl}/adduser`, userData);
   }
 
@@ -72,10 +75,8 @@ export class UserService {
     });
   }
 
-  logout(): Observable<any> {
-    const headers = this.getAuthHeaders();
+  logout() {
     this.tokenService.removeToken();
-    return this.http.post(`${this.apiUrl}/logout`, {}, { headers });
   }
 
   forgetPassword(email: string): Observable<any> {

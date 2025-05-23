@@ -1,0 +1,90 @@
+.overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(2px);
+}
+
+.popup {
+  background: #e6f6ff;
+  padding: 30px 40px;
+  border-radius: 16px;
+  max-width: 450px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  animation: fadeInUp 0.4s ease-out;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.buttons {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.confirm, .cancel {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.confirm {
+  background-color: #e74c3c;
+  color: #fff;
+}
+
+.confirm:hover {
+  background-color: #c0392b;
+  transform: scale(1.05);
+}
+
+.cancel {
+  background-color: #ecf0f1;
+  color: #2c3e50;
+}
+
+.cancel:hover {
+  background-color: #d0d3d4;
+  transform: scale(1.05);
+}
+
+
+.icon {
+  font-size: 48px;
+  color: #f39c12;
+  margin-bottom: 15px;
+  animation: bounce 1s infinite;
+}
+
+.popup-title {
+  margin: 0 0 10px;
+  font-size: 24px;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
