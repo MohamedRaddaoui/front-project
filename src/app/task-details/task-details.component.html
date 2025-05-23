@@ -120,7 +120,7 @@
                                         </div>
 
                                         <!-- Comments Section -->
-                                        <div class="activity-section">
+                                        <div class="activity-section" *ngIf="isEditMode || !isCreateMode" >
                                             <div class="activity-tabs">
                                                 <button 
                                                     [class.active]="activeTab === 'comments'"

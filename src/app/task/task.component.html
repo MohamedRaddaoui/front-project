@@ -8,6 +8,10 @@
                     <div class="content-wrapper">
                         <button ejs-button id='addNew' class="e-dialog-add add-task-button fab" (click)="addClick()">
                         <span class="fab-text">Add New Task</span></button>
+                        <app-task-filter
+                            [users]="users"
+                            (filterChange)="onFilterChange($event)">
+                        </app-task-filter>
                         <ejs-kanban #kanbanObj cssClass='kanban-overview'  keyField="Status" [dataSource]='kanbanData'
                             [cardSettings]='cardSettings' enableTooltip='true'  enableVirtualization="true"       (dialogOpen)="onOpen($event)"
 

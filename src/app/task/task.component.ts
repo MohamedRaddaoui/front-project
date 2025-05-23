@@ -24,6 +24,7 @@ import { SideBarComponent } from '../side-bar/side-bar.component';
 import { KanbanModule } from '@syncfusion/ej2-angular-kanban';
 import { TaskKanbanMapper } from '../util/task.mapper';
 import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
+import { TaskFilterComponent } from './task-filter/task-filter.component';
 
 @Component({
   selector: 'control-content',
@@ -37,7 +38,8 @@ import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
     SBActionDescriptionComponent,
     SideBarComponent,
     KanbanModule,
-    DropDownListModule
+    DropDownListModule,
+    TaskFilterComponent
   ]
 })
 export class TaskComponent implements OnInit {
@@ -55,13 +57,18 @@ export class TaskComponent implements OnInit {
     headerField: 'Id',
     contentField: 'Summary',
     selectionType: 'Multiple',
-    // Pas besoin de `template` ici : tu l’as défini dans le HTML via `#cardSettingsTemplate`
+    // Pas besoin de `template` ici : tu l'as défini dans le HTML via `#cardSettingsTemplate`
   };
 
  
   public swimlaneSettings: SwimlaneSettingsModel = {
     keyField: 'Assignee'
   };
+
+  tasks: any[] = [];
+  users: any[] = [];
+  statuses = ['To Do', 'In Progress', 'Done'];
+  filteredTasks: any[] = [];
 
   constructor(private taskService: TaskService, private router:Router) { 
     
@@ -85,6 +92,13 @@ export class TaskComponent implements OnInit {
 
       }));
     });
+
+    this.loadTasks();
+    // Load users from your user service
+    this.users = [
+      { _id: '67d99644b4e02ca9a8b0991f', firstname: 'Mohamed', lastname: 'Raddaoui' },
+      { _id: '67dea703b0a765d6ff287d98', firstname: 'jean', lastname: 'philip' }
+    ];
   }
 
   mapStatus(status: string): string {
@@ -188,4 +202,39 @@ export class TaskComponent implements OnInit {
     // Preventing the modal dialog Open 
     args.cancel = true; 
   } 
+
+  loadTasks() {
+    this.taskService.getTasks().subscribe({
+      next: (response) => {
+        this.tasks = response.tasks;
+        this.filteredTasks = [...this.tasks];
+      },
+      error: (error) => {
+        console.error('Error loading tasks:', error);
+      }
+    });
+  }
+
+  onFilterChange(filters: any) {
+    this.taskService.filterTasks(filters).subscribe({
+      next: (response) => {
+        this.filteredTasks = response.tasks;
+      },
+      error: (error) => {
+        console.error('Error filtering tasks:', error);
+      }
+    });
+  }
+
+  getTasksByStatus(status: string): any[] {
+    return this.filteredTasks.filter(task => task.status === status);
+  }
+
+  getUserInitials(userId: string): string {
+    const user = this.users.find(u => u._id === userId);
+    if (user) {
+      return `${user.firstname[0]}${user.lastname[0]}`.toUpperCase();
+    }
+    return '??';
+  }
 }
