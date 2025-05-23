@@ -21,6 +21,12 @@ import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 
+
+
+import { TaskComponent } from './task/task.component';
+import { TaskDetailsComponent } from './task-details/task-details.component';
+import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
+
 export const routes: Routes = [
   {
     path: 'calendar',
@@ -31,6 +37,10 @@ export const routes: Routes = [
     path: 'admin-dashboard',
     component: AdminDashboardComponent,
     // canActivate: [AdminGuard],
+  },
+  {
+    path: 'user-dashboard',
+    component: UserDashboardComponent,
   },
   {
     path: 'signup',

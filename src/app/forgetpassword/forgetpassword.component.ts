@@ -58,7 +58,7 @@ export class ForgetPasswordComponent implements OnInit {
             
             setTimeout(() => {
               this.router.navigate(['/login']);
-            }, 2000);
+            }, 5000);
           },
           error: (error: HttpErrorResponse) => {
             this.isSubmitting = false;
