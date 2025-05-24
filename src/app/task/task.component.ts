@@ -70,6 +70,8 @@ export class TaskComponent implements OnInit {
   users: any[] = [];
   statuses = ['To Do', 'In Progress', 'Done'];
   filteredTasks: any[] = [];
+  public isLoading: boolean = false;
+  public loadingTaskId: string | null = null;
 
   constructor(private taskService: TaskService, private router: Router) { 
     
@@ -85,22 +87,7 @@ export class TaskComponent implements OnInit {
   }
 
   loadTasks() {
-    this.taskService.getAllTasks().subscribe((tasks: Task[]) => {
-      this.kanbanData = tasks.map((task: Task) => ({
-        Id: task._id,
-        Title: task.title,
-        Summary: task.description,
-        Tags: this.getTag(task.tags),
-        Status: this.mapStatus(task.status),
-        Priority: task.priority,
-        Assignee: this.getAssigneeName(task.assignedUser),
-        idAssigned: this.getAssigneeId(task.assignedUser),
-        Type: 'story',
-        ProjectId: this.getProjectid(task.projectId)
-      }));
-      this.tasks = tasks;
-      this.filteredTasks = [...tasks];
-    });
+    this.refreshBoard();
   }
 
   mapStatus(status: string): string {
@@ -248,10 +235,11 @@ export class TaskComponent implements OnInit {
   } 
 
   onFilterChange(filters: any) {
+    this.isLoading = true;
     this.taskService.filterTasks(filters).subscribe({
       next: (response) => {
         this.filteredTasks = response.tasks;
-        this.kanbanData = this.filteredTasks.map((task: Task) => ({
+        this.kanbanData = response.tasks.map((task: Task) => ({
           Id: task._id,
           Title: task.title,
           Summary: task.description,
@@ -266,6 +254,9 @@ export class TaskComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error filtering tasks:', error);
+      },
+      complete: () => {
+        this.isLoading = false;
       }
     });
   }
@@ -301,23 +292,82 @@ export class TaskComponent implements OnInit {
     element.classList.remove('drag-over');
 
     if (this.draggedTask && this.draggedTask.Status !== newStatus) {
+      this.loadingTaskId = this.draggedTask.Id;
+      this.isLoading = true;
+
       const updatedTask = {
         ...this.draggedTask,
         status: this.reverseMapStatus(newStatus)
       };
 
+      // Store the original status in case of error
+      const originalStatus = this.draggedTask.Status;
+
       this.taskService.updateTask(updatedTask.Id, updatedTask).subscribe({
-        next: () => {
-          this.draggedTask.Status = newStatus;
-          this.loadTasks(); // Refresh the board
+        next: (response) => {
+          // Update the local task data first
+          const taskIndex = this.kanbanData.findIndex(t => t.Id === updatedTask.Id);
+          if (taskIndex !== -1) {
+            this.kanbanData[taskIndex] = {
+              ...this.kanbanData[taskIndex],
+              Status: newStatus
+            };
+          }
+          
+          // Then refresh the entire board
+          this.refreshBoard();
         },
         error: (error) => {
           console.error('Error updating task status:', error);
+          // Revert the task to its original status
+          const taskIndex = this.kanbanData.findIndex(t => t.Id === updatedTask.Id);
+          if (taskIndex !== -1) {
+            this.kanbanData[taskIndex] = {
+              ...this.kanbanData[taskIndex],
+              Status: originalStatus
+            };
+          }
+        },
+        complete: () => {
+          this.isLoading = false;
+          this.loadingTaskId = null;
+          this.draggedTask = null;
         }
       });
     }
 
     this.draggedTask = null;
+  }
+
+  refreshBoard() {
+    this.isLoading = true;
+    this.taskService.getAllTasks().subscribe({
+      next: (tasks: Task[]) => {
+        const mappedTasks = tasks.map((task: Task) => ({
+          Id: task._id,
+          Title: task.title,
+          Summary: task.description,
+          Tags: this.getTag(task.tags),
+          Status: this.mapStatus(task.status),
+          Priority: task.priority,
+          Assignee: this.getAssigneeName(task.assignedUser),
+          idAssigned: this.getAssigneeId(task.assignedUser),
+          Type: 'story',
+          ProjectId: this.getProjectid(task.projectId)
+        }));
+
+        // Update the data sources
+        this.tasks = tasks;
+        this.kanbanData = mappedTasks;
+        this.filteredTasks = [...tasks];
+      },
+      error: (error) => {
+        console.error('Error refreshing board:', error);
+      },
+      complete: () => {
+        this.isLoading = false;
+      }
+    });
   }
 
   getUserInitials(userId: string): string {
@@ -326,5 +376,18 @@ export class TaskComponent implements OnInit {
       return `${user.firstname[0]}${user.lastname[0]}`.toUpperCase();
     }
     return '??';
+  }
+
+  getStatusIcon(status: string): string {
+    switch (status) {
+      case 'Open':
+        return 'fas fa-list-ul text-primary';
+      case 'InProgress':
+        return 'fas fa-spinner text-warning';
+      case 'Close':
+        return 'fas fa-check-circle text-success';
+      default:
+        return 'fas fa-list';
+    }
   }
 }

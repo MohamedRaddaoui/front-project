@@ -12,9 +12,15 @@
                             (filterChange)="onFilterChange($event)">
                         </app-task-filter>
                         
-                        <div class="kanban-board">
+                        <div class="kanban-board" [class.loading]="isLoading">
+                            <div class="board-loader" *ngIf="isLoading">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                <span>Updating board...</span>
+                            </div>
+                            
                             <div class="kanban-column" *ngFor="let column of columns">
                                 <div class="column-header">
+                                    <i [class]="getStatusIcon(column.keyField)"></i>
                                     <span class="header-text">{{column.headerText}}</span>
                                     <span class="task-count">- {{getTaskCountByStatus(column.keyField)}} Items</span>
                                 </div>
@@ -28,7 +34,11 @@
                                          (dblclick)="cardDoubleClick({data: task})"
                                          [class.priority-low]="task.Priority === 'Low'"
                                          [class.priority-medium]="task.Priority === 'Medium'"
-                                         [class.priority-high]="task.Priority === 'High'">
+                                         [class.priority-high]="task.Priority === 'High'"
+                                         [class.loading]="loadingTaskId === task.Id">
+                                        <div class="card-loader" *ngIf="loadingTaskId === task.Id">
+                                            <i class="fas fa-spinner fa-spin"></i>
+                                        </div>
                                         <div class="card-header">
                                             <h3 class="card-title">{{task.Title}}</h3>
                                         </div>
