@@ -1,0 +1,20 @@
+<div class="modal" *ngIf="visible">
+  <div class="modal-content">
+    <span class="close" (click)="closeModal()">&times;</span>
+    <section id="user-stories">
+              <h2>Ceate new Backlog</h2>
+              <form id="userStoryForm" [formGroup]="formBacklog">
+                <input type="hidden" id="us-id" />
+                <label for="us-title">Title</label>
+                <input type="text" id="us-title" required placeholder="Ex: Ajouter authentification" formControlName="title"/>
+                
+                <label for="us-description">Description</label>
+                <textarea id="us-description" placeholder="Décrire la fonctionnalité"  formControlName="description"></textarea>
+                
+                <label for="us-priority">Project Title</label>
+                <input type="text" id="us-points" min="0" step="1" placeholder="Ex: 3"  formControlName="title"/>
+                <button type="submit" (click)="addBacklog()">Save</button>
+              </form>
+            </section>
+  </div>
+</div>

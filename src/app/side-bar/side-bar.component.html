@@ -1,56 +1,75 @@
-
-  <aside class="sidebar">
-    <nav class="sidebar-nav">
-      <ul class="nav-list">
-        <li class="nav-item ">
-          <a href="#" class="nav-link">
-            <div class="icon-container">
-              <div class="icon project-icon"></div>
-            </div>
-            <span class="link-text">Dashboard</span>
-          </a>
-        </li>
-        <li class="nav-item active">
-          <div class="nav-link" >
-            <div class="icon-container">
-              <a href ="/add" class="icon project-icon" ></a>
-            </div>
-            <span class="link-text"  >Project</span>
+<aside class="sidebar">
+  <nav class="sidebar-nav">
+    <ul class="nav-list">
+      <!-- Dashboard -->
+      <li class="nav-item">
+        <a href="/dash" class="nav-link">
+          <div class="icon-container">
+            <div class="icon project-icon"></div>
           </div>
-        </li>
-        <li class="nav-item">
-          <a href="#" class="nav-link">
-            <div class="icon-container">
-              <div class="icon tasks-icon"></div>
-            </div>
-            <span class="link-text">Tasks</span>
-          </a>
-        </li>
-        <!-- <li class="nav-item">
-          <a href="#" class="nav-link">
-            <div class="icon-container">
-              <div class="icon logs-icon"></div>
-            </div>
-            <span class="link-text">Work Logs</span>
-          </a>
-        </li> -->
-        <!-- <li class="nav-item">
-          <a href="#" class="nav-link">
-            <div class="icon-container">
-              <div class="icon performance-icon"></div>
-            </div>
-            <span class="link-text">Performance</span>
-          </a>
-        </li> -->
-        <li class="nav-item">
-          <a href="#" class="nav-link">
-            <div class="icon-container">
-              <div class="icon settings-icon"></div>
-            </div>
-            <span class="link-text">Settings</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
-  </aside>
+          <span class="link-text">Dashboard</span>
+        </a>
+      </li>
+      <!-- Project avec liste déroulante -->
+     <li class="nav-item has-dropdown">
+  <div class="nav-link dropdown-toggle" (click)="toggleDropdown()">
+    <div class="icon-container">
+      <div class="icon project-icon" routerLink="/add"></div>
+    </div>
+    <span class="link-text" >Project</span>
+    <span class="arrow" [class.rotated]="isDropdownOpen">&#9662;</span>
+  </div>
+   <ul class="dropdown-menu" [class.show]="isDropdownOpen">
+    <div class="dropdown-item">
+      <a routerLink="/project" [queryParams]="{ archived: false }" class="nav-link">
+        <div class="icon-container">
+          <i class="fas fa-list-alt"></i>
+        </div>
+        <span class="link-text">Active Projects</span>
+      </a>
+    </div>
+    <div class="dropdown-item">
+      <a routerLink="/project" [queryParams]="{ archived: true }" class="nav-link">
+        <div class="icon-container">
+          <i class="fas fa-archive"></i>
+        </div>
+        <span class="link-text">Archived Projects</span>
+      </a>
+    </div>
+  </ul>
+</li>
 
+
+      <!-- Tasks -->
+      <li class="nav-item">
+        <a href="/tasks" class="nav-link">
+          <div class="icon-container">
+            <div class="icon tasks-icon"></div>
+          </div>
+          <span class="link-text">Tasks</span>
+        </a>
+      </li>
+
+      <!-- Q&A -->
+       <li class="nav-item">
+          <a routerLink="/questions" class="nav-link">
+            <div class="icon-container">
+              <div class="icon qa-icon"></div>
+            </div>
+            <span class="link-text">Q&A</span>
+          </a>
+        </li>
+
+      <!-- Settings -->
+      <li class="nav-item">
+        <a href="/settings" class="nav-link">
+          <div class="icon-container">
+            <div class="icon settings-icon"></div>
+          </div>
+          <span class="link-text">Settings</span>
+        </a>
+      </li>
+
+    </ul>
+  </nav>
+</aside>

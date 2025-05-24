@@ -1,0 +1,541 @@
+/* body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f4f6fa;
+  margin: 0;
+  padding: 2rem;
+  color: #1f2937;
+}
+
+.scrum-container {
+  max-width: 1200px;
+  margin: auto;
+}
+
+header h1 {
+  font-size: 2rem;
+  margin-bottom: 0.3rem;
+}
+
+header p {
+  color: #6b7280;
+  margin-bottom: 2rem;
+}
+
+.sprint-panel {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  margin-bottom: 2rem;
+}
+
+.sprint-info h2 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.roles {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 2rem;
+  font-size: 0.95rem;
+  color: #374151;
+} */
+
+/* Scrum Board */
+/* .scrum-board {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.scrum-column {
+  flex: 1;
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.scrum-column h3 {
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.scrum-card {
+  background-color: #f9fafb;
+  border-left: 4px solid #3b82f6;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.scrum-card h4 {
+  margin: 0;
+  font-size: 1rem;
+  color: #1f2937;
+}
+
+.scrum-card p {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #4b5563;
+} */
+
+/* Ceremonies */
+/* .ceremonies {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.ceremonies h2 {
+  margin-bottom: 1rem;
+}
+
+.ceremonies ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.ceremonies li {
+  padding: 0.5rem 0;
+  font-size: 0.95rem;
+  border-bottom: 1px solid #e5e7eb;
+} */
+
+/* Base styles and reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+
+
+.app-container {
+  width: 100%;
+ 
+}
+
+
+
+/* Main content layout */
+.main-content {
+  display: flex;
+  width: 100%;
+  gap: 20px;
+}
+
+
+/* Project content styles */
+.project-content {
+  width: 78%;
+  align-self: stretch;
+}
+
+.project-header-section {
+  display: flex; 
+  align-items: stretch;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-left: 25%;
+  margin-right: 10%;
+  margin-top: 10%;
+
+}
+
+
+
+.project-title-section {
+  display: flex;
+  gap: 15px;
+  flex-direction: column;
+   min-width: 300px;
+  
+}
+
+.project-path {
+  color: rgba(154, 147, 179, 1);
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.project-title-container {
+  display: flex;
+  gap: 20px;
+  font-size: 30px;
+  color: rgba(14, 32, 64, 1);
+  white-space: nowrap;
+  font-weight: 600;
+  align-items: center;
+}
+
+.project-title {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* ou center si tu veux centrer horizontalement */
+  gap: 0.5rem;
+  
+}
+
+.project-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: contain;
+}
+
+.team-members {
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+  color: rgba(210, 91, 104, 1);
+  white-space: nowrap;
+  margin-top: 40px;
+}
+
+.team-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: contain;
+}
+
+.more-members {
+  background-color: rgba(244, 215, 218, 1);
+  border: 1px solid white;
+  padding: 10px;
+  border-radius: 50%;
+}
+
+.status-badge {
+  background-color: rgba(75, 166, 101, 0.11);
+  color: rgba(75, 166, 101, 1);
+  font-size: 16px;
+  white-space: nowrap;
+  margin-top: 0px;
+  padding: 10px 24px 16px;
+  border-radius: 15px;
+  font-weight: 500;
+  flex-shrink: 0
+}
+
+.project-metrics {
+  display: flex;
+  gap: 20px;
+  font-size: 13px;
+  align-self: center;
+  margin-left: 50%;
+  justify-content: flex-end;
+  
+  
+}
+
+.time-spent-section {
+  display: flex;
+  align-items: flex-end;
+  gap: 9px; 
+}
+
+.metric-icon {
+  width: 20px;
+  height: 24px;
+  object-fit: contain;
+  margin-top: 40px;
+  margin-left: 8px;
+    filter: invert(35%) sepia(97%) saturate(459%) hue-rotate(331deg) brightness(91%) contrast(91%);
+}
+
+.metric-details {
+  display: flex;
+  flex-direction: column;
+  
+}
+
+.metric-label {
+  color: rgba(101, 101, 101, 1);
+
+}
+
+.metric-label.center {
+  text-align: center;
+}
+
+.metric-value{
+  color: rgba(75, 166, 101, 1);
+  font-weight: 500;
+  
+}
+
+
+
+.deadline-section {
+  display: flex;
+  flex-direction: column;
+   min-width: 150px;
+  
+}
+
+.deadline-badge {
+  background-color: #ffe5e5;
+  display: flex;
+  gap: 9px;
+  color: #d9534f;
+  margin-top: 8px;
+  padding: 3px 4px ;
+  border-radius: 15px;
+  align-items: center;
+}
+
+
+.deadline-badgev {
+  background-color: #e2f5e9;
+  display: flex;
+  gap: 9px;
+  color: #28a745;
+  margin-top: 8px;
+  padding: 3px 15px;
+  border-radius: 15px;
+  align-items: center;
+  
+}
+
+.deadline-badge .metric-icon {
+  margin-top: 0;
+}
+
+.deadline-badge .metric-value {
+  margin: 0;
+  width: 100px;
+}
+
+/* Tasks section styles */
+.tasks-container {
+  background-color: rgb(240, 252, 252);
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 100%;
+  overflow: hidden;
+  margin-top: 10px;
+  padding: 21px 43px;
+  border-radius: 15px;
+  margin-left: 25%
+
+  ;
+
+  
+  
+ 
+
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .project-header {
+    padding: 21px 20px;
+  }
+
+  .header-right {
+    gap: 40px;
+    flex-wrap: wrap;
+    max-width: 100%;
+  }
+
+  .search-input {
+    padding: 14px 20px;
+  }
+
+  .main-content {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    margin-top: 40px;
+  }
+
+  .project-content {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 40px;
+  }
+
+  .project-path {
+    margin-right: 6px;
+  }
+
+  .status-badge {
+    margin-top: 40px;
+    padding: 10px 20px;
+    white-space: nowrap;
+  }
+
+  .tasks-container {
+    padding: 21px 20px;
+    margin-right: 8px;
+  }
+
+  .task-title-row {
+    width: 100%;
+  }
+
+  .task-counters {
+    margin-right: 10px;
+  }
+}
+
+.icons {
+  cursor: pointer;
+  display: flex;
+  flex-direction: row; /* tu peux mettre column si tu veux chaque icône sur sa propre ligne */
+  gap: 0.75rem;
+  margin-left: 0%;
+ 
+}
+
+
+
+
+
+
+.task-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border-radius: 30px;
+  padding: 16px 24px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  gap: 20px;
+  max-width: 1000px;
+}
+
+.task-left {
+  flex: 3;
+}
+
+.task-title {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.task-meta {
+  font-size: 12px;
+  color: #777;
+  white-space: normal; /* Permet les retours à la ligne */
+  word-wrap: break-word; /* Permet de couper les mots longs si nécessaire */
+  max-width: 300px; /* Exemple de largeur maximale pour forcer les retours */
+}
+.task-icon {
+  aspect-ratio: 0.92;
+  object-fit: contain;
+  width: 16px;
+  align-self: center;
+ 
+}
+
+.status {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 10px;
+  font-size: 11px;
+  margin-left: 6px;
+  font-weight: bold;
+}
+
+.status.cancelled {
+  background-color: #ffe5e5;
+  color: #d9534f;
+}
+
+.status.completed {
+  background-color: #e2f5e9;
+  color: #28a745;
+}
+
+.task-dates {
+  display: flex;
+  flex: 2;
+  gap: 20px;
+}
+
+.date-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-size: 12px;
+}
+
+.label {
+  color: #888;
+  font-size: 11px;
+}
+
+.date {
+  font-weight: bold;
+  margin-top: 2px;
+}
+
+.task-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.timer {
+  background-color: #e2f5e9;
+  color: #28a745;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+
+.menu-icon {
+  font-size: 18px;
+  cursor: pointer;
+}
+
+
+
+
+.description {
+  text-align: justify;        /* Justifie le texte */
+  font-size: 12px;            /* Taille du texte (modifiable selon ton besoin) */
+  width: 1048px;           /* Largeur maximale du paragraphe */  
+  line-height: 1.5;           /* Améliore la lisibilité */
+  color: #333;        /* Couleur du texte (facultatif) */
+  margin-left: 25%;
+}
+.menu-item {
+  padding: 8px 15px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+
+.project-icons {
+  display: flex;
+  gap: 10px;
+  margin-top: 5px;
+ 
+}
