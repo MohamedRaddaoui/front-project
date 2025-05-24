@@ -1,0 +1,74 @@
+<div class="filter-panel" [class.expanded]="isExpanded">
+  <button class="filter-toggle" (click)="togglePanel()">
+    <i class="fas fa-filter"></i>
+    {{ isExpanded ? 'Hide Filters' : 'Show Filters' }}
+  </button>
+  
+  <div class="filter-content" *ngIf="isExpanded">
+    <div class="filter-section">
+      <h3>Filters</h3>
+      <div class="filter-grid">
+        <!-- Assigned User Filter -->
+        <div class="filter-item">
+          <label>Assigned To</label>
+          <select [(ngModel)]="filters.assignedUser" (change)="applyFilters()">
+            <option value="">All Users</option>
+            <option *ngFor="let user of users" [value]="user._id">
+              {{user.firstname}} {{user.lastname}}
+            </option>
+          </select>
+        </div>
+
+        <!-- Status Filter -->
+        <div class="filter-item">
+          <label>Status</label>
+          <select [(ngModel)]="filters.status" (change)="applyFilters()">
+            <option value="">All Status</option>
+            <option *ngFor="let status of statuses" [value]="status">
+              {{status}}
+            </option>
+          </select>
+        </div>
+
+        <!-- Priority Filter -->
+        <div class="filter-item">
+          <label>Priority</label>
+          <select [(ngModel)]="filters.priority" (change)="applyFilters()">
+            <option value="">All Priorities</option>
+            <option *ngFor="let priority of priorities" [value]="priority">
+              {{priority}}
+            </option>
+          </select>
+        </div>
+
+        <!-- Due Date Filter -->
+        <div class="filter-item">
+          <label>Due Before</label>
+          <input 
+            type="date" 
+            [(ngModel)]="filters.dueDate" 
+            (change)="applyFilters()"
+          >
+        </div>
+
+        <!-- Inappropriate Comments Filter -->
+        <div class="filter-item checkbox">
+          <label>
+            <input 
+              type="checkbox" 
+              [(ngModel)]="filters.inappropriateComments"
+              (change)="applyFilters()"
+            >
+            Show Flagged Comments Only
+          </label>
+        </div>
+      </div>
+
+      <div class="filter-actions">
+        <button class="clear-btn" (click)="clearFilters()">
+          <i class="fas fa-times"></i> Clear Filters
+        </button>
+      </div>
+    </div>
+  </div>
+</div> 

@@ -5,9 +5,27 @@ export interface Task {
   status: 'To Do' | 'In Progress' | 'In Review' | 'Done';
   priority: 'Low' | 'Medium' | 'High';
   dueDate?: string;
-  projectId: string;
-  assignedUser?: string | { _id: string; firstname: string }; // selon que tu fasses un populate ou non
+  projectId: string | { _id: string; title: string }; 
+  assignedUser?: string | { _id: string; firstname: string; lastname: string; }; 
+  tags?: string;
   comments?: any[];
   createdAt?: string;
   updatedAt?: string;
+
+}
+
+export interface TaskHistory {
+  _id?: string;
+  task: Task | string;
+  updatedBy:{
+    _id: string;
+    email: string;
+  };
+  changes: {
+    [key: string]: {
+      oldValue: any;
+      newValue: any;
+    };
+  };
+  createdAt: Date;
 }

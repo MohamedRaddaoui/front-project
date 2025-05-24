@@ -1,3 +1,11 @@
+
+import { Component,NgModule } from '@angular/core';
+import { AIAssistViewModule, ChatUIModule } from '@syncfusion/ej2-angular-interactive-chat';
+import { DialogModule, TooltipModule } from '@syncfusion/ej2-angular-popups';
+import { TextBoxModule, TextAreaModule, NumericTextBoxModule, MaskedTextBoxModule, SliderModule, UploaderModule, ColorPickerModule, SignatureModule, RatingModule, OtpInputModule, SmartTextAreaModule, SpeechToTextModule } from '@syncfusion/ej2-angular-inputs';
+import { ButtonModule, CheckBoxModule, RadioButtonModule, SwitchModule, ChipListModule, FabModule, SpeedDialModule, SmartPasteButtonModule } from '@syncfusion/ej2-angular-buttons';
+import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { Component } from '@angular/core';
 import {
   AIAssistViewModule,
@@ -69,6 +77,10 @@ import { AiAssistantComponent } from './ai-assistant/ai-assistant.component';
     ScheduleModule,
     RecurrenceEditorModule,
     RouterOutlet,
+    NavBarComponent,
+    DropDownListModule,
+    FormsModule,
+    ReactiveFormsModule,
     CommonModule,
     AiAssistantComponent,
   ],

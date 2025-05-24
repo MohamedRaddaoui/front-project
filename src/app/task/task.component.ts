@@ -15,6 +15,9 @@ import { CommonModule } from '@angular/common';
 import { SideBarComponent } from '../side-bar/side-bar.component';
 import { KanbanModule } from '@syncfusion/ej2-angular-kanban';
 import { TaskKanbanMapper } from '../util/task.mapper';
+import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
+import { TaskFilterComponent } from './task-filter/task-filter.component';
+
 
 @Component({
   selector: 'control-content',
@@ -22,7 +25,16 @@ import { TaskKanbanMapper } from '../util/task.mapper';
   styleUrls: ['task.component.css'],
   encapsulation: ViewEncapsulation.None,
   standalone: true,
-  imports: [CommonModule, SideBarComponent, KanbanModule],
+  imports: [
+    CommonModule,
+    SBDescriptionComponent,
+    SBActionDescriptionComponent,
+    SideBarComponent,
+    KanbanModule,
+    DropDownListModule,
+    TaskFilterComponent
+  ]
+
 })
 export class TaskComponent implements OnInit {
   @ViewChild('kanbanObj', { static: false }) kanbanObj!: KanbanComponent;
@@ -39,29 +51,45 @@ export class TaskComponent implements OnInit {
     headerField: 'Id',
     contentField: 'Summary',
     selectionType: 'Multiple',
-    // Pas besoin de `template` ici : tu l’as défini dans le HTML via `#cardSettingsTemplate`
   };
 
   public swimlaneSettings: SwimlaneSettingsModel = {
     keyField: 'Assignee',
   };
 
-  constructor(private taskService: TaskService, private router: Router) {}
+  tasks: any[] = [];
+  users: any[] = [];
+  statuses = ['To Do', 'In Progress', 'Done'];
+  filteredTasks: any[] = [];
+
+  constructor(private taskService: TaskService, private router:Router) { 
+    
+
+  }
 
   ngOnInit(): void {
     this.taskService.getAllTasks().subscribe((tasks: Task[]) => {
+      console.log(tasks);
       this.kanbanData = tasks.map((task: Task) => ({
         Id: task._id,
         Title: task.title,
         Summary: task.description,
-        Tags: 'Général',
+        Tags: this.getTag(task.tags),
         Status: this.mapStatus(task.status),
         Priority: task.priority,
         Assignee: this.getAssigneeName(task.assignedUser),
         idAssigned: this.getAssigneeId(task.assignedUser),
         Type: 'story',
+        ProjectId:this.getProjectid(task.projectId)
       }));
     });
+
+    this.loadTasks();
+    // Load users from your user service
+    this.users = [
+      { _id: '67d99644b4e02ca9a8b0991f', firstname: 'Mohamed', lastname: 'Raddaoui' },
+      { _id: '67dea703b0a765d6ff287d98', firstname: 'jean', lastname: 'philip' }
+    ];
   }
 
   mapStatus(status: string): string {
@@ -82,12 +110,22 @@ export class TaskComponent implements OnInit {
   getAssigneeName(assignee: any): string {
     return typeof assignee === 'string'
       ? assignee
-      : assignee?.firstname || 'Unassigned';
+      : assignee?.firstname + " " + assignee?.lastname || 'Unassigned';
+  }
+  getProjectid(project: any): string {
+    return typeof project === 'string'
+      ? project
+      : project?._id || 'Unassigned';
   }
   getAssigneeId(assignee: any): string {
     return typeof assignee === 'string' ? assignee : assignee?._id || null;
   }
 
+  getTag(tag: any): string {
+    return typeof tag === 'string'
+    ? tag
+    : tag?.toUpperCase() || 'GENERAL';
+  }
   getString(assignee: string): string {
     return (
       assignee
@@ -168,5 +206,57 @@ export class TaskComponent implements OnInit {
   onOpen(args: any) {
     // Preventing the modal dialog Open
     args.cancel = true;
+  }
+  onOpen(args:any) { 
+    // Preventing the modal dialog Open 
+    args.cancel = true; 
+  } 
+
+  loadTasks() {
+    this.taskService.getTasks().subscribe({
+      next: (response) => {
+        this.tasks = response.tasks;
+        this.filteredTasks = [...this.tasks];
+      },
+      error: (error) => {
+        console.error('Error loading tasks:', error);
+      }
+    });
+  }
+
+  onFilterChange(filters: any) {
+    this.taskService.filterTasks(filters).subscribe({
+      next: (response) => {
+        this.filteredTasks = response.tasks;
+        // Map filtered tasks to kanban format and update kanbanData
+        this.kanbanData = this.filteredTasks.map((task: Task) => ({
+          Id: task._id,
+          Title: task.title,
+          Summary: task.description,
+          Tags: this.getTag(task.tags),
+          Status: this.mapStatus(task.status),
+          Priority: task.priority,
+          Assignee: this.getAssigneeName(task.assignedUser),
+          idAssigned: this.getAssigneeId(task.assignedUser),
+          Type: 'story',
+          ProjectId: this.getProjectid(task.projectId)
+        }));
+      },
+      error: (error) => {
+        console.error('Error filtering tasks:', error);
+      }
+    });
+  }
+
+  getTasksByStatus(status: string): any[] {
+    return this.filteredTasks.filter(task => task.status === status);
+  }
+
+  getUserInitials(userId: string): string {
+    const user = this.users.find(u => u._id === userId);
+    if (user) {
+      return `${user.firstname[0]}${user.lastname[0]}`.toUpperCase();
+    }
+    return '??';
   }
 }
