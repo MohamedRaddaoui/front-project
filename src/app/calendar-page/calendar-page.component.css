@@ -1,0 +1,49 @@
+.custom-event-editor td {
+  padding: 8px;
+}
+
+.custom-participate-btn,
+.custom-add-participant-btn {
+  margin: 12px 8px 0 0;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(60, 60, 60, 0.08);
+}
+
+.custom-participate-btn {
+  background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
+  color: #1b3a2f;
+}
+
+.custom-add-participant-btn {
+  background: linear-gradient(90deg, #2196f3 0%, #21cbf3 100%);
+  color: #fff;
+}
+
+.custom-participate-btn:hover {
+  background: linear-gradient(90deg, #38f9d7 0%, #43e97b 100%);
+  color: #0d1f16;
+  box-shadow: 0 4px 16px rgba(67, 233, 123, 0.15);
+}
+
+.custom-add-participant-btn:hover {
+  background: linear-gradient(90deg, #21cbf3 0%, #2196f3 100%);
+  color: #e3f2fd;
+  box-shadow: 0 4px 16px rgba(33, 203, 243, 0.15);
+}
+
+.snackbar-success {
+  background: #43e97b;
+  color: #1b3a2f;
+  font-weight: bold;
+}
+.snackbar-error {
+  background: #ff5252;
+  color: #fff;
+  font-weight: bold;
+}
