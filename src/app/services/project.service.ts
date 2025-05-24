@@ -29,9 +29,6 @@ export class ProjectService {
       return this.http.post<Project[]>(`${this.apiUrl}/addProject`,data,{ headers });
     }
 
-
-    
-
      getAllProject():Observable<Project[]>{
       return this.http.get<Project[]>(`${this.apiUrl}/listProject`);
      }
@@ -146,7 +143,7 @@ getSprintByProject(id:string):Observable<Sprint[]>{
 }
 // Dans project.service.ts
 addUserStoryToSprint(userStoryId: string, sprintId: string): Observable<any> {
-  return this.http.post<any>(`${this.apiUrl3}/assignUserStory/${sprintId}/userStories`, { userStoryId } );
+  return this.http.post<any>(`${this.apiUrl3}/assignUserStory/${sprintId}/userStories`, { userStoryId });
 }
 
 }

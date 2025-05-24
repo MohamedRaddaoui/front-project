@@ -1,0 +1,180 @@
+<mat-toolbar color="primary" class="dashboard-toolbar">
+  <span>
+    <mat-icon>dashboard</mat-icon>
+    Event Dashboard
+  </span>
+</mat-toolbar>
+
+<div class="dashboard-content">
+  <div class="dashboard-kpis">
+    <mat-card class="kpi-card mat-elevation-z2 kpi-total">
+      <mat-icon class="kpi-icon kpi-total-icon">event</mat-icon>
+      <div class="kpi-title">Total Events</div>
+      <div class="kpi-value">{{ kpis.total }}</div>
+    </mat-card>
+    <mat-card class="kpi-card mat-elevation-z2 kpi-scheduled">
+      <mat-icon class="kpi-icon kpi-scheduled-icon">schedule</mat-icon>
+      <div class="kpi-title">Scheduled</div>
+      <div class="kpi-value">{{ kpis.scheduled }}</div>
+    </mat-card>
+    <mat-card class="kpi-card mat-elevation-z2 kpi-completed">
+      <mat-icon class="kpi-icon kpi-completed-icon">check_circle</mat-icon>
+      <div class="kpi-title">Completed</div>
+      <div class="kpi-value">{{ kpis.completed }}</div>
+    </mat-card>
+    <mat-card class="kpi-card mat-elevation-z2 kpi-cancelled">
+      <mat-icon class="kpi-icon kpi-cancelled-icon">cancel</mat-icon>
+      <div class="kpi-title">Cancelled</div>
+      <div class="kpi-value">{{ kpis.cancelled }}</div>
+    </mat-card>
+  </div>
+
+  <div class="dashboard-charts">
+    <mat-card class="chart-card mat-elevation-z2">
+      <mat-card-header>
+        <div class="chart-header">
+          <mat-icon class="chart-icon">pie_chart</mat-icon>
+          <div class="chart-title">
+            <h2>Status Distribution</h2>
+            <p class="chart-subtitle">Overview of event statuses</p>
+          </div>
+        </div>
+      </mat-card-header>
+      <mat-divider></mat-divider>
+      <mat-card-content>
+        <ejs-accumulationchart
+          [legendSettings]="statusPieLegend"
+          [tooltip]="statusPieTooltip"
+          [enableAnimation]="true">
+          <e-accumulation-series-collection>
+            <e-accumulation-series
+              [dataSource]="statusChartData"
+              xName="x"
+              yName="y"
+              type="Pie"
+              [radius]="'75%'"
+              [dataLabel]="{
+                visible: true,
+                position: 'Outside',
+                name: 'x',
+                font: { size: '14px', color: '#666' }
+              }">
+            </e-accumulation-series>
+          </e-accumulation-series-collection>
+        </ejs-accumulationchart>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="chart-card mat-elevation-z2">
+      <mat-card-header>
+        <div class="chart-header">
+          <mat-icon class="chart-icon">donut_large</mat-icon>
+          <div class="chart-title">
+            <h2>Events by Type</h2>
+            <p class="chart-subtitle">Distribution across event categories</p>
+          </div>
+        </div>
+      </mat-card-header>
+      <mat-divider></mat-divider>
+      <mat-card-content>
+        <ejs-accumulationchart
+          [legendSettings]="typePieLegend"
+          [tooltip]="typePieTooltip"
+          [enableAnimation]="true"
+          [background]="'transparent'"
+          [height]="'350px'"
+          [width]="'100%'">
+          <e-accumulation-series-collection>
+            <e-accumulation-series
+              [dataSource]="typeChartData"
+              xName="x"
+              yName="y"
+              type="Pie"
+              [radius]="'75%'"
+              [palettes]="['#7E57C2', '#26A69A', '#EC407A', '#5C6BC0']"
+              [dataLabel]="{
+                visible: true,
+                position: 'Outside',
+                name: 'x',
+                connectorStyle: { length: '10%', type: 'Curve' },
+                font: { size: '14px', color: '#666' }
+              }">
+            </e-accumulation-series>
+          </e-accumulation-series-collection>
+        </ejs-accumulationchart>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <mat-card class="dashboard-table mat-elevation-z2">
+    <mat-card-header class="table-header">
+      <div class="header-content">
+        <mat-icon class="header-icon">event_note</mat-icon>
+        <mat-card-title>All Events</mat-card-title>
+      </div>
+      <button mat-raised-button class="add-event-btn" (click)="addEvent()">
+        <mat-icon>add</mat-icon>
+        <span>Add Event</span>
+      </button>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z0">
+
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef> Title </th>
+          <td mat-cell *matCellDef="let event"> {{event.title}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef> Type </th>
+          <td mat-cell *matCellDef="let event"> {{event.type}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef> Status </th>
+          <td mat-cell *matCellDef="let event" [ngClass]="'status-' + event.status.toLowerCase()">
+            <span class="status-chip">{{event.status}}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="startTime">
+          <th mat-header-cell *matHeaderCellDef> Start Time </th>
+          <td mat-cell *matCellDef="let event"> {{event.startTime | date:'short'}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="endTime">
+          <th mat-header-cell *matHeaderCellDef> End Time </th>
+          <td mat-cell *matCellDef="let event"> {{event.endTime | date:'short'}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef> Actions </th>
+          <td mat-cell *matCellDef="let event" class="actions-cell">
+            <div class="action-buttons">
+              <button mat-icon-button class="action-btn edit" (click)="updateEvent(event)" matTooltip="Edit Event">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button class="action-btn delete" (click)="deleteEvent(event)" matTooltip="Delete Event">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="6">No events found</td>
+        </tr>
+      </table>
+      <mat-paginator 
+        [pageSizeOptions]="[5, 10, 20]" 
+        showFirstLastButtons 
+        aria-label="Select page of events"
+        class="modern-paginator">
+      </mat-paginator>
+    </mat-card-content>
+  </mat-card>
+</div>

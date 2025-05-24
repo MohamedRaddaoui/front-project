@@ -25,3 +25,15 @@
   height: 100vh;
   padding: 20px;
 }
+
+.app-container {
+  position: relative;
+  min-height: 100vh;
+}
+
+.ai-assistant-overlay {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}

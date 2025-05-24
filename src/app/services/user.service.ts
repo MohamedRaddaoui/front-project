@@ -15,21 +15,21 @@ interface VerificationData {
 export class UserService {
   private apiUrl = `${environment.baseUrl}/users`;
 
-  constructor(
-    private http: HttpClient,
-    private tokenService: TokenService
-  ) {}
+  constructor(private http: HttpClient, private tokenService: TokenService) {}
 
   private getAuthHeaders(): HttpHeaders {
     const token = this.tokenService.getToken();
     return new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
+
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+
     });
   }
 
-  // Add a new user
-  addUser(userData: any): Observable<any> {
+  // Add a new user (avec FormData)
+  addUser(userData: FormData): Observable<any> {
+    // On n'ajoute pas les headers pour Content-Type, Angular s'en charge automatiquement
     return this.http.post(`${this.apiUrl}/adduser`, userData);
   }
 
@@ -45,32 +45,38 @@ export class UserService {
   // Protected routes that require authentication
   getAllUsers(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/showuser`, {
-      headers: this.getAuthHeaders()
+      headers: this.getAuthHeaders(),
     });
   }
 
   getUserById(id: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/showById/${id}`, {
-      headers: this.getAuthHeaders()
+      headers: this.getAuthHeaders(),
     });
+  }
+
+  getUserByEmail(email: string): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/find-by-email`,
+      { email },
+      { headers: this.getAuthHeaders() }
+    );
   }
 
   deleteUser(id: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/deleteuser/${id}`, {
-      headers: this.getAuthHeaders()
+      headers: this.getAuthHeaders(),
     });
   }
 
   updateUser(id: string, updatedData: any): Observable<any> {
     return this.http.put(`${this.apiUrl}/updateuser/${id}`, updatedData, {
-      headers: this.getAuthHeaders()
+      headers: this.getAuthHeaders(),
     });
   }
 
-  logout(): Observable<any> {
-    const headers = this.getAuthHeaders();
+  logout() {
     this.tokenService.removeToken();
-    return this.http.post(`${this.apiUrl}/logout`, {}, { headers });
   }
 
   forgetPassword(email: string): Observable<any> {
@@ -78,7 +84,8 @@ export class UserService {
   }
 
   resetPassword(token: string, newPassword: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/reset-password/${token}`, 
+    return this.http.post(
+      `${this.apiUrl}/reset-password/${token}`,
       { newPassword },
       { headers: this.getAuthHeaders() }
     );

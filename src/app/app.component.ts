@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+
+import { Component,NgModule } from '@angular/core';
+import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import {
   AIAssistViewModule,
   ChatUIModule,
@@ -69,6 +72,9 @@ import { AiAssistantComponent } from './ai-assistant/ai-assistant.component';
     ScheduleModule,
     RecurrenceEditorModule,
     RouterOutlet,
+    DropDownListModule,
+    FormsModule,
+    ReactiveFormsModule,
     CommonModule,
     AiAssistantComponent,
   ],

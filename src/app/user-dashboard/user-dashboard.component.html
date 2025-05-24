@@ -1,0 +1,58 @@
+<h2 class="title">Admin-Dashboard</h2>
+
+<table *ngIf="users.length > 0; else noUsers" class="table-container">
+  <thead>
+    <tr>
+      <th>Photo</th>
+      <th>Nom complet</th>
+      <th>Email</th>
+      <th>Rôle</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of users">
+      <ng-container *ngIf="selectedUser && selectedUser._id === user._id; else viewMode">
+        <!-- Mode édition -->
+        <td>
+          <img [src]="'http://localhost:5000/uploads/' + user.photo" class="avatar" *ngIf="user.photo" />
+        </td>
+        <td>
+          <input [(ngModel)]="editedUser.firstname" placeholder="Prénom" class="form-input" />
+          <input [(ngModel)]="editedUser.lastname" placeholder="Nom" class="form-input" />
+        </td>
+        <td><input [(ngModel)]="editedUser.email" placeholder="Email" class="form-input" /></td>
+        <td><input [(ngModel)]="editedUser.role" placeholder="Rôle" class="form-input" /></td>
+        <td>
+          <button (click)="saveUser()" class="icon-btn save" title="Enregistrer">
+            <i class="fas fa-check"></i>
+          </button>
+          <button (click)="cancelEdit()" class="icon-btn cancel" title="Annuler">
+            <i class="fas fa-times"></i>
+          </button>
+        </td>
+      </ng-container>
+      <ng-template #viewMode>
+        <!-- Mode affichage -->
+        <td>
+          <img [src]="'http://localhost:5000/uploads/' + user.photo" class="avatar" *ngIf="user.photo" />
+        </td>
+        <td>{{ user.firstname }} {{ user.lastname }}</td>
+        <td>{{ user.email }}</td>
+        <td><span class="badge">{{ user.role }}</span></td>
+        <td>
+          <button (click)="editUser(user)" class="icon-btn edit" title="Modifier">
+            <i class="fas fa-pen"></i>
+          </button>
+          <button (click)="deleteUser(user._id)" class="icon-btn delete" title="Supprimer">
+            <i class="fas fa-trash"></i>
+          </button>
+        </td>
+      </ng-template>
+    </tr>
+  </tbody>
+</table>
+
+<ng-template #noUsers>
+  <p class="no-users">Aucun utilisateur trouvé.</p>
+</ng-template>

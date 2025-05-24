@@ -33,6 +33,8 @@ export class SignupComponent implements OnInit {
   hidePassword: boolean = true;
   errorMessage: string = '';
 
+  selectedFile: File | null = null;
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -55,17 +57,29 @@ export class SignupComponent implements OnInit {
   togglePasswordVisibility(): void {
     this.hidePassword = !this.hidePassword;
   }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+    }
+  }
+
   onSubmit(): void {
     if (this.signupForm.invalid) {
       return;
     }
 
-    const formData = {
-      firstname: this.signupForm.value.firstname,
-      lastname: this.signupForm.value.lastname,
-      email: this.signupForm.value.email,
-      password: this.signupForm.value.password,
-    };
+    const formData = new FormData();
+
+    formData.append('firstname', this.signupForm.value.firstname);
+    formData.append('lastname', this.signupForm.value.lastname);
+    formData.append('email', this.signupForm.value.email);
+    formData.append('password', this.signupForm.value.password);
+
+    if (this.selectedFile) {
+      formData.append('photo', this.selectedFile);
+    }
 
     this.userService.addUser(formData).subscribe({
       next: () => {

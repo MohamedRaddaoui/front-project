@@ -22,10 +22,10 @@ export class TaskKanbanMapper {
       description: card.Summary,
       status: this.mapStatus(card.Status),
       assignedUser: card.idAssigned || null,
-     // tags: typeof card.Tags === 'string' ? card.Tags.split(',') : card.Tags,
+      tags: card.Tags ,
       priority: card.Priority,
       dueDate: new Date().toISOString(), 
-      projectId: "65f123456789abcdef123456",
+      projectId: card.ProjectId,
     };
     }
     static mapStatus(Status: any) {

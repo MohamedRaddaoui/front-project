@@ -114,7 +114,7 @@ export class LoginComponent implements OnInit {
         next: (response: any) => {
           if (response && response.token) {
             this.tokenService.setToken(response.token);
-            this.router.navigate(['/']);
+            this.router.navigate(['/project']);
           } else {
             this.errorMessage = 'Invalid verification code';
           }
