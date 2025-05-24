@@ -1,3 +1,5 @@
+<app-nav-bar></app-nav-bar>
+
 <div class="app-container">
     <div class="main-container">
         <app-side-bar></app-side-bar>
@@ -5,9 +7,6 @@
             <div class="content-header">
                 <div class="control-section">
                     <div class="content-wrapper">
-                        <button class="add-task-button fab" (click)="addClick()">
-                            <span class="fab-text">Add New Task</span>
-                        </button>
                         <app-task-filter
                             [users]="users"
                             (filterChange)="onFilterChange($event)">
@@ -59,5 +58,9 @@
         </main>
     </div>
 </div>
+
+<button class="add-task-button" (click)="addClick()">
+    <span class="fab-text">Add New Task</span>
+</button>
  
  

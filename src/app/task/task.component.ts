@@ -19,6 +19,7 @@ import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
 import { TaskFilterComponent } from './task-filter/task-filter.component';
 import { SBDescriptionComponent } from '../common/dp/dp.component';
 import { SBActionDescriptionComponent } from '../common/adp/adp.component';
+import { NavBarComponent } from '../nav-bar/nav-bar.component';
 
 interface Column {
   headerText: string;
@@ -39,7 +40,8 @@ interface Column {
     SideBarComponent,
     KanbanModule,
     DropDownListModule,
-    TaskFilterComponent
+    TaskFilterComponent,
+    NavBarComponent
   ]
 })
 export class TaskComponent implements OnInit {
