@@ -20,6 +20,11 @@ import { TaskFilterComponent } from './task-filter/task-filter.component';
 import { SBDescriptionComponent } from '../common/dp/dp.component';
 import { SBActionDescriptionComponent } from '../common/adp/adp.component';
 
+interface Column {
+  headerText: string;
+  keyField: string;
+  allowToggle: boolean;
+}
 
 @Component({
   selector: 'control-content',
@@ -36,14 +41,14 @@ import { SBActionDescriptionComponent } from '../common/adp/adp.component';
     DropDownListModule,
     TaskFilterComponent
   ]
-
 })
 export class TaskComponent implements OnInit {
   @ViewChild('kanbanObj', { static: false }) kanbanObj!: KanbanComponent;
 
-  public kanbanData: Object[] = [];
+  public kanbanData: any[] = [];
+  private draggedTask: any = null;
 
-  public columns: ColumnsModel[] = [
+  public columns: Column[] = [
     { headerText: 'To Do', keyField: 'Open', allowToggle: true },
     { headerText: 'In Progress', keyField: 'InProgress', allowToggle: true },
     { headerText: 'Done', keyField: 'Close', allowToggle: true },
@@ -64,14 +69,21 @@ export class TaskComponent implements OnInit {
   statuses = ['To Do', 'In Progress', 'Done'];
   filteredTasks: any[] = [];
 
-  constructor(private taskService: TaskService, private router:Router) { 
+  constructor(private taskService: TaskService, private router: Router) { 
     
 
   }
 
   ngOnInit(): void {
+    this.loadTasks();
+    this.users = [
+      { _id: '67d99644b4e02ca9a8b0991f', firstname: 'Mohamed', lastname: 'Raddaoui' },
+      { _id: '67dea703b0a765d6ff287d98', firstname: 'jean', lastname: 'philip' }
+    ];
+  }
+
+  loadTasks() {
     this.taskService.getAllTasks().subscribe((tasks: Task[]) => {
-      console.log(tasks);
       this.kanbanData = tasks.map((task: Task) => ({
         Id: task._id,
         Title: task.title,
@@ -82,16 +94,11 @@ export class TaskComponent implements OnInit {
         Assignee: this.getAssigneeName(task.assignedUser),
         idAssigned: this.getAssigneeId(task.assignedUser),
         Type: 'story',
-        ProjectId:this.getProjectid(task.projectId)
+        ProjectId: this.getProjectid(task.projectId)
       }));
+      this.tasks = tasks;
+      this.filteredTasks = [...tasks];
     });
-
-    this.loadTasks();
-    // Load users from your user service
-    this.users = [
-      { _id: '67d99644b4e02ca9a8b0991f', firstname: 'Mohamed', lastname: 'Raddaoui' },
-      { _id: '67dea703b0a765d6ff287d98', firstname: 'jean', lastname: 'philip' }
-    ];
   }
 
   mapStatus(status: string): string {
@@ -100,12 +107,23 @@ export class TaskComponent implements OnInit {
         return 'Open';
       case 'In Progress':
         return 'InProgress';
-      case 'Review':
-        return 'Review';
       case 'Done':
         return 'Close';
       default:
         return 'Open';
+    }
+  }
+
+  reverseMapStatus(status: string): string {
+    switch (status) {
+      case 'Open':
+        return 'To Do';
+      case 'InProgress':
+        return 'In Progress';
+      case 'Close':
+        return 'Done';
+      default:
+        return 'To Do';
     }
   }
 
@@ -114,20 +132,23 @@ export class TaskComponent implements OnInit {
       ? assignee
       : assignee?.firstname + " " + assignee?.lastname || 'Unassigned';
   }
+
   getProjectid(project: any): string {
     return typeof project === 'string'
       ? project
       : project?._id || 'Unassigned';
   }
+
   getAssigneeId(assignee: any): string {
     return typeof assignee === 'string' ? assignee : assignee?._id || null;
   }
 
   getTag(tag: any): string {
     return typeof tag === 'string'
-    ? tag
-    : tag?.toUpperCase() || 'GENERAL';
+      ? tag
+      : tag?.toUpperCase() || 'GENERAL';
   }
+
   getString(assignee: string): string {
     return (
       assignee
@@ -189,20 +210,12 @@ export class TaskComponent implements OnInit {
   addClick(): void {
     const url = `/task-details`;
     window.open(url, '_blank');
-    /* const cardIds = this.kanbanObj.kanbanData.map((obj: { [key: string]: string }) => parseInt(obj['Id'].replace('Task ', ''), 10));
-    const cardCount: number = Math.max.apply(Math, cardIds) + 1;
-    const cardDetails = {
-      Id: 'Task ' + cardCount, Status: 'Open', Priority: 'Normal',
-      Assignee: 'Andrew Fuller', Estimate: 0, Tags: '', Summary: ''
-    };
-    this.kanbanObj.openDialog('Add', cardDetails);*/
   }
   cardDoubleClick(args: any): void {
-    console.log('Card double-clicked:', args.data);
     const taskId = args.data?.Id;
     if (taskId) {
       const url = `/task-details/${taskId}`;
-      window.open(url, '_blank'); // Ouvre dans un nouvel onglet
+      window.open(url, '_blank');
     }
   }
 
@@ -211,23 +224,10 @@ export class TaskComponent implements OnInit {
     args.cancel = true; 
   } 
 
-  loadTasks() {
-    this.taskService.getTasks().subscribe({
-      next: (response) => {
-        this.tasks = response.tasks;
-        this.filteredTasks = [...this.tasks];
-      },
-      error: (error) => {
-        console.error('Error loading tasks:', error);
-      }
-    });
-  }
-
   onFilterChange(filters: any) {
     this.taskService.filterTasks(filters).subscribe({
       next: (response) => {
         this.filteredTasks = response.tasks;
-        // Map filtered tasks to kanban format and update kanbanData
         this.kanbanData = this.filteredTasks.map((task: Task) => ({
           Id: task._id,
           Title: task.title,
@@ -247,8 +247,54 @@ export class TaskComponent implements OnInit {
     });
   }
 
-  getTasksByStatus(status: string): any[] {
-    return this.filteredTasks.filter(task => task.status === status);
+  getTasksByColumnStatus(status: string): any[] {
+    return this.kanbanData.filter(task => task.Status === status);
+  }
+
+  getTaskCountByStatus(status: string): number {
+    return this.getTasksByColumnStatus(status).length;
+  }
+
+  onDragStart(event: DragEvent, task: any) {
+    this.draggedTask = task;
+    if (event.dataTransfer) {
+      event.dataTransfer.effectAllowed = 'move';
+      event.dataTransfer.setData('text/plain', task.Id);
+    }
+    const element = event.target as HTMLElement;
+    element.classList.add('dragging');
+  }
+
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    const element = event.target as HTMLElement;
+    element.classList.add('drag-over');
+  }
+
+  onDrop(event: DragEvent, newStatus: string) {
+    event.preventDefault();
+    const element = event.target as HTMLElement;
+    element.classList.remove('drag-over');
+
+    if (this.draggedTask && this.draggedTask.Status !== newStatus) {
+      const updatedTask = {
+        ...this.draggedTask,
+        status: this.reverseMapStatus(newStatus)
+      };
+
+      this.taskService.updateTask(updatedTask.Id, updatedTask).subscribe({
+        next: () => {
+          this.draggedTask.Status = newStatus;
+          this.loadTasks(); // Refresh the board
+        },
+        error: (error) => {
+          console.error('Error updating task status:', error);
+        }
+      });
+    }
+
+    this.draggedTask = null;
   }
 
   getUserInitials(userId: string): string {
