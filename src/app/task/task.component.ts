@@ -21,6 +21,7 @@ import { SBDescriptionComponent } from '../common/dp/dp.component';
 import { SBActionDescriptionComponent } from '../common/adp/adp.component';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
 import { Subject, debounceTime } from 'rxjs';
+import { ViewportScroller } from '@angular/common';
 
 interface Column {
   headerText: string;
@@ -75,7 +76,20 @@ export class TaskComponent implements OnInit {
   public loadingTaskId: string | null = null;
   private refreshSubject = new Subject<void>();
 
-  constructor(private taskService: TaskService, private router: Router) {
+  public visibleCards: { [key: string]: number } = {
+    'Open': 3,
+    'InProgress': 3,
+    'Close': 3
+  };
+
+  private readonly cardIncrement = 3;
+  private scrollThreshold = 0.8; // 80% of scroll height
+
+  constructor(
+    private taskService: TaskService, 
+    private router: Router,
+    private viewportScroller: ViewportScroller
+  ) {
     // Set up debounced refresh
     this.refreshSubject.pipe(
       debounceTime(300) // Wait 300ms before refreshing
@@ -278,11 +292,34 @@ export class TaskComponent implements OnInit {
     if (!this.kanbanData || this.kanbanData.length === 0) {
       return [];
     }
-    return this.kanbanData.filter(task => task.Status === status);
+    const tasks = this.kanbanData.filter(task => task.Status === status);
+    return tasks.slice(0, this.visibleCards[status]);
   }
 
-  getTaskCountByStatus(status: string): number {
-    return this.getTasksByColumnStatus(status).length;
+  hasMoreTasks(status: string): boolean {
+    if (!this.kanbanData) return false;
+    const totalTasks = this.kanbanData.filter(task => task.Status === status).length;
+    return totalTasks > this.visibleCards[status];
+  }
+
+  loadMoreTasks(status: string): void {
+    this.visibleCards[status] += this.cardIncrement;
+  }
+
+  onColumnScroll(event: Event, status: string): void {
+    const element = event.target as HTMLElement;
+    const scrollPosition = element.scrollTop + element.clientHeight;
+    const scrollHeight = element.scrollHeight;
+    
+    if (scrollPosition / scrollHeight > this.scrollThreshold) {
+      this.loadMoreTasks(status);
+    }
+  }
+
+  getRemainingTaskCount(status: string): number {
+    if (!this.kanbanData) return 0;
+    const totalTasks = this.kanbanData.filter(task => task.Status === status).length;
+    return Math.max(0, totalTasks - this.visibleCards[status]);
   }
 
   onDragStart(event: DragEvent, task: any) {
@@ -422,5 +459,10 @@ export class TaskComponent implements OnInit {
     this.filteredTasks = [];
     this.kanbanData = [];
     this.isLoading = false;
+  }
+
+  getTaskCountByStatus(status: string): number {
+    if (!this.kanbanData) return 0;
+    return this.kanbanData.filter(task => task.Status === status).length;
   }
 }

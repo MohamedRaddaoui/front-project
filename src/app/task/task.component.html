@@ -29,46 +29,56 @@
                                     <div class="column-header">
                                         <i [class]="getStatusIcon(column.keyField)"></i>
                                         <span class="header-text">{{column.headerText}}</span>
-                                        <span class="task-count">- {{getTaskCountByStatus(column.keyField)}} Items</span>
+                                        <span class="task-count">{{getTaskCountByStatus(column.keyField)}} Items</span>
                                     </div>
                                     <div class="column-content" 
+                                         [class.has-more]="hasMoreTasks(column.keyField)"
+                                         (scroll)="onColumnScroll($event, column.keyField)"
                                          (dragover)="onDragOver($event)"
                                          (drop)="onDrop($event, column.keyField)">
-                                        <div class="task-card" 
-                                             *ngFor="let task of getTasksByColumnStatus(column.keyField)"
-                                             draggable="true"
-                                             (dragstart)="onDragStart($event, task)"
-                                             (dblclick)="cardDoubleClick({data: task})"
-                                             [class.priority-low]="task.Priority === 'Low'"
-                                             [class.priority-medium]="task.Priority === 'Medium'"
-                                             [class.priority-high]="task.Priority === 'High'"
-                                             [class.loading]="loadingTaskId === task.Id">
-                                            <div class="card-loader" *ngIf="loadingTaskId === task.Id">
-                                                <i class="fas fa-spinner fa-spin"></i>
-                                            </div>
-                                            <div class="card-header">
-                                                <h3 class="card-title">{{task.Title}}</h3>
-                                            </div>
-                                            <div class="card-content">
-                                                <p class="card-description">{{task.Summary}}</p>
-                                            </div>
-                                            <div class="card-footer">
-                                                <div class="tags">
-                                                    <span class="tag" *ngFor="let tag of task.Tags?.split(',')" [class]="getTagClass(tag.trim())">
-                                                        <i [class]="getTagIcon(tag.trim())"></i>
-                                                        {{tag.trim()}}
-                                                    </span>
+                                        <div class="task-list">
+                                            <div class="task-card" 
+                                                 *ngFor="let task of getTasksByColumnStatus(column.keyField)"
+                                                 draggable="true"
+                                                 (dragstart)="onDragStart($event, task)"
+                                                 (dblclick)="cardDoubleClick({data: task})"
+                                                 [class.priority-low]="task.Priority === 'Low'"
+                                                 [class.priority-medium]="task.Priority === 'Medium'"
+                                                 [class.priority-high]="task.Priority === 'High'"
+                                                 [class.loading]="loadingTaskId === task.Id">
+                                                <div class="card-loader" *ngIf="loadingTaskId === task.Id">
+                                                    <i class="fas fa-spinner fa-spin"></i>
                                                 </div>
-                                                <div class="card-metadata">
-                                                    <span class="priority-badge" [class]="'priority-' + task.Priority?.toLowerCase()">
-                                                        {{task.Priority}}
-                                                    </span>
-                                                    <span class="assignee-avatar" [title]="task.Assignee">
-                                                        {{getString(task.Assignee)}}
-                                                    </span>
+                                                <div class="card-header">
+                                                    <h3 class="card-title">{{task.Title}}</h3>
+                                                </div>
+                                                <div class="card-content">
+                                                    <p class="card-description">{{task.Summary}}</p>
+                                                </div>
+                                                <div class="card-footer">
+                                                    <div class="tags">
+                                                        <span class="tag" *ngFor="let tag of task.Tags?.split(',')" [class]="getTagClass(tag.trim())">
+                                                            <i [class]="getTagIcon(tag.trim())"></i>
+                                                            {{tag.trim()}}
+                                                        </span>
+                                                    </div>
+                                                    <div class="card-metadata">
+                                                        <span class="priority-badge" [class]="'priority-' + task.Priority?.toLowerCase()">
+                                                            {{task.Priority}}
+                                                        </span>
+                                                        <span class="assignee-avatar" [title]="task.Assignee">
+                                                            {{getString(task.Assignee)}}
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        <button *ngIf="hasMoreTasks(column.keyField)" 
+                                                class="show-more-button"
+                                                (click)="loadMoreTasks(column.keyField)">
+                                            <i class="fas fa-chevron-down"></i>
+                                            Show {{getRemainingTaskCount(column.keyField)}} more tasks
+                                        </button>
                                     </div>
                                 </div>
                             </div>

@@ -472,7 +472,72 @@ a{
 .column-content {
     flex: 1;
     padding: 8px;
+    max-height: 400px;
     overflow-y: auto;
+    position: relative;
+    scrollbar-width: thin;
+    scrollbar-color: #A5ADBA transparent;
+}
+
+.column-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.column-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.column-content::-webkit-scrollbar-thumb {
+    background-color: #A5ADBA;
+    border-radius: 3px;
+}
+
+.show-more-button {
+    width: 100%;
+    padding: 8px;
+    background: #F4F5F7;
+    border: 1px solid #DFE1E6;
+    border-radius: 3px;
+    color: #42526E;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.show-more-button:hover {
+    background: #EBECF0;
+    color: #172B4D;
+}
+
+.show-more-button i {
+    font-size: 14px;
+}
+
+.task-list {
+    min-height: 100px;
+}
+
+.column-content::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: linear-gradient(to bottom, transparent, rgba(235, 236, 240, 0.9));
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.column-content.has-more::after {
+    opacity: 1;
 }
 
 .task-card {
