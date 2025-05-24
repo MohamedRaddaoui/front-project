@@ -5,6 +5,7 @@ export class User{
   password: String;
   role: String;
   status: String;
+  photo: String ;
   twoFACode:  String;
   twoFACodeExpires: Date;
   photo?:String;
@@ -15,6 +16,7 @@ export class User{
     password: String,
     role: String,
     status: String,
+    photo: String,
     twoFACode:  String,
     twoFACodeExpires: Date,
     photo:String,
@@ -25,6 +27,7 @@ export class User{
     this.password=password;
     this.role= role;
     this.status= status;
+    this.photo= photo;
     this.twoFACode= twoFACode;
     this.twoFACodeExpires= twoFACodeExpires;
     this.photo=photo
