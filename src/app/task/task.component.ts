@@ -20,6 +20,7 @@ import { TaskFilterComponent } from './task-filter/task-filter.component';
 import { SBDescriptionComponent } from '../common/dp/dp.component';
 import { SBActionDescriptionComponent } from '../common/adp/adp.component';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
+import { Subject, debounceTime } from 'rxjs';
 
 interface Column {
   headerText: string;
@@ -72,10 +73,15 @@ export class TaskComponent implements OnInit {
   filteredTasks: any[] = [];
   public isLoading: boolean = false;
   public loadingTaskId: string | null = null;
+  private refreshSubject = new Subject<void>();
 
-  constructor(private taskService: TaskService, private router: Router) { 
-    
-
+  constructor(private taskService: TaskService, private router: Router) {
+    // Set up debounced refresh
+    this.refreshSubject.pipe(
+      debounceTime(300) // Wait 300ms before refreshing
+    ).subscribe(() => {
+      this.performRefresh();
+    });
   }
 
   ngOnInit(): void {
@@ -238,6 +244,12 @@ export class TaskComponent implements OnInit {
     this.isLoading = true;
     this.taskService.filterTasks(filters).subscribe({
       next: (response) => {
+        if (!response.tasks || response.tasks.length === 0) {
+          this.clearBoard();
+          return;
+        }
+
+        // Update local state immediately
         this.filteredTasks = response.tasks;
         this.kanbanData = response.tasks.map((task: Task) => ({
           Id: task._id,
@@ -254,6 +266,7 @@ export class TaskComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error filtering tasks:', error);
+        this.clearBoard();
       },
       complete: () => {
         this.isLoading = false;
@@ -262,6 +275,9 @@ export class TaskComponent implements OnInit {
   }
 
   getTasksByColumnStatus(status: string): any[] {
+    if (!this.kanbanData || this.kanbanData.length === 0) {
+      return [];
+    }
     return this.kanbanData.filter(task => task.Status === status);
   }
 
@@ -293,7 +309,6 @@ export class TaskComponent implements OnInit {
 
     if (this.draggedTask && this.draggedTask.Status !== newStatus) {
       this.loadingTaskId = this.draggedTask.Id;
-      this.isLoading = true;
 
       const updatedTask = {
         ...this.draggedTask,
@@ -303,33 +318,35 @@ export class TaskComponent implements OnInit {
       // Store the original status in case of error
       const originalStatus = this.draggedTask.Status;
 
+      // Update local state immediately for better UX
+      const taskIndex = this.kanbanData.findIndex(t => t.Id === updatedTask.Id);
+      if (taskIndex !== -1) {
+        this.kanbanData[taskIndex] = {
+          ...this.kanbanData[taskIndex],
+          Status: newStatus
+        };
+      }
+
       this.taskService.updateTask(updatedTask.Id, updatedTask).subscribe({
-        next: (response) => {
-          // Update the local task data first
-          const taskIndex = this.kanbanData.findIndex(t => t.Id === updatedTask.Id);
-          if (taskIndex !== -1) {
-            this.kanbanData[taskIndex] = {
-              ...this.kanbanData[taskIndex],
-              Status: newStatus
-            };
-          }
-          
-          // Then refresh the entire board
-          this.refreshBoard();
+        next: () => {
+          // Only trigger a refresh if needed
+          this.refreshSubject.next();
         },
         error: (error) => {
           console.error('Error updating task status:', error);
-          // Revert the task to its original status
-          const taskIndex = this.kanbanData.findIndex(t => t.Id === updatedTask.Id);
-          if (taskIndex !== -1) {
-            this.kanbanData[taskIndex] = {
-              ...this.kanbanData[taskIndex],
-              Status: originalStatus
-            };
+          if (error.status === 404) {
+            this.clearBoard();
+          } else {
+            // Revert the task to its original status only if not 404
+            if (taskIndex !== -1) {
+              this.kanbanData[taskIndex] = {
+                ...this.kanbanData[taskIndex],
+                Status: originalStatus
+              };
+            }
           }
         },
         complete: () => {
-          this.isLoading = false;
           this.loadingTaskId = null;
           this.draggedTask = null;
         }
@@ -340,6 +357,10 @@ export class TaskComponent implements OnInit {
   }
 
   refreshBoard() {
+    this.refreshSubject.next();
+  }
+
+  private performRefresh() {
     this.isLoading = true;
     this.taskService.getAllTasks().subscribe({
       next: (tasks: Task[]) => {
@@ -363,6 +384,12 @@ export class TaskComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error refreshing board:', error);
+        // Clear all data if we get a 404
+        if (error.status === 404) {
+          this.tasks = [];
+          this.kanbanData = [];
+          this.filteredTasks = [];
+        }
       },
       complete: () => {
         this.isLoading = false;
@@ -389,5 +416,11 @@ export class TaskComponent implements OnInit {
       default:
         return 'fas fa-list';
     }
+  }
+
+  private clearBoard() {
+    this.filteredTasks = [];
+    this.kanbanData = [];
+    this.isLoading = false;
   }
 }
