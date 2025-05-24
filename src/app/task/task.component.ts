@@ -277,6 +277,14 @@ export class TaskComponent implements OnInit {
           Type: 'story',
           ProjectId: this.getProjectid(task.projectId)
         }));
+
+        // After data is loaded and rendered, scroll to the results
+        setTimeout(() => {
+          const kanbanBoard = document.querySelector('.kanban-board');
+          if (kanbanBoard) {
+            kanbanBoard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 100);
       },
       error: (error) => {
         console.error('Error filtering tasks:', error);
