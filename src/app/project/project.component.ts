@@ -5,6 +5,8 @@ import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';  // Ajo
 import { ProjectService } from '../services/project.service';
 import { Project } from '../models/project.model';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
+import { TokenService } from '../services/token.service';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
   selector: 'app-project',
@@ -14,8 +16,17 @@ import { NavBarComponent } from '../nav-bar/nav-bar.component';
 })
 export class ProjectComponent {
   successMessage: string | null = null; // ✅ Ajoute cette ligne
+    token:string |null;
+  userId:string="";
+  private jwtHelper = new JwtHelperService();
 
-  constructor(private projectService: ProjectService, private router:Router, private route :ActivatedRoute) {
+  constructor(private projectService: ProjectService, private router:Router, private route :ActivatedRoute,private tokenService:TokenService) {
+
+     this.token = this.tokenService.getToken();
+      if (this.token) {
+        const decodedToken = this.jwtHelper.decodeToken(this.token);
+        this.userId = decodedToken.userId;
+
     this.route.queryParams.subscribe(params => {
       this.successMessage = params['message'] || null;
       if (this.successMessage) {
@@ -24,7 +35,7 @@ export class ProjectComponent {
         }, 3000); // 3 secondes
       }
     });
-  }
+  }}
   listProject: Project[]=[]
 
   //extraire le date d'un date de type iso
@@ -67,7 +78,7 @@ export class ProjectComponent {
 
   
   loadProjects() {
-    this.projectService.getAllProject().subscribe((projects) => {
+    this.projectService.getProjectByUser(this.userId).subscribe((projects) => {
       this.listProject = projects;
       console.log(this.listProject);
       this.totalPages = Math.ceil(
@@ -83,7 +94,7 @@ export class ProjectComponent {
 
 
   loadArchivedProjects() {
-  this.projectService.listOfArchiveProject().subscribe((projects) => {
+  this.projectService.ArchiveProjectByUser().subscribe((projects) => {
       this.listProject = projects;
       console.log(this.listProject);
       this.totalPages = Math.ceil(

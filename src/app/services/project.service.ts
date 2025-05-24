@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environment/env';
 import { Observable } from 'rxjs';
@@ -6,6 +6,7 @@ import { Project } from '../models/project.model';
 import { Backlog } from '../models/backlog.model';
 import { UserStory } from '../models/userStory.model';
 import { Sprint } from '../models/sprint.model';
+import { TokenService } from './token.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,12 +17,16 @@ export class ProjectService {
   private apiUrl2 = `${environment.baseUrl}/userstory`;
   private apiUrl3 =`${environment.baseUrl}/sprint`;
 
-  constructor(private http :HttpClient) {}  
+  constructor(private http :HttpClient,private tokenService: TokenService) {}  
 
      //cerate new project
      addProject(data:Project):Observable<Project[]>{
+       const token = this.tokenService.getToken(); // récupère ton token
+      const headers = new HttpHeaders({
+        Authorization: `Bearer ${token}`
+        });
       
-      return this.http.post<Project[]>(`${this.apiUrl}/addProject`,data);
+      return this.http.post<Project[]>(`${this.apiUrl}/addProject`,data,{ headers });
     }
 
      getAllProject():Observable<Project[]>{
@@ -41,6 +46,8 @@ export class ProjectService {
      }
      
      assignUserToProject(data: { projectId: string, email: string, userType: string }):Observable<Project[]>{
+       console.log("URL utilisée :", `${this.apiUrl}/assignUserToProject`);
+  console.log("Données envoyées :", data); 
       return this.http.post<Project[]>(`${this.apiUrl}/assignUserToProject`,data);
      }
      
@@ -58,6 +65,12 @@ export class ProjectService {
      listOfArchiveProject():Observable<Project[]>{
       return this.http.get<Project[]>(`${this.apiUrl}/getArchProject`);  
     }
+
+
+      ArchiveProjectByUser():Observable<Project[]>{
+      return this.http.get<Project[]>(`${this.apiUrl}/getArchProjectUser`);  
+    }
+
 
     getProjectByUser(id:String):Observable<Project[]>{
       return this.http.get<Project[]>(`${this.apiUrl}/getProjectByUser/${id}`);  

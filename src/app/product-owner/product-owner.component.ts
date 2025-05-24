@@ -301,10 +301,11 @@ removeUserFromStory(story: UserStory) {
 
 
 
-//fonction suppresion backlogand userStory
+//fonction suppresion backlog and userStory
 popupVisible = false;
 
-openPopup() {
+openPopup(backlogID: string): void {
+  this.id = backlogID;
   this.popupVisible = true;
 }
 
@@ -312,20 +313,31 @@ cancelDelete() {
   this.popupVisible = false;
 }
 
-confirmDelete() {
+confirmDelete(): void {
   if (this.id) {
+    console.log('ID à supprimer :', this.id);
+
     this.projectService.deleteBacklog(this.id).subscribe({
-      next: () => {
-        console.log("Suppression confirmée");
+      next: (res:any) => {
+        console.log("Suppression confirmée :", res.message);
+
+        // Si tu as une liste locale de backlogs à mettre à jour :
+        this.backlog = this.backlog.filter(b => b._id !== this.id);
+
+        // Redirection optionnelle (à adapter selon ton app)
         this.router.navigate(['/'], {
           queryParams: { message: 'Project deleted successfully' }
         });
       },
       error: (err) => {
         console.error('Erreur de suppression :', err);
+        alert('Failed to delete backlog and its user stories.');
       }
     });
+  } else {
+    console.warn('Aucun ID sélectionné pour suppression');
   }
+
   this.popupVisible = false;
 }
 
