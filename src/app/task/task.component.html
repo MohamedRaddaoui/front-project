@@ -37,7 +37,10 @@
                                         </div>
                                         <div class="card-footer">
                                             <div class="tags">
-                                                <span class="tag" *ngFor="let tag of task.Tags?.split(',')">{{tag}}</span>
+                                                <span class="tag" *ngFor="let tag of task.Tags?.split(',')" [class]="getTagClass(tag.trim())">
+                                                    <i [class]="getTagIcon(tag.trim())"></i>
+                                                    {{tag.trim()}}
+                                                </span>
                                             </div>
                                             <div class="card-metadata">
                                                 <span class="priority-badge" [class]="'priority-' + task.Priority?.toLowerCase()">

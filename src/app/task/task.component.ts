@@ -152,12 +152,33 @@ export class TaskComponent implements OnInit {
   }
 
   getString(assignee: string): string {
-    return (
-      assignee
-        .match(/\b(\w)/g)
-        ?.join('')
-        .toUpperCase() || ''
-    );
+    return assignee ? assignee.charAt(0).toUpperCase() : '';
+  }
+
+  getTagClass(tag: string): string {
+    const tagLower = tag.toLowerCase();
+    if (tagLower.includes('bug')) return 'tag bug';
+    if (tagLower.includes('feature')) return 'tag feature';
+    if (tagLower.includes('enhancement')) return 'tag enhancement';
+    if (tagLower.includes('doc')) return 'tag documentation';
+    if (tagLower.includes('design')) return 'tag design';
+    if (tagLower.includes('test')) return 'tag testing';
+    if (tagLower.includes('security')) return 'tag security';
+    if (tagLower.includes('performance')) return 'tag performance';
+    return 'tag';
+  }
+
+  getTagIcon(tag: string): string {
+    const tagLower = tag.toLowerCase();
+    if (tagLower.includes('bug')) return 'fas fa-bug';
+    if (tagLower.includes('feature')) return 'fas fa-star';
+    if (tagLower.includes('enhancement')) return 'fas fa-rocket';
+    if (tagLower.includes('doc')) return 'fas fa-book';
+    if (tagLower.includes('design')) return 'fas fa-paint-brush';
+    if (tagLower.includes('test')) return 'fas fa-vial';
+    if (tagLower.includes('security')) return 'fas fa-shield-alt';
+    if (tagLower.includes('performance')) return 'fas fa-tachometer-alt';
+    return 'fas fa-tag';
   }
 
   cardRendered(args: CardRenderedEventArgs): void {
