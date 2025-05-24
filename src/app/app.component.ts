@@ -38,10 +38,14 @@ import {
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AiAssistantComponent } from './ai-assistant/ai-assistant.component';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
+import { SideBarComponent } from './side-bar/side-bar.component';
 
 @Component({
   selector: 'app-root',
   imports: [
+  SideBarComponent,
+    NavBarComponent,
     AIAssistViewModule,
     ChatUIModule,
     DialogModule,
@@ -87,7 +91,7 @@ export class AppComponent {
           '/signup',
           '/forget-password',
           '/reset-password',
-          '/calendar',
+          '/calendar'
         ].includes(event.url);
       }
     });
@@ -99,7 +103,7 @@ export class AppComponent {
       '/signup',
       '/forget-password',
       '/reset-password',
-      '/calendar',
+      '/calendar'
     ];
     return authRoutes.includes(this.router.url);
   }

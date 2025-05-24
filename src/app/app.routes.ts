@@ -10,8 +10,6 @@ import { StandardProjectComponent } from './standard-project/standard-project.co
 import { DeleteProjectComponent } from './delete-project/delete-project.component';
 
 
-import { TaskComponent } from './task/task.component';
-import { TaskDetailsComponent } from './task-details/task-details.component';
 import { EditProjectComponent } from './edit-project/edit-project.component';
 import { ProductOwnerComponent } from './product-owner/product-owner.component';
 import { AuthGuard } from './guards/auth.guard';
@@ -26,12 +24,15 @@ import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.compo
 import { TaskComponent } from './task/task.component';
 import { TaskDetailsComponent } from './task-details/task-details.component';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
+import { ForumComponent } from './forum/forum.component';
+import { AskQuestionComponent } from './ask-question/ask-question.component';
+import { QuestionDetailsComponent } from './question-details/question-details.component';
 
 export const routes: Routes = [
   {
     path: 'calendar',
     component: CalendarPageComponent,
-    canActivate: [AuthGuard],
+    canActivate: [],
   },
   {
     path: 'admin-dashboard',
@@ -70,14 +71,23 @@ export const routes: Routes = [
     component: TaskComponent,
   },
 
-
-
-
-
+ {
+    path: 'forum',
+    component: ForumComponent,
+    canActivate: [],
+  },
+  {
+    path: 'ask-question',
+    component: AskQuestionComponent,
+    canActivate: [],
+  },
+   { path: 'forum/:questionId', 
+    component: QuestionDetailsComponent 
+  },
   {
     path: 'project',
     component: ProjectComponent,
-    canActivate: [AuthGuard],
+    canActivate: [],
     children: [
       {
         path: '',
@@ -86,7 +96,6 @@ export const routes: Routes = [
     ],
   },
 
-  
   {
     path: 'add',
     component: AddProjectComponent,
@@ -98,50 +107,29 @@ export const routes: Routes = [
       },
     ],
   },
-
-
   {
     path: 'scrum/:id',
-    component:ScrumProjectComponent,
-   
-
+    component: ScrumProjectComponent,
   },
-
-   {
+  {
     path: 'PO/:id',
-    component:ProductOwnerComponent,
-   
-
+    component: ProductOwnerComponent,
   },
-
   {
     path: 'standard/:id',
-    component:StandardProjectComponent,
-    
-
+    component: StandardProjectComponent,
   },
-
   {
     path: 'delete/:id',
-    component:DeleteProjectComponent,
-    
-
+    component: DeleteProjectComponent,
   },
-
-
-   {
+  {
     path: 'updateProject/:id',
-    component:EditProjectComponent,
-    
-
+    component: EditProjectComponent,
   },
-
-
-
-
-
-
-
-  
-  
+  {
+    path: '**',
+    redirectTo: '/project',
+    pathMatch: 'full'
+  }
 ];

@@ -1,0 +1,60 @@
+<div class="container my-4">
+  <h2 class="fw-bold text-primary mb-3">Ask a Question</h2>
+  <form [formGroup]="questionForm" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label for="title" class="form-label fw-medium">Title</label>
+      <input
+        id="title"
+        type="text"
+        class="form-control"
+        formControlName="title"
+        placeholder="Enter your question title"
+        [class.is-invalid]="questionForm.get('title')?.touched && questionForm.get('title')?.invalid"
+      />
+      <div *ngIf="questionForm.get('title')?.touched && questionForm.get('title')?.invalid" class="invalid-feedback">
+        <div *ngIf="questionForm.get('title')?.errors?.['required']">Title is required.</div>
+        <div *ngIf="questionForm.get('title')?.errors?.['minlength']">Title must be at least 5 characters.</div>
+        <div *ngIf="questionForm.get('title')?.errors?.['maxlength']">Title cannot exceed 200 characters.</div>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="content" class="form-label fw-medium">Content</label>
+      <textarea
+        id="content"
+        class="form-control"
+        formControlName="content"
+        rows="6"
+        placeholder="Provide details for your question"
+        [class.is-invalid]="questionForm.get('content')?.touched && questionForm.get('content')?.invalid"
+      ></textarea>
+      <div *ngIf="questionForm.get('content')?.touched && questionForm.get('content')?.invalid" class="invalid-feedback">
+        <div *ngIf="questionForm.get('content')?.errors?.['required']">Content is required.</div>
+        <div *ngIf="questionForm.get('content')?.errors?.['minlength']">Content must be at least 10 characters.</div>
+        <div *ngIf="questionForm.get('content')?.errors?.['maxlength']">Content cannot exceed 5000 characters.</div>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="tags" class="form-label fw-medium">Tags (comma-separated)</label>
+      <input
+        id="tags"
+        type="text"
+        class="form-control"
+        formControlName="tags"
+        placeholder="e.g., javascript, angular, mongodb"
+        [class.is-invalid]="questionForm.get('tags')?.touched && questionForm.get('tags')?.invalid"
+      />
+      <div *ngIf="questionForm.get('tags')?.touched && questionForm.get('tags')?.invalid" class="invalid-feedback">
+        <div *ngIf="questionForm.get('tags')?.errors?.['maxlength']">Tags cannot exceed 100 characters.</div>
+      </div>
+    </div>
+    <div class="d-flex gap-2">
+      <button type="submit" class="btn btn-primary" [disabled]="loading">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+        Post Question
+      </button>
+      <a routerLink="/forum" class="btn btn-outline-secondary">Cancel</a>
+    </div>
+    <div *ngIf="error" class="alert alert-danger mt-3" role="alert">{{ error }}</div>
+    <div *ngIf="success" class="alert alert-success mt-3" role="alert">{{ success }}</div>
+  </form>
+</div>

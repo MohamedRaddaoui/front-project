@@ -6,7 +6,7 @@ export const cardData = [
     Summary: 'Create initial wireframes and UI concepts',
     Assignee: 'Alice',
     Priority: 'High',
-    Tags: 'UI,Design' 
+    Tags: 'UI,Design'
 
   },
   {

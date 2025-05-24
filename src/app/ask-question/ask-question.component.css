@@ -1,0 +1,17 @@
+@import "bootstrap/dist/css/bootstrap.min.css";
+
+.container {
+  max-width: 800px;
+}
+
+.form-control.is-invalid {
+  border-color: #dc3545;
+}
+
+.invalid-feedback {
+  display: block;
+}
+
+.alert {
+  max-width: 500px;
+}

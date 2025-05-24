@@ -25,3 +25,6 @@
   height: 100vh;
   padding: 20px;
 }
+.page-content {
+  padding-top: 80px; /* Adjust based on actual navbar height */
+}

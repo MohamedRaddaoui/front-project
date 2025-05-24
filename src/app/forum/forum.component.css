@@ -1,0 +1,144 @@
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap');
+
+.container {
+  font-family: 'Inter', 'Noto Color Emoji', sans-serif;
+  background-color: #f5f5f5;
+  padding: 2rem;
+  border-radius: 8px;
+}
+
+.forum-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #212121;
+}
+
+.modern-select {
+  border: 2px solid #26a69a;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.modern-select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(38, 166, 154, 0.2);
+}
+
+.modern-btn {
+  background-color: #26a69a;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.modern-btn:hover {
+  background-color: #2bbbad;
+  transform: scale(1.05);
+}
+
+.modern-empty {
+  background-color: #fafafa;
+  border-radius: 8px;
+  font-size: 1.25rem;
+  color: #757575;
+}
+
+.question-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.modern-card {
+  background-color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.modern-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.question-link {
+  color: #212121;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+.question-link:hover {
+  color: #26a69a;
+}
+
+.question-snippet {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #616161;
+}
+
+.modern-vote-btn {
+  border: 2px solid #26a69a;
+  color: #26a69a;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.8rem;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  min-width: 70px;
+  transition: all 0.3s ease;
+}
+
+.modern-vote-btn:hover {
+  background-color: #26a69a;
+  color: #ffffff;
+}
+
+.vote-text {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.modern-badge {
+  background-color: #e0f2f1;
+  color: #26a69a;
+  font-size: 0.875rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 12px;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+  color: #757575;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  .forum-title {
+    font-size: 1.75rem;
+  }
+  .modern-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+  .question-link {
+    font-size: 1.25rem;
+  }
+  .modern-vote-btn {
+    min-width: 60px;
+    padding: 0.3rem 0.6rem;
+  }
+}
