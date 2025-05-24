@@ -1,6 +1,6 @@
 import { Component, ElementRef, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProjectComponent } from '../project/project.component';
+
 import { RouterModule } from '@angular/router';
 
 @Component({

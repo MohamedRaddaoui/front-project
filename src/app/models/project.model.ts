@@ -1,5 +1,7 @@
+
 import { Sprint } from "./sprint.model";
 import { Task } from "./task.model";
+
 
 export class Project{
     id?:string;
@@ -17,7 +19,7 @@ export class Project{
     type?:string;
      tasksID?: Task[];
      sprintsID?: Sprint[];
-
+    
   constructor( 
     
     title?:string,

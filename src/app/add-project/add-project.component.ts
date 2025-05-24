@@ -5,6 +5,8 @@ import { Project } from '../models/project.model';
 import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { Router } from '@angular/router';import { CommonModule } from '@angular/common';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
+import { TokenService } from '../services/token.service';
+import { JwtHelperService } from '@auth0/angular-jwt';
  ;
 
 @Component({
@@ -15,9 +17,17 @@ import { NavBarComponent } from '../nav-bar/nav-bar.component';
   styleUrl: './add-project.component.css'
 })
 export class AddProjectComponent {
+  token:string |null;
+userId:string="";
+private jwtHelper = new JwtHelperService();
 
- constructor(private projectService: ProjectService, private route:Router){}
-
+ constructor(private projectService: ProjectService, private route:Router,private tokenService:TokenService){
+  this.token = this.tokenService.getToken();
+      if (this.token) {
+        const decodedToken = this.jwtHelper.decodeToken(this.token);
+        this.userId = decodedToken.userId;
+ }
+ }
  formProject = new FormGroup({
   title :new FormControl('', [Validators.required,Validators.minLength(3)]),
   description : new FormControl ('', [Validators.required, Validators.minLength(50)]),

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environment/env';
 import { Observable } from 'rxjs';
@@ -6,6 +6,7 @@ import { Project } from '../models/project.model';
 import { Backlog } from '../models/backlog.model';
 import { UserStory } from '../models/userStory.model';
 import { Sprint } from '../models/sprint.model';
+import { TokenService } from './token.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,12 +17,16 @@ export class ProjectService {
   private apiUrl2 = `${environment.baseUrl}/userstory`;
   private apiUrl3 =`${environment.baseUrl}/sprint`;
 
-  constructor(private http :HttpClient) {}  
+  constructor(private http :HttpClient,private tokenService: TokenService) {}  
 
      //cerate new project
      addProject(data:Project):Observable<Project[]>{
+       const token = this.tokenService.getToken(); // récupère ton token
+      const headers = new HttpHeaders({
+        Authorization: `Bearer ${token}`
+        });
       
-      return this.http.post<Project[]>(`${this.apiUrl}/addProject`,data);
+      return this.http.post<Project[]>(`${this.apiUrl}/addProject`,data,{ headers });
     }
 
 
@@ -107,6 +112,7 @@ export class ProjectService {
   //delete backlog
   deleteBacklog(id:string):Observable<Backlog>{
     return this.http.delete<Backlog>(`${this.apiUrl1}/deleteBacklog/${id}`)
+    
   }
 
   getBacklogByProject(id:string):Observable<Backlog[]>{
