@@ -7,6 +7,7 @@ export class User{
   status: String;
   twoFACode:  String;
   twoFACodeExpires: Date;
+  photo?:String;
   constructor(
     firstname:String,
     lastname: String,
@@ -16,6 +17,7 @@ export class User{
     status: String,
     twoFACode:  String,
     twoFACodeExpires: Date,
+    photo:String,
   ) {
     this.firstname=firstname;
     this.lastname= lastname;
@@ -25,6 +27,7 @@ export class User{
     this.status= status;
     this.twoFACode= twoFACode;
     this.twoFACodeExpires= twoFACodeExpires;
+    this.photo=photo
 }
   
 }

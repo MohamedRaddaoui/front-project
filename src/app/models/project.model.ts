@@ -1,6 +1,7 @@
 
 import { Sprint } from "./sprint.model";
 import { Task } from "./task.model";
+import { User } from "./user";
 
 
 export class Project{
@@ -9,16 +10,17 @@ export class Project{
     description?:string;
     startDate?:string   
     endDate?:string
-    ownerID?:string
+    ownerID?:User
     team?:number 
     status?:string
     category?:string
-    usersID?:[]
+    usersID?:User[]
     archived?:boolean
     summarySent?: boolean;
     type?:string;
-     tasksID?: Task[];
-     sprintsID?: Sprint[];
+    tasksID?: Task[];
+    sprintsID?: Sprint[];
+    created_by?:string;
     
   constructor( 
     
@@ -26,16 +28,17 @@ export class Project{
     description?:string,
     startDate?:string ,  
     endDate?:string,
-    ownerID?:string,
+    ownerID?:User,
     team?:number ,
     status?:string,
     category?:string,
-    usersID?:[],
+    usersID?:User[],
     archived?:boolean,
     summarySent?: boolean,
     type?:string,
     tasksID?:[],
-    sprintsID?: Sprint[],){
+    sprintsID?: Sprint[],
+    created_by?:string,){
         
         
         this.title=title,
@@ -52,6 +55,7 @@ export class Project{
         this.type=type,
         this.tasksID=tasksID
         this.sprintsID=sprintsID
+        this.created_by=created_by
        
 
     }

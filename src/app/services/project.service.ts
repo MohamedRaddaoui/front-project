@@ -46,6 +46,8 @@ export class ProjectService {
      }
      
      assignUserToProject(data: { projectId: string, email: string, userType: string }):Observable<Project[]>{
+       console.log("URL utilisée :", `${this.apiUrl}/assignUserToProject`);
+  console.log("Données envoyées :", data); 
       return this.http.post<Project[]>(`${this.apiUrl}/assignUserToProject`,data);
      }
      
@@ -63,6 +65,12 @@ export class ProjectService {
      listOfArchiveProject():Observable<Project[]>{
       return this.http.get<Project[]>(`${this.apiUrl}/getArchProject`);  
     }
+
+
+      ArchiveProjectByUser():Observable<Project[]>{
+      return this.http.get<Project[]>(`${this.apiUrl}/getArchProjectUser`);  
+    }
+
 
     getProjectByUser(id:String):Observable<Project[]>{
       return this.http.get<Project[]>(`${this.apiUrl}/getProjectByUser/${id}`);  

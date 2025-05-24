@@ -97,34 +97,21 @@
 
 
                <!-- Icônes supplémentaires -->
-  
-              
-
-              
-              <!-- <div class="team-members">
+              <div class="team-members"   >
+                <div *ngFor="let user of project.usersID">
                 <img
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/05c9801fe2a9cfae539a3634c618adef0a525173?placeholderIfAbsent=true"
-                  alt="Team member"
+                  [src]="'http://localhost:5000/uploads/' + user.photo"  class="team-avatar"
                   class="team-avatar"
-                />
-                <img
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/a0cf297a03ff7ffd2c864bdd46a942eff477fd23?placeholderIfAbsent=true"
-                  alt="Team member"
-                  class="team-avatar"
-                />
-                <img
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/8408570356559b14842d17b62ae8e4b03b79000c?placeholderIfAbsent=true"
-                  alt="Team member"
-                  class="team-avatar"
-                />
-                <img
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/ba69be818acbf1fe8dcdeecbfd4db80676dba024?placeholderIfAbsent=true"
-                  alt="Team member"
-                  class="team-avatar"
-                />
+                />  
+               </div>
+               
                 <div class="more-members">+2</div>
-              </div> -->
-              
+              </div>
+             
+
+
+
+
             </div>
            
           </div> 

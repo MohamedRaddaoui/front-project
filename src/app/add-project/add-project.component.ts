@@ -53,7 +53,9 @@ addProject() {
     endDate: FormValue.endDate ?? '',
     type: FormValue.type ?? '',
     category: FormValue.category ?? 'dev',
-    status: FormValue.status ?? 'Not Started'
+    status: FormValue.status ?? 'Not Started',
+    created_by:this.userId,
+
   };
 
   this.projectService.addProject(project).subscribe(() => this.route.navigateByUrl('/project'));
