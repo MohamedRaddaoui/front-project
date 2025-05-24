@@ -17,6 +17,8 @@ import { KanbanModule } from '@syncfusion/ej2-angular-kanban';
 import { TaskKanbanMapper } from '../util/task.mapper';
 import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
 import { TaskFilterComponent } from './task-filter/task-filter.component';
+import { SBDescriptionComponent } from '../common/dp/dp.component';
+import { SBActionDescriptionComponent } from '../common/adp/adp.component';
 
 
 @Component({
@@ -203,10 +205,7 @@ export class TaskComponent implements OnInit {
       window.open(url, '_blank'); // Ouvre dans un nouvel onglet
     }
   }
-  onOpen(args: any) {
-    // Preventing the modal dialog Open
-    args.cancel = true;
-  }
+
   onOpen(args:any) { 
     // Preventing the modal dialog Open 
     args.cancel = true; 

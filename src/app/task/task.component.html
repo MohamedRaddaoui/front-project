@@ -14,7 +14,7 @@
                         </app-task-filter>
                         <ejs-kanban #kanbanObj cssClass='kanban-overview'  keyField="Status" [dataSource]='kanbanData'
                             [cardSettings]='cardSettings' enableTooltip='true'  enableVirtualization="true"       (dialogOpen)="onOpen($event)"
-
+ 
                          (cardRendered)='cardRendered($event)' (dragStop)='OnDragStop($event)' (cardDrop)='onCardDrop($event)'   (created)='onKanbanCreated()' (dataSourceChanged)="dataSourceChanged($event)" (cardDoubleClick)="cardDoubleClick($event)" >>
                         <e-columns>
                             <e-column *ngFor="let column of columns" [headerText]="column.headerText" [keyField]="column.keyField"
@@ -48,7 +48,7 @@
                                     </div>
                                 </div>
                             </ng-template>
-                          
+                         
                         </ejs-kanban>
                     </div>
                 </div>
@@ -56,3 +56,5 @@
         </main>
     </div>
 </div>
+ 
+ 

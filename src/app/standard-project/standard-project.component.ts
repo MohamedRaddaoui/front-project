@@ -26,7 +26,6 @@ private jwtHelper = new JwtHelperService();
  @Input() customTasksTemplate?: TemplateRef<any>;
   constructor(private projectService:ProjectService,private route: ActivatedRoute,private router:Router,private tokenService: TokenService)
   {
-     
     this.token = this.tokenService.getToken();
       if (this.token) {
         const decodedToken = this.jwtHelper.decodeToken(this.token);

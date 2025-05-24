@@ -19,7 +19,7 @@ Chart.register(
 );
 
 registerLicense(
-  'Ngo9BigBOggjHTQxAR8/V1NNaF5cXmpCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdmWXtcc3VSRWBYV01xW0RWYUA='
+  'Ngo9BigBOggjHTQxAR8/V1NNaF1cWWhPYVF0WmFZfVtgfV9EZFZUTWY/P1ZhSXxWdkBhWn1fcnFRQ2RVUUZ9XUs= '
 );
 
 if (environment.production) {
