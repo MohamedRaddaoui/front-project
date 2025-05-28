@@ -107,7 +107,7 @@ export class TaskComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadProjects();
-    this.loadTasks();
+    this.performRefresh();
     this.users = [
       { _id: '67d99644b4e02ca9a8b0991f', firstname: 'Mohamed', lastname: 'Raddaoui' },
       { _id: '67dea703b0a765d6ff287d98', firstname: 'jean', lastname: 'philip' }
