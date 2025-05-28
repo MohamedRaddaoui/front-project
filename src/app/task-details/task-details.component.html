@@ -38,7 +38,7 @@
                                         </div>
                                     </div>
                                     <div class="action-buttons">
-                                        <button *ngIf="!isEditMode && !isCreateMode" 
+                                        <button *ngIf="!isEditMode && !isCreateMode && authService.canEditTask(task.userId)" 
                                                 class="btn btn-primary" 
                                                 (click)="onEdit()">
                                             <i class="fas fa-edit"></i>
@@ -50,7 +50,7 @@
                                             <i class="fas fa-save"></i>
                                             Save
                                         </button>
-                                        <button *ngIf="isEditMode || !isCreateMode" 
+                                        <button *ngIf="(isEditMode || !isCreateMode) && authService.canDeleteTask(task.userId)" 
                                                 class="btn btn-danger" 
                                                 (click)="onDelete()">
                                             <i class="fas fa-trash"></i>
@@ -68,7 +68,7 @@
                                                 <button class="btn" 
                                                         *ngFor="let status of ['To Do', 'In Progress', 'Done']"
                                                         [class.active]="task.status === status"
-                                                        [disabled]="!isEditMode && !isCreateMode"
+                                                        [disabled]="(!isEditMode && !isCreateMode) || !authService.canEditTask(task.userId)"
                                                         (click)="task.status = status">
                                                     <i class="fas" 
                                                        [class.fa-clock]="status === 'To Do'"
@@ -89,7 +89,7 @@
                                             <input [(ngModel)]="task.tags" 
                                                    name="tags"
                                                    placeholder="Enter tags (comma separated)"
-                                                   [disabled]="!isEditMode && !isCreateMode"
+                                                   [disabled]="(!isEditMode && !isCreateMode) || !authService.canEditTask(task.userId)"
                                                    class="input-field" />
                                         </div>
 
@@ -100,10 +100,10 @@
                                             </label>
                                             <select [(ngModel)]="task.priority" 
                                                     name="priority"
-                                                    [disabled]="!isEditMode && !isCreateMode"
+                                                    [disabled]="(!isEditMode && !isCreateMode) || !authService.canEditTask(task.userId)"
                                                     class="select-field">
-                                        <option *ngFor="let p of priorities" [value]="p">{{ p }}</option>
-                                    </select>
+                                                <option *ngFor="let p of priorities" [value]="p">{{ p }}</option>
+                                            </select>
                                         </div>
 
                                         <div class="field-group">
@@ -113,7 +113,7 @@
                                             </label>
                                             <textarea [(ngModel)]="task.description" 
                                                       name="description"
-                                                      [disabled]="!isEditMode && !isCreateMode"
+                                                      [disabled]="(!isEditMode && !isCreateMode) || !authService.canEditTask(task.userId)"
                                                       rows="5"
                                                       placeholder="Enter task description"
                                                       class="textarea-field task-description"></textarea>

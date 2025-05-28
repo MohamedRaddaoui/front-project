@@ -12,11 +12,8 @@
   },
   "private": true,
   "dependencies": {
-
-    "@angular/cdk": "^19.2.16",
-
     "@angular/animations": "^19.2.0",
-
+    "@angular/cdk": "^19.2.16",
     "@angular/common": "^19.2.0",
     "@angular/compiler": "^19.2.0",
     "@angular/core": "^19.2.0",
@@ -43,11 +40,9 @@
     "@syncfusion/ej2-material-theme": "~29.1.38",
     "chart.js": "^4.4.9",
     "express": "^4.18.2",
-
+    "jwt-decode": "^4.0.0",
     "material-icons": "^1.13.14",
-
     "multer": "^2.0.0",
-
     "ng2-charts": "^8.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

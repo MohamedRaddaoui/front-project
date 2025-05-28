@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TaskService } from '../services/task.service';
 import { CommentService } from '../services/comment.service';
 import { Task, TaskHistory } from '../models/task.model';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-task-details',
@@ -21,7 +22,8 @@ export class TaskDetailsComponent implements OnInit {
     priority: 'Medium',
     status: 'To Do',
     assignedUser: '',
-    projectId: '', // This should be set based on current project
+    projectId: '',
+    userId: '',
     comments: []
   };
 
@@ -46,7 +48,8 @@ export class TaskDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private taskService: TaskService,
-    private commentService: CommentService
+    private commentService: CommentService,
+    public authService: AuthService
   ) { }
 
   ngOnInit() {
@@ -55,8 +58,8 @@ export class TaskDetailsComponent implements OnInit {
         this.fetchTask(params['id']);
       } else {
         this.isCreateMode = true;
-        // Set projectId from route or state management
         this.task.projectId = this.route.snapshot.queryParams['projectId'];
+        this.task.userId = this.authService.getCurrentUserId();
       }
     });
     this.fetchUsers();
@@ -109,6 +112,10 @@ export class TaskDetailsComponent implements OnInit {
   }
 
   onEdit() {
+    if (!this.authService.canEditTask(this.task.userId)) {
+      this.errorMessage = 'Vous n\'avez pas la permission de modifier cette tâche';
+      return;
+    }
     this.isEditMode = true;
   }
 
@@ -124,6 +131,10 @@ export class TaskDetailsComponent implements OnInit {
     }
 
     if (this.isCreateMode) {
+      if (!this.authService.canAddTask()) {
+        this.errorMessage = 'Vous n\'avez pas la permission d\'ajouter une nouvelle tâche';
+        return;
+      }
       this.taskService.createTask(this.task).subscribe({
         next: (response) => {
           console.log('Task created:', response);
@@ -135,6 +146,10 @@ export class TaskDetailsComponent implements OnInit {
         }
       });
     } else {
+      if (!this.authService.canEditTask(this.task.userId)) {
+        this.errorMessage = 'Vous n\'avez pas la permission de modifier cette tâche';
+        return;
+      }
       this.taskService.updateTask(this.task._id, this.task).subscribe({
         next: (response) => {
           console.log('Task updated:', response);
@@ -150,10 +165,18 @@ export class TaskDetailsComponent implements OnInit {
   }
 
   onDelete() {
+    if (!this.authService.canDeleteTask(this.task.userId)) {
+      this.errorMessage = 'Vous n\'avez pas la permission de supprimer cette tâche';
+      return;
+    }
     this.showDeleteModal = true;
   }
 
   confirmDelete() {
+    if (!this.authService.canDeleteTask(this.task.userId)) {
+      this.errorMessage = 'Vous n\'avez pas la permission de supprimer cette tâche';
+      return;
+    }
     this.taskService.deleteTask(this.task._id).subscribe({
       next: () => {
         console.log('Task deleted successfully');

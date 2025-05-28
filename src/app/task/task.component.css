@@ -832,5 +832,37 @@ a{
     gap: 20px;
     width: 100%;
 }
+
+.task-card.non-modifiable {
+    opacity: 0.8;
+    cursor: not-allowed;
+}
+
+.task-card.non-modifiable:hover {
+    transform: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.owner-badge {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    background: #E3FCEF;
+    color: #006644;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.owner-badge i {
+    font-size: 12px;
+}
+
+.card-badges {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+}
  
  

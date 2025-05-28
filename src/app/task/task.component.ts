@@ -24,6 +24,8 @@ import { SBActionDescriptionComponent } from '../common/adp/adp.component';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
 import { Subject, debounceTime } from 'rxjs';
 import { ViewportScroller } from '@angular/common';
+import { AuthService } from '../services/auth.service';
+import { UserService } from '../services/user.service';
 
 interface Column {
   headerText: string;
@@ -91,16 +93,16 @@ export class TaskComponent implements OnInit {
 
   constructor(
     private taskService: TaskService,
+    private userService: UserService,
     private projectService: ProjectService,
     private router: Router,
-    private viewportScroller: ViewportScroller
+    private viewportScroller: ViewportScroller,
+    public authService: AuthService
   ) {
     // Set up debounced refresh
-    this.refreshSubject.pipe(
-      debounceTime(300) // Wait 300ms before refreshing
-    ).subscribe(() => {
-      this.performRefresh();
-    });
+    this.refreshSubject
+      .pipe(debounceTime(300))
+      .subscribe(() => this.loadTasks());
   }
 
   ngOnInit(): void {

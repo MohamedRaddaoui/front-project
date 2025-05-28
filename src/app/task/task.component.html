@@ -40,18 +40,25 @@
                                         <div class="task-list">
                                             <div class="task-card" 
                                                  *ngFor="let task of getTasksByColumnStatus(column.keyField)"
-                                                 draggable="true"
+                                                 [draggable]="authService.canModifyTask(task.userId)"
                                                  (dragstart)="onDragStart($event, task)"
                                                  (dblclick)="cardDoubleClick({data: task})"
                                                  [class.priority-low]="task.Priority === 'Low'"
                                                  [class.priority-medium]="task.Priority === 'Medium'"
                                                  [class.priority-high]="task.Priority === 'High'"
-                                                 [class.loading]="loadingTaskId === task.Id">
+                                                 [class.loading]="loadingTaskId === task.Id"
+                                                 [class.non-modifiable]="!authService.canModifyTask(task.userId)">
                                                 <div class="card-loader" *ngIf="loadingTaskId === task.Id">
                                                     <i class="fas fa-spinner fa-spin"></i>
                                                 </div>
                                                 <div class="card-header">
                                                     <h3 class="card-title">{{task.Title}}</h3>
+                                                    <div class="card-badges">
+                                                        <span class="owner-badge" *ngIf="task.userId === authService.getCurrentUserId()">
+                                                            <i class="fas fa-user-circle"></i>
+                                                            Owner
+                                                        </span>
+                                                    </div>
                                                 </div>
                                                 <div class="card-content">
                                                     <p class="card-description">{{task.Summary}}</p>
@@ -91,7 +98,7 @@
     </div>
 </div>
 
-<button class="add-task-button" (click)="addClick()">
+<button class="add-task-button" *ngIf="authService.canAddTask()" (click)="addClick()">
     <span class="fab-text">Add New Task</span>
 </button>
  
