@@ -10,7 +10,9 @@ import { Router } from '@angular/router';
 
 import { addClass } from '@syncfusion/ej2-base';
 import { TaskService } from '../services/task.service';
+import { ProjectService } from '../services/project.service';
 import { Task } from '../models/task.model';
+import { Project } from '../models/project.model';
 import { CommonModule } from '@angular/common';
 import { SideBarComponent } from '../side-bar/side-bar.component';
 import { KanbanModule } from '@syncfusion/ej2-angular-kanban';
@@ -85,8 +87,11 @@ export class TaskComponent implements OnInit {
   private readonly cardIncrement = 3;
   private scrollThreshold = 0.8; // 80% of scroll height
 
+  projects: Project[] = [];
+
   constructor(
-    private taskService: TaskService, 
+    private taskService: TaskService,
+    private projectService: ProjectService,
     private router: Router,
     private viewportScroller: ViewportScroller
   ) {
@@ -99,11 +104,24 @@ export class TaskComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loadProjects();
     this.loadTasks();
     this.users = [
       { _id: '67d99644b4e02ca9a8b0991f', firstname: 'Mohamed', lastname: 'Raddaoui' },
       { _id: '67dea703b0a765d6ff287d98', firstname: 'jean', lastname: 'philip' }
     ];
+  }
+
+  loadProjects() {
+    this.projectService.getAllProject().subscribe({
+      next: (projects) => {
+        this.projects = projects;
+        console.log('Loaded projects:', this.projects);
+      },
+      error: (error) => {
+        console.error('Error loading projects:', error);
+      }
+    });
   }
 
   loadTasks() {
@@ -255,9 +273,11 @@ export class TaskComponent implements OnInit {
   } 
 
   onFilterChange(filters: any) {
+    console.log('Applying filters:', filters); // Pour debug
     this.isLoading = true;
     this.taskService.filterTasks(filters).subscribe({
       next: (response) => {
+        console.log('Filter response:', response); // Pour debug
         if (!response.tasks || response.tasks.length === 0) {
           this.clearBoard();
           return;
