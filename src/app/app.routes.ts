@@ -21,6 +21,8 @@ import { ForumComponent } from './forum/forum.component';
 import { AskQuestionComponent } from './ask-question/ask-question.component';
 import { QuestionViewComponent } from './question-details/question-details.component';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
+import { BacklogComponent } from './backlog/backlog.component';
+import { DetailsBacklogComponent } from './details-backlog/details-backlog.component';
 
 export const routes: Routes = [
   {
@@ -114,6 +116,53 @@ export const routes: Routes = [
     canActivate: [],
   },
   { path: 'forum/:id', component: QuestionViewComponent },
+  {
+        path: 'backlogDtails/:id',
+        component: DetailsBacklogComponent
+      },
+
+
+  // Q&A routes matching backend API structure
+  {
+    path: 'questions',
+    children: [
+      {
+        path: '',
+        component: QuestionsListComponent
+      },
+      {
+        path: 'create',
+        component: CreateQuestionComponent
+      },
+      {
+        path: 'search',
+        component: QuestionsListComponent
+      },
+      {
+        path: 'search/tags',
+        component: QuestionsListComponent
+      },
+      {
+        path: 'search/advanced',
+        component: QuestionsListComponent
+      },
+      {
+        path: 'frequent',
+        component: QuestionsListComponent
+      },
+      // {
+      //   path: ':id',
+      //   component: QuestionDetailComponent,
+      //   children: [
+      //     {
+      //       path: 'answers',
+      //       component: QuestionDetailComponent
+      //     }
+      //   ]
+      // },
+      
+    ]
+  }
 ];
 
 
