@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TaskService } from '../services/task.service';
 import { CommentService } from '../services/comment.service';
+import { UserService } from '../services/user.service';
+import { ProjectService } from '../services/project.service';
 import { Task, TaskHistory } from '../models/task.model';
 import { AuthService } from '../services/auth.service';
 
@@ -49,6 +51,8 @@ export class TaskDetailsComponent implements OnInit {
     private router: Router,
     private taskService: TaskService,
     private commentService: CommentService,
+    private userService: UserService,
+    private projectService: ProjectService,
     public authService: AuthService
   ) { }
 
@@ -68,12 +72,16 @@ export class TaskDetailsComponent implements OnInit {
   }
 
   fetchProjects() {
-    // Static project list for now
-    this.projects = [
-      { _id: '67f7a640d4ce6fae00468f18', name: 'Application dev' },
-      { _id: '68014b8ea4e327735c69ec8f', name: 'project test mail' },
-      { _id: '68150a984ed88e831b86d362', name: 'test' }
-    ];
+    this.projectService.getAllProject().subscribe({
+      next: (response) => {
+        this.projects = response;
+        console.log('Projects loaded:', this.projects);
+      },
+      error: (error) => {
+        console.error('Error loading projects:', error);
+        this.errorMessage = 'Error loading projects';
+      }
+    });
   }
 
   fetchTask(id: string) {
@@ -104,11 +112,16 @@ export class TaskDetailsComponent implements OnInit {
   }
 
   fetchUsers() {
-    // TODO: Implement user service to fetch users
-    this.users = [
-      { _id: '67d99644b4e02ca9a8b0991f', firstname: 'Mohamed', lastname: 'Raddaoui' },
-      { _id: '67dea703b0a765d6ff287d98', firstname: 'jean', lastname: 'philip' }
-    ];
+    this.userService.getAllUsers().subscribe({
+      next: (response) => {
+        this.users = response;
+        console.log('Users loaded:', this.users);
+      },
+      error: (error) => {
+        console.error('Error loading users:', error);
+        this.errorMessage = 'Error loading users';
+      }
+    });
   }
 
   onEdit() {

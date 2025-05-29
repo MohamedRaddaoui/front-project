@@ -99,7 +99,6 @@ export class TaskComponent implements OnInit {
     private viewportScroller: ViewportScroller,
     public authService: AuthService
   ) {
-    // Set up debounced refresh
     this.refreshSubject
       .pipe(debounceTime(300))
       .subscribe(() => this.loadTasks());
@@ -107,21 +106,30 @@ export class TaskComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadProjects();
+    this.loadUsers();
     this.performRefresh();
-    this.users = [
-      { _id: '67d99644b4e02ca9a8b0991f', firstname: 'Mohamed', lastname: 'Raddaoui' },
-      { _id: '67dea703b0a765d6ff287d98', firstname: 'jean', lastname: 'philip' }
-    ];
   }
 
   loadProjects() {
     this.projectService.getAllProject().subscribe({
-      next: (projects) => {
-        this.projects = projects;
+      next: (response) => {
+        this.projects = response;
         console.log('Loaded projects:', this.projects);
       },
       error: (error) => {
         console.error('Error loading projects:', error);
+      }
+    });
+  }
+
+  loadUsers() {
+    this.userService.getAllUsers().subscribe({
+      next: (response) => {
+        this.users = response;
+        console.log('Loaded users:', this.users);
+      },
+      error: (error) => {
+        console.error('Error loading users:', error);
       }
     });
   }
@@ -165,7 +173,7 @@ export class TaskComponent implements OnInit {
   getProjectid(project: any): string {
     return typeof project === 'string'
       ? project
-      : project?._id || 'Unassigned';
+      : project?.id || 'Unassigned';
   }
 
   getAssigneeId(assignee: any): string {
@@ -441,7 +449,9 @@ export class TaskComponent implements OnInit {
           Assignee: this.getAssigneeName(task.assignedUser),
           idAssigned: this.getAssigneeId(task.assignedUser),
           Type: 'story',
-          ProjectId: this.getProjectid(task.projectId)
+          ProjectId: this.getProjectid(task.projectId),
+          ProjectTitle: this.getProjectTitle(task.projectId),
+          userId: task.userId
         }));
 
         // Update the data sources
@@ -494,5 +504,13 @@ export class TaskComponent implements OnInit {
   getTaskCountByStatus(status: string): number {
     if (!this.kanbanData) return 0;
     return this.kanbanData.filter(task => task.Status === status).length;
+  }
+
+  getProjectTitle(project: any): string {
+    if (typeof project === 'string') {
+      const foundProject = this.projects.find(p => p.id === project);
+      return foundProject?.title || 'Unassigned';
+    }
+    return project?.title || 'Unassigned';
   }
 }

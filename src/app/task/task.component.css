@@ -864,5 +864,19 @@ a{
     gap: 8px;
     margin-top: 4px;
 }
+
+.project-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: #5e6c84;
+}
+
+.project-info i {
+    font-size: 12px;
+    color: #6b778c;
+}
  
  
