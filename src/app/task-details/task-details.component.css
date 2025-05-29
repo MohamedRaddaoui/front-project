@@ -1512,3 +1512,70 @@ i {
     color: #42526E;
     text-shadow: 0 2px 4px rgba(66, 82, 110, 0.2);
 }
+
+.edit-comment-form {
+    margin: 10px 0;
+}
+
+.edit-textarea {
+    width: 95%;
+    min-height: 80px;
+    padding: 12px;
+    border: 2px solid #DFE1E6;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-bottom: 10px;
+    resize: vertical;
+}
+
+.edit-textarea:focus {
+    outline: none;
+    border-color: #4C9AFF;
+    box-shadow: 0 0 0 2px rgba(76, 154, 255, 0.2);
+}
+
+.edit-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #0052CC;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.download-link {
+    color: #0052CC;
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+}
+
+.download-link:hover {
+    background: #DEEBFF;
+}
+
+.download-link i {
+    margin-right: 0;
+}
+
+/* Move the add comment section to the top */
+.comments-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.add-comment {
+    order: -1;
+}

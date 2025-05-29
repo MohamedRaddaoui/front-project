@@ -41,6 +41,7 @@ export class TaskDetailsComponent implements OnInit {
     files: [] as File[]
   };
   showCommentForm: boolean = false;
+  editingComment: any = null;
   errorMessage: string = '';
   taskHistory: TaskHistory[] = [];
   activeTab: 'comments' | 'history' = 'comments';
@@ -103,7 +104,10 @@ export class TaskDetailsComponent implements OnInit {
     this.commentService.getCommentsByTaskId(taskId).subscribe({
       next: (response) => {
         console.log('Comments loaded:', response);
-        this.task.comments = response.comments || [];
+        // Sort comments by date, newest first
+        this.task.comments = (response.comments || []).sort((a: any, b: any) => 
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
       },
       error: (error) => {
         console.error('Error loading comments:', error);
@@ -237,9 +241,49 @@ export class TaskDetailsComponent implements OnInit {
     }
   }
 
-  editComment(comment: any) {
-    // TODO: Implement comment editing
-    console.log('Edit comment:', comment);
+  startEditComment(comment: any) {
+    this.editingComment = {
+      ...comment,
+      editText: comment.text
+    };
+  }
+
+  cancelEditComment() {
+    this.editingComment = null;
+  }
+
+  updateComment(comment: any) {
+    if (!comment.editText.trim()) {
+      this.errorMessage = 'Comment text cannot be empty';
+      return;
+    }
+
+    const updatedComment = {
+      text: comment.editText,
+      taskId: this.task._id,
+      userId: this.authService.getCurrentUserId()
+    };
+
+    console.log('Updating comment:', {
+      commentId: comment._id,
+      data: updatedComment
+    });
+
+    this.commentService.updateComment(comment._id, updatedComment).subscribe({
+      next: (response) => {
+        console.log('Comment updated successfully:', response);
+        this.loadComments(this.task._id);
+        this.editingComment = null;
+      },
+      error: (error) => {
+        console.error('Error updating comment:', error);
+        this.errorMessage = error.error?.message || 'Error updating comment';
+      }
+    });
+  }
+
+  canEditComment(comment: any): boolean {
+    return this.authService.canEditComment(comment.userId);
   }
 
   deleteComment(commentId: string) {

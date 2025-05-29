@@ -140,55 +140,7 @@
 
                                             <!-- Comments Tab -->
                                             <div *ngIf="activeTab === 'comments'" class="comments-container">
-                                                <div class="comments-list">
-                                                    <div *ngFor="let comment of task.comments" class="comment">
-                                                        <div class="comment-header">
-                                                            <div class="user-info">
-                                                                <img [src]="comment.user?.avatar" class="avatar" alt="User avatar"/>
-                                                                <span class="username">{{ comment.user?.firstname }} {{ comment.user?.lastname }}</span>
-                                                            </div>
-                                                            <div class="comment-metadata">
-                                                                <span class="comment-date">
-                                                                    <i class="far fa-clock"></i>
-                                                                    {{ comment.createdAt | date:'MMM d, y HH:mm' }}
-                                                                </span>
-                                                                <span class="sentiment-badge" [class]="comment.sentiment">
-                                                                    <i class="fas" 
-                                                                       [class.fa-smile]="comment.sentiment === 'positive'"
-                                                                       [class.fa-meh]="comment.sentiment === 'neutral'"
-                                                                       [class.fa-frown]="comment.sentiment === 'negative'">
-                                                                    </i>
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="comment-content">
-                                                            <p [class.flagged]="comment.isFlagged">{{ comment.text }}</p>
-                                                            <div *ngIf="comment.attachments?.length" class="attachments">
-                                                                <div *ngFor="let attachment of comment.attachments" class="attachment">
-                                                                    <i class="fas fa-file"></i>
-                                                                    <span class="filename">{{ attachment.filename }}</span>
-                                                                    <a [href]="getDownloadUrl(comment._id, attachment._id)" 
-                                                                       target="_blank" 
-                                                                       class="download-link">
-                                                                        <i class="fas fa-download"></i>
-                                                                    </a>
-                                                                    <button class="btn-icon" 
-                                                                            *ngIf="authService.canDeleteAttachment(comment.userId)"
-                                                                            (click)="deleteAttachment(comment._id, attachment._id)">
-                                                                        <i class="fas fa-times"></i>
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="comment-actions">
-                                                            <button (click)="deleteComment(comment._id)">
-                                                                <i class="fas fa-trash"></i>
-                                                                Delete
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
+                                                <!-- Add Comment Button -->
                                                 <div class="add-comment">
                                                     <button class="btn-add-comment" 
                                                             (click)="showCommentForm = true" 
@@ -202,7 +154,7 @@
                                                             <textarea [(ngModel)]="newComment.text" 
                                                                       name="commentText" 
                                                                       placeholder="Add a comment..."
-                                            required></textarea>
+                                                                      required></textarea>
                                                         </div>
                                                         <div class="form-actions">
                                                             <div class="file-upload">
@@ -237,7 +189,91 @@
                                                                 </button>
                                                             </div>
                                                         </div>
-                                    </form>
+                                                    </form>
+                                                </div>
+
+                                                <!-- Comments List -->
+                                                <div class="comments-list">
+                                                    <div *ngFor="let comment of task.comments" class="comment">
+                                                        <div class="comment-header">
+                                                            <div class="user-info">
+                                                                <div class="avatar">
+                                                                    {{ comment.user?.firstname?.[0] }}{{ comment.user?.lastname?.[0] }}
+                                                                </div>
+                                                                <span class="username">{{ comment.user?.firstname }} {{ comment.user?.lastname }}</span>
+                                                            </div>
+                                                            <div class="comment-metadata">
+                                                                <span class="comment-date">
+                                                                    <i class="far fa-clock"></i>
+                                                                    {{ comment.createdAt | date:'MMM d, y HH:mm' }}
+                                                                </span>
+                                                                <span class="sentiment-badge" [class]="comment.sentiment">
+                                                                    <i class="fas" 
+                                                                       [class.fa-smile]="comment.sentiment === 'positive'"
+                                                                       [class.fa-meh]="comment.sentiment === 'neutral'"
+                                                                       [class.fa-frown]="comment.sentiment === 'negative'">
+                                                                    </i>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="comment-content">
+                                                            <!-- Normal View -->
+                                                            <div *ngIf="editingComment?._id !== comment._id">
+                                                                <p [class.flagged]="comment.isFlagged">{{ comment.text }}</p>
+                                                                <div *ngIf="comment.attachments?.length" class="attachments">
+                                                                    <div *ngFor="let attachment of comment.attachments" class="attachment">
+                                                                        <i class="fas fa-file"></i>
+                                                                        <span class="filename">{{ attachment.filename }}</span>
+                                                                        <a [href]="getDownloadUrl(comment._id, attachment._id)" 
+                                                                           target="_blank" 
+                                                                           class="download-link">
+                                                                            <i class="fas fa-download"></i>
+                                                                        </a>
+                                                                        <button class="btn-icon" 
+                                                                                *ngIf="authService.canDeleteAttachment(comment.userId)"
+                                                                                (click)="deleteAttachment(comment._id, attachment._id)">
+                                                                            <i class="fas fa-times"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- Edit View -->
+                                                            <div *ngIf="editingComment?._id === comment._id" class="edit-comment-form">
+                                                                <textarea [(ngModel)]="editingComment.editText"
+                                                                          name="editText"
+                                                                          class="edit-textarea"
+                                                                          required></textarea>
+                                                                <div class="edit-actions">
+                                                                    <button type="button" 
+                                                                            class="btn-cancel" 
+                                                                            (click)="cancelEditComment()">
+                                                                        <i class="fas fa-times"></i>
+                                                                        Cancel
+                                                                    </button>
+                                                                    <button type="button" 
+                                                                            class="btn-submit"
+                                                                            (click)="updateComment(editingComment)"
+                                                                            [disabled]="!editingComment.editText.trim()">
+                                                                        <i class="fas fa-check"></i>
+                                                                        Save
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="comment-actions">
+                                                            <button *ngIf="canEditComment(comment) && editingComment?._id !== comment._id"
+                                                                    (click)="startEditComment(comment)">
+                                                                <i class="fas fa-edit"></i>
+                                                                Edit
+                                                            </button>
+                                                            <button *ngIf="canEditComment(comment)"
+                                                                    (click)="deleteComment(comment._id)">
+                                                                <i class="fas fa-trash"></i>
+                                                                Delete
+                                                            </button>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
 
