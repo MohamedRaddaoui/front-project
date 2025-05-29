@@ -1,0 +1,63 @@
+<app-nav-bar></app-nav-bar>
+<app-side-bar> </app-side-bar>
+<div class="container">
+  <header class="header">
+    <h1>Community Forum</h1>
+    <div class="actions">
+      <select class="select" (change)="onSortChange($event)">
+        <option value="newest" selected>Newest</option>
+        <option value="popular">Popular</option>
+        <option value="unanswered">Unanswered</option>
+      </select>
+      <button class="button" (click)="askQuestion()">
+        Ask a Question
+      </button>
+    </div>
+  </header>
+
+  <div *ngIf="loading" class="loader">
+    <div class="loader-spinner"></div>
+  </div>
+  <div *ngIf="error" class="error">
+    {{ error }}
+    <span *ngIf="error?.includes('log in')" class="error-action">
+      <a routerLink="/login" class="error-link">Log in now</a>
+    </span>
+  </div>
+
+  <div *ngIf="!loading && !error && questions.length === 0" class="empty">
+    No questions found. Be the first to ask one!
+  </div>
+
+  <div class="questions" *ngIf="!loading && !error && questions.length > 0">
+    <article *ngFor="let question of questions; trackBy: trackByQuestionId" class="question-card">
+      <div class="question-main">
+        <div class="question-content">
+          <h2>
+            <a [routerLink]="['/forum', question._id]">{{ question.title }}</a>
+          </h2>
+          <p class="snippet">{{ question.content | slice:0:150 }}{{ question.content.length > 150 ? '...' : '' }}</p>
+        </div>        <div class="vote-buttons">
+          <button class="vote-button" (click)="upvoteQuestion(question._id)" [class.active]="hasVoted(question, 'up')">
+  <fa-icon [icon]="faChevronUp"></fa-icon>
+</button>
+          <span class="vote-score">{{ question.voteScore }}</span>
+          <button class="vote-button downvote" (click)="downvoteQuestion(question._id)" [class.active]="hasVoted(question, 'down')">
+  <fa-icon [icon]="faChevronDown"></fa-icon>
+</button>
+        </div>
+      </div>
+      <footer class="question-meta">
+  <div class="meta-info">
+    <span>{{ getAuthorName(question.author) }}</span>
+    <span>{{ question.createdAt | date:'mediumDate' }}</span>
+    <span>{{ question.answer?.length || 0 }} answers</span>
+
+  </div>
+  <div class="tags" *ngIf="question.tags?.length">
+    <span *ngFor="let tag of question.tags" class="tag">{{ tag }}</span>
+  </div>
+</footer>
+    </article>
+  </div>
+</div>
