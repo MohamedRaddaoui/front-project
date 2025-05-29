@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, TemplateRef, ViewChild, OnInit } from '@angular/core'; // Added OnInit
+import { Component, ElementRef, Input, TemplateRef, ViewChild, OnInit, input } from '@angular/core'; // Added OnInit
 import { ProjectService } from '../services/project.service';
 import { Project } from '../models/project.model';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -16,20 +16,21 @@ import { User } from '../models/user';
 
 @Component({
   selector: 'app-standard-project',
+  templateUrl: './standard-project.component.html',
+  standalone:true,
+  styleUrls: ['./standard-project.component.css'],
   // Add your generic DeleteComponent to imports if it's not standalone or globally provided
   imports: [
     CommonModule,
     SideBarComponent, 
     NavBarComponent,
-    DeleteProjectComponent, // For project deletion
-    DeleteProjectComponent, // Uncomment if needed for user deletion
+    DeleteProjectComponent,  // Uncomment if needed for user deletion
     AssignUserComponent, 
     ReactiveFormsModule,
     FormsModule,
     RouterLink
   ],
-  templateUrl: './standard-project.component.html',
-  styleUrls: ['./standard-project.component.css'] // Corrected from styleUrl
+  // Corrected from styleUrl
 })
 export class StandardProjectComponent implements OnInit { // Implemented OnInit
 

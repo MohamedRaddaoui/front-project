@@ -575,7 +575,7 @@ color: #F4A529;
   border-radius: 50%; 
   border: 2px solid white; 
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.2); 
-  vertical-align: middle; 
+  /* vertical-align: middle;  */
   background-color: #ccc; 
   display: block; /* Évite des espaces inattendus sous l'image */
 }

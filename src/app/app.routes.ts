@@ -27,7 +27,6 @@ import { TaskComponent } from './task/task.component';
 import { TaskDetailsComponent } from './task-details/task-details.component';
 import { NgModule } from '@angular/core';
 import { QuestionsListComponent } from './questions-list/questions-list.component';
-import { QuestionDetailComponent } from './question-detail/question-detail.component';
 import { CreateQuestionComponent } from './create-question/create-question.component';
 
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
@@ -173,16 +172,17 @@ export const routes: Routes = [
         path: 'frequent',
         component: QuestionsListComponent
       },
-      {
-        path: ':id',
-        component: QuestionDetailComponent,
-        children: [
-          {
-            path: 'answers',
-            component: QuestionDetailComponent
-          }
-        ]
-      },
+      // {
+      //   path: ':id',
+      //   component: QuestionDetailComponent,
+      //   children: [
+      //     {
+      //       path: 'answers',
+      //       component: QuestionDetailComponent
+      //     }
+      //   ]
+      // },
+      
     ]
   }
 ];
