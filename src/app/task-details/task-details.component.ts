@@ -206,11 +206,11 @@ export class TaskDetailsComponent implements OnInit {
     if (this.newComment.text.trim() && this.task.assignedUser) {
       const formData = new FormData();
       formData.append('taskId', this.task._id);
-      formData.append('userId', this.task.assignedUser);
+      formData.append('userId', this.authService.getCurrentUserId() ?? this.task.assignedUser);
       formData.append('text', this.newComment.text);
 
       this.newComment.files.forEach((file) => {
-        formData.append('files', file);
+        formData.append('attachments', file);
       });
 
       this.commentService.addComment(formData).subscribe({
