@@ -10,15 +10,6 @@ export class TokenService {
 
   constructor(private router: Router) {}
 
-  canActivate(): boolean {
-    const token = localStorage.getItem('token');
-    if (token && !this.jwtHelper.isTokenExpired(token)) {
-      return true;
-    }
-    this.router.navigate(['/login']);
-    return false;
-  }
-
   isTokenValid(): boolean {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -41,5 +32,20 @@ export class TokenService {
 
   removeToken(): void {
     localStorage.removeItem('token');
+  }
+
+  // Nouvelle méthode pour extraire le rôle du token
+  getUserRole(): string | null {
+    const token = this.getToken();
+    if (!token) {
+      return null;
+    }
+    try {
+      const decodedToken = this.jwtHelper.decodeToken(token);
+      // Ici, adapte "role" selon la clé exacte dans ton token
+      return decodedToken?.role || null;
+    } catch {
+      return null;
+    }
   }
 }
