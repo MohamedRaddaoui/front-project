@@ -48,7 +48,7 @@
   display: flex;
   gap: 15px;
   flex-direction: column;
-   min-width: 300px;
+   width: 100%;
   
 }
 
@@ -66,15 +66,23 @@
   white-space: nowrap;
   font-weight: 600;
   align-items: center;
+  width: 100%;
 }
 
-.project-title {
+
+ .project-title {
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* ou center si tu veux centrer horizontalement */
+  align-items: flex-start;
   gap: 0.5rem;
-  
+  max-width: 200px;
+
 }
+
+
+
+
+
 
 .project-avatar {
   width: 32px;
@@ -123,7 +131,7 @@
   gap: 20px;
   font-size: 13px;
   align-self: center;
-  margin-left: 50%;
+  margin-left: 40%;
   justify-content: flex-end;
   
   
@@ -218,13 +226,11 @@
   margin-top: 10px;
   padding: 21px 43px;
   border-radius: 15px;
-  margin-left: 25%
-
-  ;
+  margin-left: 25%;
+  max-width: 1400px;
 
   
   
- 
 
 }
 
@@ -424,3 +430,216 @@
   margin-top: 5px;
  
 }
+
+
+
+
+.status-badge {
+
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+
+.status-inprogress {
+  background-color: #ebf7da;
+  color: #8BC34A;
+}
+
+.status-notstarted {
+  background-color: #cdebfc;
+  color: #1A89C7;
+}
+.status-done{
+  background-color: #faf2e7 ;
+color: #F4A529;
+
+}
+
+/* Styles modernes pour la nouvelle proposition de catégorie */
+
+.category-tag {
+  display: flex;
+  align-items: center;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  max-width: fit-content;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 6px 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(230, 230, 250, 0.7);
+  transition: all 0.3s ease;
+}
+
+.category-tag:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.category-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+  border-radius: 8px;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.category-icon i {
+  color: white;
+  font-size: 14px;
+}
+
+.category-text {
+  color: #4B5563;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.3px;
+  padding-right: 6px;
+}
+
+/* Variantes de couleurs selon la catégorie */
+.category-tag[data-category="Development"] .category-icon {
+  background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+}
+
+.category-tag[data-category="Design"] .category-icon {
+  background: linear-gradient(135deg, #EC4899 0%, #F472B6 100%);
+}
+
+.category-tag[data-category="Marketing"] .category-icon {
+  background: linear-gradient(135deg, #10B981 0%, #34D399 100%);
+}
+
+.category-tag[data-category="Research"] .category-icon {
+  background: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%);
+}
+
+/* Adaptation responsive */
+@media (max-width: 768px) {
+  .category-tag {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .category-icon {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .category-text {
+    font-size: 13px;
+  }
+}
+
+.category-container {
+  position: relative;
+  height: 20px;
+  margin-top: 0px;
+ 
+}
+
+.category-position-5 {
+  position: absolute;
+  left: 20;
+}
+
+/* Dans votre fichier standard-project.component.css */
+
+.team-members {
+  display: flex; 
+  align-items: center; 
+  padding-left: 10px; 
+}
+
+.team-member-item {
+  display: inline-block; 
+  margin-left: -10px; /* Chevauchement */
+  transition: margin-left 0.3s ease;
+  position: relative; /* !! Important pour positionner l'icône en absolu par rapport à cet item !! */
+}
+
+.team-member-item:first-child {
+  margin-left: 0; 
+}
+
+.team-avatar {
+  width: 32px; 
+  height: 32px;
+  border-radius: 50%; 
+  border: 2px solid white; 
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.2); 
+  /* vertical-align: middle;  */
+  background-color: #ccc; 
+  display: block; /* Évite des espaces inattendus sous l'image */
+}
+
+/* --- Icône de suppression --- */
+.remove-user-icon {
+  position: absolute;
+  top: -7px; /* Ajustez pour un positionnement précis sur la bordure */
+  right: -7px; /* Ajustez pour un positionnement précis sur la bordure */
+  width: 18px; /* Taille de l'icône + padding */
+  height: 18px;
+  border-radius: 50%;
+  background-color: white;
+  color: #dc3545; 
+  display: flex; /* Pour centrer l'icône font-awesome */
+  justify-content: center;
+  align-items: center;
+  font-size: 10px; /* Taille de l'icône font-awesome elle-même */
+  cursor: pointer;
+  border: 1px solid #eee; /* Légère bordure sur le cercle blanc */
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  
+  /* --- Effet de survol --- */
+  opacity: 0; /* Caché par défaut */
+  visibility: hidden;
+  transform: scale(0.5); /* Optionnel: effet de zoom à l'apparition */
+  transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease; /* Transition douce */
+  z-index: 10; 
+}
+
+/* Affichage de l'icône au survol de l'élément parent (.team-member-item) */
+.team-member-item:hover .remove-user-icon {
+  opacity: 1; /* Visible au survol */
+  visibility: visible;
+  transform: scale(1); /* Retour à la taille normale */
+}
+
+/* Optionnel: léger grossissement de l'icône elle-même au survol */
+.remove-user-icon:hover {
+  transform: scale(1.1); 
+}
+/* --- Fin Icône de suppression --- */
+
+
+.more-members {
+  display: inline-flex; 
+  justify-content: center;
+  align-items: center;
+  width: 32px; 
+  height: 32px;
+  border-radius: 50%;
+  background-color: #e9ecef; 
+  color: #495057; 
+  font-size: 12px;
+  font-weight: bold;
+  border: 2px solid white; 
+  margin-left: -10px; /* Chevauchement */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  z-index: 5; 
+}
+
+.more-members:hover {
+  background-color: #ced4da; 
+}
+
+

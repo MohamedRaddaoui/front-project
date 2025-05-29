@@ -1,26 +1,29 @@
 export class User{
-  firstname:String;
+  _id?:string;
+  firstname:string;
   lastname: String;
   email: String;
   password: String;
   role: String;
   status: String;
-  photo: String ;
+
   twoFACode:  String;
   twoFACodeExpires: Date;
   photo?:String;
   constructor(
-    firstname:String,
+    _id:string,
+    firstname:string,
     lastname: String,
     email: String,
     password: String,
     role: String,
     status: String,
-    photo: String,
+    
     twoFACode:  String,
     twoFACodeExpires: Date,
     photo:String,
   ) {
+    this._id=_id;
     this.firstname=firstname;
     this.lastname= lastname;
     this.email= email;

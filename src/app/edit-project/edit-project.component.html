@@ -1,123 +1,153 @@
-<app-nav-bar></app-nav-bar>
-
-<app-side-bar></app-side-bar>
-
-    <form class="project-form-container" [formGroup]="formProject">
-        <div class="page-title">
-          Projects / Update Project
+  <app-nav-bar></app-nav-bar>
+  <div class="app-container">
+    <div class="main-container">
+  <app-side-bar></app-side-bar>
+      <!-- Main Content -->
+      <main class="content">
+        <!-- <div class="custom-success " *ngIf="successMessage" >
+          {{ successMessage }}
         </div>
-        <div class="form-container">
-          <div class="form-row">
-            <div class="form-group-row">
-              <div class="form-group-labels">
-                <div class="form-label">Project Title</div>
-                <div class="form-label">Project Type</div>
-              </div>
-              <div class="form-group-fields">
-                <div class="input-wrapper">
-                  <input class="form-field" formControlName="title">
-                  <div class="form-error-message" *ngIf="formProject.controls['title'].invalid && formProject.controls['title'].touched">
-                    <p *ngIf="formProject.controls['title'].hasError('required')">Title is required</p>
-                    <p *ngIf="formProject.controls['title'].hasError('minlength')">Title must be at least 3 characters long.</p>
-                  </div>
-                </div>
-                
-                <div class="input-wrapper">
-                  <select class="form-field" formControlName="type">
-                    <option value="">-- Select a type --</option>
-                    <option value="Kanban">Kanban</option>
-                    <option value="Scrum">Scrum</option>
-                  </select>
-                <div class="form-error-message" *ngIf="formProject.controls['title'].invalid && formProject.controls['title'].touched">
-                  <p *ngIf="formProject.controls['title'].hasError('required')">Type is required</p>
-                </div>
-                </div>
-                
-              </div>
-            </div>
-            <div class="form-group-date">
-              <div class="form-label">Start Date</div>
-              <input class="date-field" type="datetime-local" formControlName="startDate">
-              <div class="form-error-message" *ngIf="formProject.controls['startDate'].invalid && formProject.controls['startDate'].touched">
-                <p *ngIf="formProject.controls['startDate'].hasError('required')">Date is required</p>
-                <p *ngIf="formProject.controls['startDate'].hasError('pastStartDate')">Date must be in the present.</p>
-              </div>
-            </div>
-            <div class="form-group-date">
-              <div class="form-label">End Date</div>
-              <input class="date-field" type="datetime-local" formControlName="endDate">
-              <div class="form-error-message" *ngIf="formProject.controls['endDate'].invalid && formProject.controls['endDate'].touched">
-                <p *ngIf="formProject.controls['endDate'].hasError('required')">Date is required</p>
-                <p *ngIf="formProject.controls['endDate'].hasError('pastEndDate')">Date must not be in the past.</p>
-              </div>
-            </div>
-          </div>
+         -->
+        <div class="content-header">
+          <h1 class="content-title">Edit project</h1>
+        </div>
+<form [formGroup]="formProject"  (ngSubmit)="updateProject()"> 
+  <div class="form-container">
+    <!-- Première ligne -->
+    <div class="form-row first-row">
+      <div class="form-field-wrapper">
+        <label class="form-label" for="projectTitle">Project Title</label>
+        <input id="projectTitle" class="form-field" placeholder="Enter project title" formControlName="title">
+        <!-- Conteneur pour les messages d'erreur du titre -->
+        <div *ngIf="formProject.get('title')?.invalid && formProject.get('title')?.dirty || formProject.get('title')?.touched"
+             class="form-error-message active"> 
+          <p *ngIf="formProject.get('title')?.hasError('required')">Title is required.</p>
+          <p *ngIf="formProject.get('title')?.hasError('minlength')">Title must be at least 3 characters long.</p>
+          <p *ngIf="formProject.get('title')?.hasError('invalidTitle')">Title must contain only letters, spaces, hyphens or apostrophes.</p>
 
-
-
-          
-      
-          <div class="form-group">
-            <div class="form-label">Project Description</div>
-            <textarea class="description-field" formControlName="description"></textarea>
-            <div class="form-error-message" *ngIf="formProject.controls['description'].invalid && formProject.controls['startDate'].touched">
-              <p *ngIf="formProject.controls['description'].hasError('required')">Description is required</p>
-              <p *ngIf="formProject.controls['description'].hasError('minlength')">Description must be at least 30 characters long..</p>
-            </div>
-          </div>
-
-           <div class="form-group-labels">
-                <div class="form-label">Project status</div>
-                <div class="form-label">Project category</div>
-              </div>
-              <div class="form-group-fields">
-                
-                <div class="input-wrapper">
-                  <select class="form-field" formControlName="category">
-                    <option value="">-- Select a category --</option>
-                    <option value="Developpment">Web Developpment</option>
-                    <option value="Mobile">Mobile Developpment</option>
-                    <option value="Marketing">Marketing</option>
-                    <option value="Autre">Autre</option>
-                  </select>
-                <div class="form-error-message" *ngIf="formProject.controls['category'].invalid && formProject.controls['category'].touched">
-                  <p *ngIf="formProject.controls['category'].hasError('required')">Type is required</p>
-                </div>
-                </div>
-
-
-
-
-                   <div class="input-wrapper">
-                  <select class="form-field" formControlName="status">
-                    <option value="">-- Select a status --</option>
-                    <option value="Done">Done</option>
-                    <option value="In Progress">In Progress</option>
-                    <option value="Not Started">Not Started</option>
-                    
-                  </select>
-                <div class="form-error-message" *ngIf="formProject.controls['status'].invalid && formProject.controls['status'].touched">
-                  <p *ngIf="formProject.controls['status'].hasError('required')">Type is required</p>
-                </div>
-                </div>
-
-
-                <div class="input-wrapper">
-                    <label>
-                     <input type="checkbox" value="Canceled" name="Canceled" formControlName="status">
-                     Canceled
-                 </label>
-                </div>
-                
-                
-              </div>
-          
-      <div class="action-buttons">
-        <button class="create-button" type="submit" (click)="updateProject()"  [disabled]="formProject.invalid">edit</button>
-        <button type="reset" class="delete-button ">cancel</button>
+        </div>
       </div>
-         
+
+<div class="form-field-wrapper">
+        <label class="form-label" for="startDate">Start Date</label>
+        <input id="startDate" class="date-field" type="date" formControlName="startDate"
+         [ngClass]="{
+          'custom-error': formProject.hasError('startAfterEnd') && (formProject.get('startDate')?.touched 
+          || formProject.get('endDate')?.touched)
+}"
+
+/>
+         <div *ngIf="formProject.get('startDate')?.invalid && (formProject.get('startDate')?.touched || formProject.get('startDate')?.dirty)" 
+             class="form-error-message active">
+          <p *ngIf="formProject.get('startDate')?.hasError('required')">start date is required.</p>
+          <p *ngIf="formProject.get('startDate')?.hasError('pastStartDate')">start date must not be in the past.</p>
         </div>
-      </form>
-      
+          <div *ngIf="formProject.hasError('startAfterEnd') && formProject.get('startDate')?.touched" 
+                 class="form-error-message active">
+          <p>start date must be after start date.</p>
+          </div>
+      </div>
+
+      <div class="form-field-wrapper">
+        <label class="form-label" for="endDate">End Date</label>
+        <input id="endDate" class="date-field" type="date" formControlName="endDate"
+[ngClass]="{
+  'custom-error': formProject.hasError('startAfterEnd') && (formProject.get('startDate')?.touched || formProject.get('endDate')?.touched)
+}"
+/>
+         <div *ngIf="formProject.get('endDate')?.invalid && (formProject.get('endDate')?.touched || formProject.get('endDate')?.dirty)" 
+             class="form-error-message active">
+          <p *ngIf="formProject.get('endDate')?.hasError('required')">End date is required.</p>
+          <p *ngIf="formProject.get('endDate')?.hasError('pastEndDate')">End date must not be in the past.</p>
+        </div>
+          <div *ngIf="formProject.hasError('startAfterEnd') && (formProject.get('endDate')?.touched || formProject.get('endDate')?.dirty)" 
+                 class="form-error-message active">
+          <p>End date must be after start date.</p>
+          </div>
+      </div>
+    </div>
+
+    <!-- Deuxième ligne (Adaptez de manière similaire) -->
+    <div class="form-row second-row">
+       <div class="form-field-wrapper">
+        <label class="form-label" for="type">Project Type</label>
+        <select id="type" class="form-field" formControlName="type">
+          <option value="" disabled>-- Select a type --</option> <!-- Ajout de disabled -->
+          <option value="Kanban">Kanban</option>
+          <option value="Scrum">Scrum</option>
+        </select>
+        <div *ngIf="formProject.get('type')?.invalid && (formProject.get('type')?.touched || formProject.get('type')?.dirty)" 
+             class="form-error-message active">
+          <p *ngIf="formProject.get('type')?.hasError('required')">Project type is required.</p>
+        </div>
+      </div>
+      <div class="form-field-wrapper">
+        <label class="form-label" for="category">Category</label>
+        <select id="category" class="form-field" formControlName="category">
+          <option value="" disabled>-- Select a category --</option> <!-- Ajout de disabled -->
+          <option value="Development">Development</option> 
+          <option value="design">Design</option>
+          <option value="marketing">Marketing</option>
+        </select>
+        <!-- Pas de message d'erreur si pas de validation -->
+      </div>
+    </div>
+
+    <!-- Description (Adaptez de manière similaire) -->
+    <div class="form-field-wrapper">
+      <label class="form-label" for="projectDescription">Project Description</label>
+      <textarea id="projectDescription" class="description-field" placeholder="Enter a detailed description..." formControlName="description"></textarea>
+      <div *ngIf="formProject.get('description')?.invalid && (formProject.get('description')?.touched || formProject.get('description')?.dirty)" 
+           class="form-error-message active">
+        <p *ngIf="formProject.get('description')?.hasError('required')">Description is required.</p>
+        <p *ngIf="formProject.get('description')?.hasError('minlength')">Description must be at least 30 characters long.</p>
+      </div>
+    </div>
+
+    <!-- Case à cocher pour autoriser l'annulation -->
+<div class="form-field-wrapper">
+  <div class="checkbox-container">
+    <input id="allowCancel" type="checkbox" formControlName="allowCancel" class="form-checkbox">
+    <label for="allowCancel" class="form-label checkbox-label">Allow setting status to 'Canceled'</label>
+  </div>
+</div>
+
+
+    <!-- Boutons d'action -->
+    <div class="action-buttons">
+      <button class="create-button" type="submit" [disabled]="formProject.invalid">Save</button>
+      <button type="reset" class="delete-button">Cancel</button>
+    </div>
+
+  </div>
+</form>
+
+
+        
+        
+      </main>
+    </div>
+  </div>
+
+    <!-- Exemple de notification de succès -->
+  <div class="custom-success">Project created successfully!</div>
+
+ 
+  <script>
+    // Simple JavaScript for toggling mobile menu
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add mobile menu toggle functionality if needed
+      const navItems = document.querySelectorAll('.nav-item');
+
+      navItems.forEach(item => {
+        item.addEventListener('click', function() {
+          // Remove active class from all items
+          navItems.forEach(i => i.classList.remove('active'));
+          // Add active class to clicked item
+          this.classList.add('active');
+        });
+      });
+    });
+  </script>
+
 

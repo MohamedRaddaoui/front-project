@@ -30,6 +30,8 @@ import { QuestionsListComponent } from './questions-list/questions-list.componen
 import { CreateQuestionComponent } from './create-question/create-question.component';
 
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
+import { BacklogComponent } from './backlog/backlog.component';
+import { DetailsBacklogComponent } from './details-backlog/details-backlog.component';
 
 export const routes: Routes = [
   {
@@ -136,6 +138,11 @@ export const routes: Routes = [
     
 
   },
+  {
+        path: 'backlogDtails/:id',
+        component: DetailsBacklogComponent
+      },
+
 
   // Q&A routes matching backend API structure
   {
@@ -165,6 +172,16 @@ export const routes: Routes = [
         path: 'frequent',
         component: QuestionsListComponent
       },
+      // {
+      //   path: ':id',
+      //   component: QuestionDetailComponent,
+      //   children: [
+      //     {
+      //       path: 'answers',
+      //       component: QuestionDetailComponent
+      //     }
+      //   ]
+      // },
       
     ]
   }
