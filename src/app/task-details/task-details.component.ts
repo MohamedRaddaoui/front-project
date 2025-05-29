@@ -9,6 +9,7 @@ import { UserService } from '../services/user.service';
 import { ProjectService } from '../services/project.service';
 import { Task, TaskHistory } from '../models/task.model';
 import { AuthService } from '../services/auth.service';
+import { environment } from '../../environment/env';
 
 @Component({
   selector: 'app-task-details',
@@ -326,5 +327,9 @@ export class TaskDetailsComponent implements OnInit {
 
   switchTab(tab: 'comments' | 'history') {
     this.activeTab = tab;
+  }
+
+  getDownloadUrl(commentId: string, attachmentId: string): string {
+    return `${environment.baseUrl}/taskcomments/${commentId}/attachments/${attachmentId}`;
   }
 }

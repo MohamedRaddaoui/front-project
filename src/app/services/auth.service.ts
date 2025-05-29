@@ -55,6 +55,10 @@ export class AuthService {
     return this.isAdmin() || this.getCurrentUserId() === taskUserId;
   }
 
+  canDeleteAttachment(commentUserId: string): boolean {
+    return this.isAdmin() || this.getCurrentUserId() === commentUserId;
+  }
+
   isTokenExpired(): boolean {
     const decodedToken = this.getDecodedToken();
     if (!decodedToken) return true;
