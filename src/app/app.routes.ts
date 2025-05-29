@@ -31,6 +31,8 @@ import { QuestionDetailComponent } from './question-detail/question-detail.compo
 import { CreateQuestionComponent } from './create-question/create-question.component';
 
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
+import { BacklogComponent } from './backlog/backlog.component';
+import { DetailsBacklogComponent } from './details-backlog/details-backlog.component';
 
 export const routes: Routes = [
   {
@@ -137,6 +139,11 @@ export const routes: Routes = [
     
 
   },
+  {
+        path: 'backlogDtails/:id',
+        component: DetailsBacklogComponent
+      },
+
 
   // Q&A routes matching backend API structure
   {
@@ -175,7 +182,7 @@ export const routes: Routes = [
             component: QuestionDetailComponent
           }
         ]
-      }
+      },
     ]
   }
 ];

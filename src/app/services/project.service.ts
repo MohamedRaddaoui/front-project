@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environment/env';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { Project } from '../models/project.model';
 import { Backlog } from '../models/backlog.model';
 import { UserStory } from '../models/userStory.model';
@@ -28,15 +28,14 @@ export class ProjectService {
       
       return this.http.post<Project[]>(`${this.apiUrl}/addProject`,data,{ headers });
     }
-
      getAllProject():Observable<Project[]>{
       return this.http.get<Project[]>(`${this.apiUrl}/listProject`);
      }
-
-     getByIdProject(id:String):Observable<Project>{
-      return this.http.get<Project>(`${this.apiUrl}/projectByID/${id}`);
-     }
-
+      getByIdProject(id: string): Observable<Project> {
+        return this.http.get<{ project: Project }>(`${this.apiUrl}/projectByID/${id}`).pipe(
+          map(response => response.project) // extraire seulement le projet depuis { project, statusUpdate }
+        );
+      }
      updateProject(id:String,data:Project):Observable<Project>{
       return this.http.put<Project>(`${this.apiUrl}/updateProject/${id}`, data);
      }

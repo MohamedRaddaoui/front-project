@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChildren, QueryList, AfterViewInit, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChildren, QueryList, AfterViewInit, HostListener, ChangeDetectorRef } from '@angular/core';
 import { SideBarComponent } from '../side-bar/side-bar.component';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
 import { BacklogComponent } from '../backlog/backlog.component';
 import { SprintComponent } from '../sprint/sprint.component';
 import { ProjectService } from '../services/project.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Backlog } from '../models/backlog.model';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserStory } from '../models/userStory.model';
@@ -16,12 +16,14 @@ import { DeleteProjectComponent } from '../delete-project/delete-project.compone
 
 @Component({
   selector: 'app-product-owner',
-  imports: [CommonModule, SideBarComponent, NavBarComponent, BacklogComponent, SprintComponent,DeleteProjectComponent, ReactiveFormsModule, FormsModule, DragDropModule],
+  imports: [CommonModule, SideBarComponent, NavBarComponent, BacklogComponent, SprintComponent,DeleteProjectComponent, ReactiveFormsModule, FormsModule, DragDropModule,RouterLink],
   templateUrl: './product-owner.component.html',
   styleUrl: './product-owner.component.css'
 })
 export class ProductOwnerComponent implements OnInit, AfterViewInit {
-  constructor(private projectService: ProjectService, private route: ActivatedRoute,private router:Router) {}
+  constructor(private projectService: ProjectService, private route: ActivatedRoute,private router:Router
+    , private cdRef: ChangeDetectorRef
+  ) {}
 
   // Référence aux listes de drop pour les connecter
   @ViewChildren(CdkDropList) dropLists!: QueryList<CdkDropList>;
@@ -44,11 +46,15 @@ export class ProductOwnerComponent implements OnInit, AfterViewInit {
   });
 
   openModal() {
+    console.log("Avant : modalVisible =", this.modalVisible);
     this.modalVisible = true;
+    console.log("Après : modalVisible =", this.modalVisible);
+    this.cdRef.detectChanges(); // <--- Ajouter cette ligne pour forcer la détection
   }
 
   closeModal() {
     this.modalVisible = false;
+    this.cdRef.detectChanges(); // <--- C'est bien de l'ajouter ici aussi
   }
 
   openModalSprint() {

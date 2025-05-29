@@ -10,7 +10,7 @@ export class Project{
     description?:string;
     startDate?:string   
     endDate?:string
-    ownerID?:User
+    ownerID?:User;
     team?:number 
     status?:string
     category?:string
@@ -20,7 +20,8 @@ export class Project{
     type?:string;
     tasksID?: Task[];
     sprintsID?: Sprint[];
-    created_by?:string;
+    created_by?:User;
+     showFullDescription?: boolean;
     
   constructor( 
     
@@ -38,7 +39,8 @@ export class Project{
     type?:string,
     tasksID?:[],
     sprintsID?: Sprint[],
-    created_by?:string,){
+    created_by?:User,
+   showFullDescription?: boolean,){
         
         
         this.title=title,
@@ -56,6 +58,7 @@ export class Project{
         this.tasksID=tasksID
         this.sprintsID=sprintsID
         this.created_by=created_by
+        this.showFullDescription = showFullDescription || false; // Initialize with false if not provided
        
 
     }
