@@ -358,13 +358,13 @@ select.form-field.ng-dirty.ng-valid:focus,
   }
 
   .action-buttons {
-    /* justify-content: space-between; /* Keep aligned right or center? */
+     justify-content: space-between; /* Keep aligned right or center? */
   }
 
   .create-button,
   .delete-button {
-    /* flex-grow: 1; /* Let them take natural width or full width? */
-    /* margin: 0 0.25rem; */
+    flex-grow: 1; /* Let them take natural width or full width? */
+    margin: 0 0.25rem; 
   }
 }
 
