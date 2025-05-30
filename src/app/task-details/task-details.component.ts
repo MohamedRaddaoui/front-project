@@ -10,10 +10,11 @@ import { ProjectService } from '../services/project.service';
 import { Task, TaskHistory } from '../models/task.model';
 import { AuthService } from '../services/auth.service';
 import { environment } from '../../environment/env';
+import { NavBarComponent } from '../nav-bar/nav-bar.component';
 
 @Component({
   selector: 'app-task-details',
-  imports: [SideBarComponent, CommonModule, FormsModule],
+  imports: [SideBarComponent, CommonModule, FormsModule,NavBarComponent],
   templateUrl: './task-details.component.html',
   styleUrl: './task-details.component.css'
 })
@@ -50,7 +51,7 @@ export class TaskDetailsComponent implements OnInit {
   isTaskUpdating: boolean = false;
   isCommentLoading: boolean = false;
   isCommentUpdating: { [key: string]: boolean } = {};
-
+  idTask: string = '';
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -64,6 +65,7 @@ export class TaskDetailsComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       if (params['id']) {
+        this.idTask = params['id'];
         this.fetchTask(params['id']);
       } else {
         this.isCreateMode = true;
@@ -209,6 +211,7 @@ export class TaskDetailsComponent implements OnInit {
           console.log('Task updated:', response);
           this.isEditMode = false;
           this.task = response.task;
+          this.fetchTask(this.idTask);
         },
         error: (error) => {
           this.errorMessage = error.error.message || 'Error updating task';
@@ -347,6 +350,9 @@ export class TaskDetailsComponent implements OnInit {
         error: (error) => {
           console.error('Error deleting comment:', error);
           this.errorMessage = error.error?.message || 'Error deleting comment';
+        },
+        complete: () => {
+          this.isTaskUpdating = false;
         }
       });
     }
