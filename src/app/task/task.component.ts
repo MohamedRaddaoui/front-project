@@ -18,7 +18,6 @@ import { TaskKanbanMapper } from '../util/task.mapper';
 import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
 import { TaskFilterComponent } from './task-filter/task-filter.component';
 import { SBDescriptionComponent } from '../common/dp/dp.component';
-import { SBActionDescriptionComponent } from '../common/adp/adp.component';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
 import { Subject, debounceTime } from 'rxjs';
 import { ViewportScroller } from '@angular/common';
@@ -37,8 +36,6 @@ interface Column {
   standalone: true,
   imports: [
     CommonModule,
-    SBDescriptionComponent,
-    SBActionDescriptionComponent,
     SideBarComponent,
     KanbanModule,
     DropDownListModule,
