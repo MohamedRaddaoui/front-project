@@ -34,8 +34,8 @@ export class AuthService {
 
   isAdmin(): boolean {
     const decodedToken = this.getDecodedToken();
-    const role = decodedToken?.role?.toLowerCase() || '';
-    return role === 'admin';
+    if (!decodedToken) return false;
+    return decodedToken.role === 'admin';
   }
 
   canModifyTask(taskUserId: string): boolean {
