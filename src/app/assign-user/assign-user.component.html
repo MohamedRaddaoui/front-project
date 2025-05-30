@@ -1,11 +1,55 @@
+<!-- Fichier: assign-user.component.html (Corrigé AVEC les messages d'erreur) -->
 <div class="popup" [ngStyle]="position">
     <span class="close" (click)="onClose()">&times;</span>
+  <!-- Ajout de novalidate pour désactiver la validation HTML5 par défaut et laisser Angular gérer -->
   <form [formGroup]="userForm" (ngSubmit)="assignUser()">
-  <input type="email" formControlName="email" placeholder="User email">
-  <select formControlName="userType">
-    <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+    
+    <!-- Champ Email -->
+    <div> <!-- Conteneur pour le champ + erreur -->
+      <label for="user-email-select">Select User:</label> <!-- Ajout d'un label pour l'accessibilité -->
+      <select id="user-email-select" formControlName="email">
+        <option value="" disabled>-- Select a user --</option>
+        <option *ngFor="let user of users" [value]="user.email">
+          {{ user.email }}
+        </option>
+      </select>
+      
+      <!-- !! BLOC POUR LES MESSAGES D'ERREUR EMAIL (manquant dans votre code initial) !! -->
+     <div 
+  class="form-error-message" 
+  [class.active]="userForm.get('email')?.invalid && (userForm.get('email')?.dirty || userForm.get('email')?.touched)"
+>
+  <p *ngIf="userForm.get('email')?.hasError('required')">User selection is required.</p>
+  <p *ngIf="userForm.get('email')?.hasError('userAlreadyAssigned')">This user is already assigned to this project.</p> 
+  <p *ngIf="userForm.get('email')?.hasError('userIsOwner')">This user is already the project owner.</p> <!-- << AJOUTER CE MESSAGE -->
+</div>
+    </div>
+
+    <!-- Champ Rôle -->
+    <div> <!-- Conteneur pour le champ + erreur -->
+      <label for="user-role-select">Select Role:</label> <!-- Ajout d'un label pour l'accessibilité -->
+     <select id="user-role-select" formControlName="userType">
+    <option value="" disabled>-- Select a role --</option>
+    <option 
+      *ngFor="let role of roles" 
+      [value]="role" 
+      [disabled]="role === 'ProjectManager' && projectOwner" 
+    >
+      {{ role }}
+    </option>
   </select>
-  <button type="submit">Assign</button>
+      
+      <!-- !! BLOC POUR LES MESSAGES D'ERREUR ROLE (manquant dans votre code initial) !! -->
+      <div 
+        class="form-error-message" 
+        [class.active]="userForm.get('userType')?.invalid && (userForm.get('userType')?.dirty || userForm.get('userType')?.touched)"
+      >
+        <p *ngIf="userForm.get('userType')?.hasError('required')">Role selection is required.</p>
+      </div>
+    </div>
+
+    <!-- Bouton Submit -->
+    <button type="submit" [disabled]="userForm.invalid">Assign</button>
 </form>
 
 </div>

@@ -1,0 +1,151 @@
+<app-nav-bar></app-nav-bar>
+<app-side-bar></app-side-bar>
+<div class="container">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loader">
+    <div class="d-flex justify-content-center align-items-center min-vh-50">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <div class="mb-4">
+    <a routerLink="/forum" class="back-link">← Back to Questions</a>
+  </div>
+
+  <!-- Messages -->
+  <div *ngIf="error" class="alert alert-danger mt-3">{{ error }}</div>
+  <div *ngIf="success" class="alert alert-success mt-3">{{ success }}</div>
+
+  <div *ngIf="question && !loading && !error" class="question-container">
+    <!-- Question Section -->
+    <div class="question-header">
+      <div class="question-header-main">
+        <h1 class="question-title" *ngIf="!editingQuestion">{{ question.title }}</h1>
+        <div class="question-actions" *ngIf="isAuthor(question)">
+          <button class="icon-btn edit" (click)="editQuestion()" *ngIf="!editingQuestion" title="Edit Question">
+            <fa-icon [icon]="faEdit"></fa-icon>
+          </button>
+          <button class="icon-btn delete" (click)="deleteQuestion()" title="Delete Question">
+            <fa-icon [icon]="faTrash"></fa-icon>
+          </button>
+        </div>
+      </div>
+      
+      <div class="meta-info">
+        <span>By {{ getAuthorName(question.author) }}</span>
+        <span>{{ question.createdAt | date:'mediumDate' }}</span>
+        <span>Views: {{ question.views }}</span>
+        <div class="tag-list">
+          <span *ngFor="let tag of question.tags" class="tag-badge">{{ tag }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question Content -->
+    <div class="question-content-container">
+      <div class="vote-section">
+        <button class="vote-button" (click)="upvoteQuestion()" [class.active]="hasVotedQuestion('up')" [disabled]="!currentUserId" title="Vote Up">
+          <fa-icon [icon]="faChevronUp"></fa-icon>
+        </button>
+        <span class="vote-score">{{ question.voteScore }}</span>
+        <button class="vote-button downvote" (click)="downvoteQuestion()" [class.active]="hasVotedQuestion('down')" [disabled]="!currentUserId" title="Vote Down">
+          <fa-icon [icon]="faChevronDown"></fa-icon>
+        </button>
+      </div>
+      
+      <div class="content-main">
+        <p class="question-content" *ngIf="!editingQuestion">{{ question.content }}</p>
+        <form *ngIf="editingQuestion" (ngSubmit)="updateQuestion(editQuestionForm.value)" [formGroup]="editQuestionForm" class="edit-form">
+          <div class="form-group">
+            <input type="text" formControlName="title" class="form-control" placeholder="Question Title">
+          </div>
+          <div class="form-group">
+            <textarea formControlName="content" class="modern-textarea" placeholder="Question Content"></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="modern-btn secondary" (click)="cancelEdit()">Cancel</button>
+            <button type="submit" class="modern-btn" [disabled]="editQuestionForm.invalid">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Answers Section -->
+    <div class="answers-section">
+      <h2 class="section-title">{{ answers.length }} Answers</h2>
+      <div *ngIf="answers.length === 0" class="empty-answers">
+        No answers yet. Be the first to answer!
+      </div>
+      
+      <div *ngFor="let answer of answers" class="answer-card">
+        <div class="answer-wrapper">
+          <div class="vote-section">
+            <button class="vote-button" (click)="upvoteAnswer(answer._id)" [class.active]="hasVoted(answer, 'up')" [disabled]="!currentUserId" title="Vote Up">
+              <fa-icon [icon]="faChevronUp"></fa-icon>
+            </button>
+            <span class="vote-score">{{ answer.voteScore }}</span>
+            <button class="vote-button downvote" (click)="downvoteAnswer(answer._id)" [class.active]="hasVoted(answer, 'down')" [disabled]="!currentUserId" title="Vote Down">
+              <fa-icon [icon]="faChevronDown"></fa-icon>
+            </button>
+          </div>
+
+          <div class="answer-main">
+            <div class="answer-header">
+              <p class="answer-content" *ngIf="!editingAnswer || editingAnswer._id !== answer._id">{{ answer.content }}</p>
+              <form *ngIf="editingAnswer && editingAnswer._id === answer._id" (ngSubmit)="updateAnswer()" [formGroup]="answerForm" class="edit-form">
+                <div class="form-group">
+                  <textarea formControlName="content" class="modern-textarea" placeholder="Your Answer"></textarea>
+                </div>
+                <div class="form-actions">
+                  <button type="button" class="modern-btn secondary" (click)="cancelEdit()">Cancel</button>
+                  <button type="submit" class="modern-btn" [disabled]="answerForm.invalid">Save Changes</button>
+                </div>
+              </form>
+              <div class="answer-actions" *ngIf="isAuthor(answer) && (!editingAnswer || editingAnswer._id !== answer._id)">
+                <button class="icon-btn edit" (click)="editAnswer(answer)" title="Edit Answer">
+                  <fa-icon [icon]="faEdit"></fa-icon>
+                </button>
+                <button class="icon-btn delete" (click)="deleteAnswer(answer._id)" title="Delete Answer">
+                  <fa-icon [icon]="faTrash"></fa-icon>
+                </button>
+              </div>
+            </div>
+            <div class="answer-meta">
+              <span>By {{ getAuthorName(answer.author) }}</span>
+              <span>{{ answer.createdAt | date:'mediumDate' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Answer Form Section -->
+    <div class="answer-section" *ngIf="!editingAnswer">
+      <h2 class="section-title">Your Answer</h2>
+      <form [formGroup]="answerForm" (ngSubmit)="onSubmit()" class="answer-form">
+        <div class="form-group">
+          <textarea
+            formControlName="content"
+            class="modern-textarea"
+            placeholder="Share your knowledge and help others..."
+            [class.error]="answerForm.get('content')?.touched && answerForm.get('content')?.invalid"
+          ></textarea>
+          <div *ngIf="answerForm.get('content')?.touched && answerForm.get('content')?.invalid" class="form-error">
+            <div *ngIf="answerForm.get('content')?.errors?.['required']">Answer is required.</div>
+            <div *ngIf="answerForm.get('content')?.errors?.['minlength']">Answer must be at least 10 characters.</div>
+            <div *ngIf="answerForm.get('content')?.errors?.['maxlength']">Answer cannot exceed 5000 characters.</div>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="modern-btn" [disabled]="!currentUserId || loading || answerForm.invalid">
+            <span *ngIf="loading" class="loader-spinner-sm" role="status" aria-hidden="true"></span>
+            {{ !currentUserId ? 'Please login to answer' : 'Post Your Answer' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

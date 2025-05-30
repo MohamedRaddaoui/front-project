@@ -3,8 +3,21 @@
     <ul class="nav-list">
 
       <!-- Dashboard -->
+
       <li class="nav-item" *ngIf="role === 'user'">
   <a class="nav-link" [routerLink]="'/event-dashboard'">
+<!-- 
+      <li class="nav-item">
+        <a href="" class="nav-link">
+          <div class="icon-container">
+            <div class="icon dashboard-icon"></div>
+          </div>
+          <span class="link-text">Dashboard</span>
+        </a>
+      </li>
+      <!-- Project avec liste déroulante -->
+<!--      <li class="nav-item has-dropdown">
+  <div class="nav-link dropdown-toggle" (click)="toggleDropdown()">  -->
     <div class="icon-container">
       <div class="icon project-icon"></div>
     </div>
@@ -58,10 +71,18 @@
             <div class="icon tasks-icon"></div>
           </div>
           <span class="link-text">Tasks</span>
-        </a>
-      </li>
 
-      <!-- Q&A -->
+      </li>      <!-- Q&A -->
+       <li class="nav-item">
+          <a routerLink="/forum" class="nav-link">
+            <div class="icon-container">
+              <div class="icon qa-icon"></div>
+            </div>
+            <span class="link-text">Q&A</span>
+          </a>
+        </li>
+
+      <!-- Settings -->
       <li class="nav-item">
         <a routerLink="/questions" class="nav-link">
           <div class="icon-container">
