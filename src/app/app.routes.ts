@@ -12,42 +12,48 @@ import { ProductOwnerComponent } from './product-owner/product-owner.component';
 import { AuthGuard } from './guards/auth.guard';
 import { ForgetPasswordComponent } from './forgetpassword/forgetpassword.component';
 import { ResetPasswordComponent } from './resetpassword/resetpassword.component';
-
 import { AdminGuard } from './guards/admin.guard';
-
-
 import { EventdashboardComponent } from './eventdashboard/eventdashboard.component';
-
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
-
-
-
 import { TaskComponent } from './task/task.component';
 import { TaskDetailsComponent } from './task-details/task-details.component';
 import { NgModule } from '@angular/core';
-import { QuestionsListComponent } from './questions-list/questions-list.component';
-import { CreateQuestionComponent } from './create-question/create-question.component';
-
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
+import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
+import { StatistiquesComponent } from './statistique/statistique.component';
+import { ForumComponent } from './forum/forum.component';
+import { AskQuestionComponent } from './ask-question/ask-question.component';
+import { QuestionViewComponent } from './question-details/question-details.component';
 import { BacklogComponent } from './backlog/backlog.component';
 import { DetailsBacklogComponent } from './details-backlog/details-backlog.component';
 import { EditBacklogComponent } from './edit-backlog/edit-backlog.component';
 import { DetailSprintComponent } from './detail-sprint/detail-sprint.component';
+import { LandingPageComponent } from './landing-page/landing-page.component';
+import { EventPageComponent } from './event-page/event-page.component';
 
 export const routes: Routes = [
+  {
+    path: '',
+    component: LandingPageComponent,
+  },
   {
     path: 'calendar',
     component: CalendarPageComponent,
     canActivate: [AuthGuard],
+    data: { roles: ['admin', 'user', 'manager'] },
   },
-
   {
     path: 'user-dashboard',
     component: UserDashboardComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['user', 'admin', 'manager'] },
   },
+  { path: 'signup', component: SignupComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'forget-password', component: ForgetPasswordComponent },
+  { path: 'reset-password/:token', component: ResetPasswordComponent },
   {
-
     path: 'signup',
     component: SignupComponent,
   },
@@ -66,80 +72,98 @@ export const routes: Routes = [
   {
     path: 'task-details/:id',
     component: TaskDetailsComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['user', 'manager'] },
   },
-  { path: 'task-details', component: TaskDetailsComponent },
   {
     path: 'tasks',
     component: TaskComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['user', 'manager'] },
   },
-
   {
     path: 'project',
     component: ProjectComponent,
     canActivate: [AuthGuard],
-    children: [
-      {
-        path: '',
-        component: SideBarComponent,
-      },
-    ],
+    // data: { roles: ['admin', 'user'] },
+    // children: [{ path: '', component: SideBarComponent }],
   },
-
   {
     path: 'add',
     component: AddProjectComponent,
     canActivate: [AuthGuard],
-    children: [
-      {
-        path: '',
-        component: SideBarComponent,
-      },
-    ],
+    // data: { roles: ['admin', 'manager'] },
+    // children: [{ path: '', component: SideBarComponent }],
   },
-
   {
     path: 'event-dashboard',
     component: EventdashboardComponent,
-    // canActivate: [AuthGuard, AdminGuard],
+    canActivate: [AuthGuard],
+    data: { roles: ['user'] },
   },
-
-
-
+  {
+    path: 'event/:id',
+    component: EventPageComponent,
+  },
   {
     path: 'scrum/:id',
-    component:ScrumProjectComponent,
-   
-
+    component: ScrumProjectComponent,
+    canActivate: [AuthGuard],
+    // data: { roles: ['manager'] },
   },
-
-   {
+  {
     path: 'PO/:id',
-    component:ProductOwnerComponent,
-   
-
+    component: ProductOwnerComponent,
+    canActivate: [AuthGuard],
+    // data: { roles: ['product_owner', 'admin'] },
   },
-
+  {
+    path: 'scrum/:id',
+    component: ScrumProjectComponent,
+  },
   {
     path: 'standard/:id',
-    component:StandardProjectComponent,
-    
-
+    component: StandardProjectComponent,
+    canActivate: [AuthGuard],
+    // data: { roles: ['manager'] },
+  },
+  {
+    path: 'delete/:id',
+    component: DeleteProjectComponent,
+    canActivate: [AuthGuard],
+    // data: { roles: ['admin'] },
   },
 
   {
-    path: 'delete/:id',
-    component:DeleteProjectComponent,
-    
-
-  },
-
-
-   {
     path: 'updateProject/:id',
-    component:EditProjectComponent,
-    
-
+    component: EditProjectComponent,
+    canActivate: [AuthGuard],
+    // data: { roles: ['admin', 'manager'] },
   },
+  {
+  path: 'unauthorized',
+  component: UnauthorizedComponent,
+  },
+  {
+  path: 'statistiques',
+  component: StatistiquesComponent,
+  canActivate: [AuthGuard], // optionnel selon ta sécurité
+  },
+  {
+    path: 'updateProject/:id',
+    component: EditProjectComponent,
+  },
+  {
+    path: 'forum',
+    component: ForumComponent,
+    canActivate: [],
+  },
+  {
+    path: 'ask-question',
+    component: AskQuestionComponent,
+    canActivate: [],
+  },
+  { path: 'forum/:id', component: QuestionViewComponent },
   {
         path: 'backlogDtails/:id',
         component: DetailsBacklogComponent
@@ -155,35 +179,58 @@ export const routes: Routes = [
         component: DetailSprintComponent
        },
 
-
+/*
   // Q&A routes matching backend API structure
   {
     path: 'questions',
     children: [
+      { path: '', component: QuestionsListComponent },
+      { path: 'create', component: CreateQuestionComponent, canActivate: [AuthGuard], data: { roles: ['user', 'admin'] } },
+      { path: 'search', component: QuestionsListComponent },
+      { path: 'search/tags', component: QuestionsListComponent },
+      { path: 'search/advanced', component: QuestionsListComponent },
+      { path: 'frequent', component: QuestionsListComponent },
+      {
+        path: ':id',
+        component: QuestionDetailComponent,
+        children: [
+          { path: 'answers', component: QuestionDetailComponent },
+        ],
+      },
+    ],
+  },
+
+  // Redirection fallback
+  { path: '**', redirectTo: 'login' },
+];
       {
         path: '',
-        component: QuestionsListComponent
+        component: QuestionsListComponent,
       },
       {
         path: 'create',
-        component: CreateQuestionComponent
+        component: CreateQuestionComponent,
       },
       {
         path: 'search',
-        component: QuestionsListComponent
+        component: QuestionsListComponent,
       },
       {
         path: 'search/tags',
-        component: QuestionsListComponent
+        component: QuestionsListComponent,
       },
       {
         path: 'search/advanced',
-        component: QuestionsListComponent
+        component: QuestionsListComponent,
       },
       {
         path: 'frequent',
-        component: QuestionsListComponent
+        component: QuestionsListComponent,
       },
+    ],
+  },
+];
+=======
       // {
       //   path: ':id',
       //   component: QuestionDetailComponent,
@@ -194,10 +241,9 @@ export const routes: Routes = [
       //     }
       //   ]
       // },
-      
+     
     ]
   }
+      */
 ];
-
-
 

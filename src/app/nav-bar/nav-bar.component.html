@@ -16,7 +16,7 @@
         <div class="user-profile">
           <div class="user-info">
             <p class="user-name">{{user?.firstname}} {{user?.lastname}}</p>
-            <p class="user-location">U.P, India</p>
+            <p class="user-location">{{user?.email}}</p>
           </div>
           <div class="avatar-container">
             <img [src]="'http://localhost:5000/uploads/' + user?.photo" alt="User profile" class="user-avatar">

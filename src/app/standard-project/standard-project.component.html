@@ -2,7 +2,7 @@
     <div class="app-container">
       <div class="main-content">
         <app-side-bar></app-side-bar>
-        <main class="project-content" >
+        <main *ngIf="project" class="project-content" >
           <div class="project-header-section">  
             <div class="project-title-section">
               <div class="project-path">

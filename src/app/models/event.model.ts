@@ -1,26 +1,33 @@
+export interface Attachments {
+  filename: String;
+  path: String;
+  mimetype: String;
+  originalname: String;
+}
+
 export class Event {
-  title: String;
-  date: String;
-  startTime: String;
-  endTime: String;
-  location?: String;
-  type: String;
-  status?: String;
-  visibility?: String;
-  createdBy: String;
-  attachments?: File[];
+  title: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  location?: string;
+  type: string;
+  status?: string;
+  visibility?: string;
+  createdBy: string;
+  attachments?: Attachments[];
   [key: string]: any;
   constructor(
-    title: String,
-    date: String,
-    startTime: String,
-    endTime: String,
-    type: String,
-    createdBy: String,
-    location?: String,
-    status?: String,
-    visibility?: String,
-    attachments?: File[]
+    title: string,
+    date: string,
+    startTime: string,
+    endTime: string,
+    type: string,
+    createdBy: string,
+    location?: string,
+    status?: string,
+    visibility?: string,
+    attachments?: Attachments[]
   ) {
     this.title = title;
     this.date = date;

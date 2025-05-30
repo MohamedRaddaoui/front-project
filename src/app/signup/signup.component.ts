@@ -34,6 +34,8 @@ export class SignupComponent implements OnInit {
   errorMessage: string = '';
 
   selectedFile: File | null = null;
+  imagePreview: string | ArrayBuffer | null = null;
+  selectedFileName: string | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -47,6 +49,8 @@ export class SignupComponent implements OnInit {
       lastname: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
+      // Optionnel : pour ajouter le champ au FormGroup (facultatif)
+      photo: [null]
     });
   }
 
@@ -58,10 +62,26 @@ export class SignupComponent implements OnInit {
     this.hidePassword = !this.hidePassword;
   }
 
+  triggerFileInput(): void {
+    const input = document.getElementById('photo') as HTMLInputElement;
+    input?.click();
+  }
+
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
+
     if (input.files && input.files.length > 0) {
       this.selectedFile = input.files[0];
+      this.selectedFileName = this.selectedFile.name;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview = reader.result;
+      };
+      reader.readAsDataURL(this.selectedFile);
+
+      // Optionnel : stocker le fichier dans le formGroup si tu en as besoin
+      this.signupForm.patchValue({ photo: this.selectedFile });
     }
   }
 
@@ -71,7 +91,6 @@ export class SignupComponent implements OnInit {
     }
 
     const formData = new FormData();
-
     formData.append('firstname', this.signupForm.value.firstname);
     formData.append('lastname', this.signupForm.value.lastname);
     formData.append('email', this.signupForm.value.email);

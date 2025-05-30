@@ -1,7 +1,29 @@
-<aside class="sidebar">
+<aside class="sidebar" *ngIf="isRoleLoaded"> 
   <nav class="sidebar-nav">
     <ul class="nav-list">
+
       <!-- Dashboard -->
+
+      <!-- <li class="nav-item" *ngIf="role === 'user'">
+  <a class="nav-link" [routerLink]="'/event-dashboard'">
+    <div class="icon-container">
+      <div class="icon project-icon"></div>
+    </div>
+    <span class="link-text">Dashboard</span>
+  </a>
+</li> -->
+
+<!-- Dashboard for admin -->
+<!-- <li class="nav-item" *ngIf="role === 'admin'">
+  <a class="nav-link" [routerLink]="'/user-dashboard'">
+    <div class="icon-container">
+      <div class="icon project-icon"></div>
+    </div>
+    <span class="link-text">Dashboard</span>
+  </a>
+</li> -->
+
+    <!-- Dashboard -->
       <li class="nav-item">
         <a href="" class="nav-link">
           <div class="icon-container">
@@ -11,6 +33,9 @@
         </a>
       </li>
       <!-- Project avec liste déroulante -->
+
+      <!-- Project Dropdown -->
+     <!-- Project avec liste déroulante -->
      <li class="nav-item has-dropdown">
   <div class="nav-link dropdown-toggle" (click)="toggleDropdown()">
     <div class="icon-container">
@@ -39,20 +64,17 @@
   </ul>
 </li>
 
-
       <!-- Tasks -->
       <li class="nav-item">
-        <a href="/tasks" class="nav-link">
+        <a routerLink="/tasks" class="nav-link">
           <div class="icon-container">
             <div class="icon tasks-icon"></div>
           </div>
           <span class="link-text">Tasks</span>
         </a>
-      </li>
-
-      <!-- Q&A -->
+      </li>      <!-- Q&A -->
        <li class="nav-item">
-          <a routerLink="/questions" class="nav-link">
+          <a routerLink="/forum" class="nav-link">
             <div class="icon-container">
               <div class="icon qa-icon"></div>
             </div>
@@ -60,13 +82,33 @@
           </a>
         </li>
 
-      <!-- Settings -->
-      <li class="nav-item">
-        <a href="/settings" class="nav-link">
+
+      <!-- Settings Dropdown -->
+      <li class="nav-item has-dropdown settings">
+        <div class="nav-link dropdown-toggle" (click)="toggleSettingsDropdown()">
           <div class="icon-container">
             <div class="icon settings-icon"></div>
           </div>
           <span class="link-text">Settings</span>
+          <span class="arrow" [class.rotated]="isSettingsDropdownOpen">&#9662;</span>
+        </div>
+        <ul class="dropdown-menu" [class.show]="isSettingsDropdownOpen">
+          <!-- Visible uniquement pour admin -->
+          <li class="dropdown-item" *ngIf="isAdmin">
+            <a routerLink="/statistiques" class="nav-link">
+              <span class="link-text">Statistiques</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <!-- Logout -->
+      <li class="nav-item">
+        <a class="nav-link" (click)="logout()">
+          <div class="icon-container">
+            <i class="fas fa-sign-out-alt"></i>
+          </div>
+          <span class="link-text">Logout</span>
         </a>
       </li>
 

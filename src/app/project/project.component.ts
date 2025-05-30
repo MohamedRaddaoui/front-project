@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SideBarComponent } from '../side-bar/side-bar.component';
 import { CommonModule } from '@angular/common';
-import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';  // Ajout de Router et NavigationEnd
+import { Router, ActivatedRoute } from '@angular/router';
 import { ProjectService } from '../services/project.service';
 import { Project } from '../models/project.model';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
@@ -10,9 +10,10 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
   selector: 'app-project',
-  imports: [SideBarComponent,NavBarComponent, CommonModule],
+  standalone: true,
+  imports: [SideBarComponent, NavBarComponent, CommonModule],
   templateUrl: './project.component.html',
-  styleUrl: './project.component.css',
+  styleUrls: ['./project.component.css']
 })
 export class ProjectComponent {
   successMessage: string | null = null; // ✅ Ajoute cette ligne
@@ -127,43 +128,37 @@ loadAndFilterProjects(filterArchived: boolean) {
 
 
 
-  goToPage(page: number) {
+  goToPage(page: number): void {
     this.currentPage = page;
     this.updatePaginatedProjects();
   }
 
-  nextPage() {
+  nextPage(): void {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
       this.updatePaginatedProjects();
     }
   }
 
-  prevPage() {
+  prevPage(): void {
     if (this.currentPage > 1) {
       this.currentPage--;
       this.updatePaginatedProjects();
     }
   }
-  
-  
-  
 
+ 
 
-
-  onProjectClick(project: any) {
+  onProjectClick(project: Project): void {
     console.log('Projet cliqué:', project);
     if (project.type === 'Scrum') {
-      this.router.navigate(['/scrum', project.id]);
+      this.router.navigate(['/scrum', project._id]);
+    } else if (project.type === 'Kanban') {
+      this.router.navigate(['/standard', project._id]);
     } else {
-      if(project.type === 'Kanban'){
-        this.router.navigate(['/standard', project.id])
-
-      }else{
-      // autre traitement ou message d’erreur
       alert('Type non pris en charge');
     }
-  }}
+  }
   
   // Propriété pour gérer l'affichage de la description complète
 
@@ -224,6 +219,4 @@ getVisibleUsers(project: any): any[] {
   // Sinon, on limite au nombre maximal d'avatars visibles
   return project.usersID.slice(0, this.maxVisibleAvatars);
 }
-
-
 }
