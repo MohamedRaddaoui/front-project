@@ -341,6 +341,7 @@ export class TaskDetailsComponent implements OnInit {
     }
 
     if (confirm('Are you sure you want to delete this comment?')) {
+      this.isCommentLoading = true;
       this.commentService.deleteComment(this.task._id, commentId).subscribe({
         next: () => {
           console.log('Comment deleted successfully');
@@ -352,7 +353,7 @@ export class TaskDetailsComponent implements OnInit {
           this.errorMessage = error.error?.message || 'Error deleting comment';
         },
         complete: () => {
-          this.isTaskUpdating = false;
+          this.isCommentLoading = false;
         }
       });
     }
