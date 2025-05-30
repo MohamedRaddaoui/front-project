@@ -29,7 +29,7 @@ export class EditProjectComponent {
     type:new FormControl('', [Validators.required]),
     category:new FormControl(),
 
-    status:new FormControl('Not Started', [ Validators.pattern(/^(Not Started|In Progress|Done|Canceled)$/) 
+    status:new FormControl('Not Started', [ Validators.pattern(/^(Not Started|In Progress|Done|Canceled)$/)
    ]),
    allowCancel: new FormControl(false)  // <-- Ajouté ici
   },{ validators: this.dateConsistencyValidator() });
@@ -98,11 +98,11 @@ ngOnInit() {
       const inputDate = new Date(control.value);
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-  
+ 
       if (inputDate < today) {
         return { pastStartDate: true };
       }
-      
+     
       return null;
     };
   }
@@ -180,7 +180,6 @@ ngOnInit() {
      return null;
    };
  }
-  
+ 
 
 }
-

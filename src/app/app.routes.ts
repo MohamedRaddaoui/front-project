@@ -121,7 +121,7 @@ export const routes: Routes = [
         component: DetailsBacklogComponent
       },
 
-
+/*
   // Q&A routes matching backend API structure
   {
     path: 'questions',
@@ -160,9 +160,10 @@ export const routes: Routes = [
       //     }
       //   ]
       // },
-      
+     
     ]
   }
+      */
 ];
 
 
