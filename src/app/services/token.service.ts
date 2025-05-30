@@ -19,7 +19,6 @@ export class TokenService {
     this.router.navigate(['/login']);
     return false;
   }
-
   isTokenValid(): boolean {
     const token = this.getToken();
     return token ? !this.jwtHelper.isTokenExpired(token) : false;
@@ -60,5 +59,20 @@ export class TokenService {
       email: decoded.email,
       role: decoded.role,
     };
+  }
+
+  // Nouvelle méthode pour extraire le rôle du token
+  getUserRole(): string | null {
+    const token = this.getToken();
+    if (!token) {
+      return null;
+    }
+    try {
+      const decodedToken = this.jwtHelper.decodeToken(token);
+      // Ici, adapte "role" selon la clé exacte dans ton token
+      return decodedToken?.role || null;
+    } catch {
+      return null;
+    }
   }
 }
