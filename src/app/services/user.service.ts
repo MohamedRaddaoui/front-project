@@ -27,6 +27,8 @@ export class UserService {
     });
   }
 
+  
+
   // Add a new user (avec FormData)
   addUser(userData: FormData): Observable<any> {
     // On n'ajoute pas les headers pour Content-Type, Angular s'en charge automatiquement

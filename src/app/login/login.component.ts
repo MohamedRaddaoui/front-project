@@ -6,7 +6,6 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
@@ -37,6 +36,7 @@ export class LoginComponent implements OnInit {
   errorMessage: string = '';
   showVerificationStep = false;
   userEmail: string = '';
+  isVerifying: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -51,10 +51,7 @@ export class LoginComponent implements OnInit {
     });
 
     this.verificationForm = this.fb.group({
-      code: [
-        '',
-        [Validators.required, Validators.minLength(6), Validators.maxLength(6)],
-      ],
+      code: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6)]],
     });
   }
 
@@ -87,11 +84,9 @@ export class LoginComponent implements OnInit {
           }
         },
         error: (error: HttpErrorResponse) => {
-          if (error.status === 401) {
-            this.errorMessage = 'Invalid email or password';
-          } else {
-            this.errorMessage = 'An error occurred. Please try again.';
-          }
+          this.errorMessage = error.status === 401
+            ? 'Invalid email or password'
+            : 'An error occurred. Please try again.';
           console.error('Login error:', error);
         },
       });
@@ -104,14 +99,21 @@ export class LoginComponent implements OnInit {
   }
 
   verifyCode(): void {
-    if (this.verificationForm.valid) {
+    if (this.verificationForm.valid && !this.isVerifying) {
+      this.isVerifying = true;
+      const trimmedCode = this.verificationForm.value.code.trim();
+
       const verificationData = {
         email: this.userEmail,
-        code: this.verificationForm.value.code,
+        code: trimmedCode,
       };
+
+      console.log('Sending verification data:', verificationData);
 
       this.userService.verify2FA(verificationData).subscribe({
         next: (response: any) => {
+          console.log('Login response:', response);
+          this.isVerifying = false;
           if (response && response.token) {
             this.tokenService.setToken(response.token);
             this.router.navigate(['/project']);
@@ -120,10 +122,13 @@ export class LoginComponent implements OnInit {
           }
         },
         error: (error: HttpErrorResponse) => {
+          this.isVerifying = false;
           this.errorMessage = 'Invalid verification code';
           console.error('Verification error:', error);
         },
       });
+    } else {
+      this.verificationForm.markAllAsTouched();
     }
   }
 

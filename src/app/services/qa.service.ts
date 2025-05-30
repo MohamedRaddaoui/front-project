@@ -1,134 +1,81 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environment/env';
-import { Question, Answer, Reply } from '../models/qa.models';
+import { Question, Answer, Reply } from '../models/qa.model'; // Use qa.model.ts
 
 @Injectable({
   providedIn: 'root'
 })
-export class QAService {
+export class QaService {
   private apiUrl = `${environment.baseUrl}/qa`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  private getAuthHeaders(): HttpHeaders {
-    // Assume token is stored in localStorage or provided by an auth service
-    const token = localStorage.getItem('jwtToken') || ''; // Replace with your auth service logic
-    return new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    });
-  }
-
-  // Get all questions with optional sorting
-  getAllQuestions(sort: string = 'newest'): Observable<Question[]> {
-    let params = new HttpParams().set('sort', sort);
-    return this.http.get<Question[]>(`${this.apiUrl}/questions`, { headers: this.getAuthHeaders(), params });
-  }
-
-  // Get question by ID
-  getQuestionById(id: string): Observable<Question> {
-    return this.http.get<Question>(`${this.apiUrl}/questions/${id}`, { headers: this.getAuthHeaders() });
-  }
-
-  // Search questions by query or tags
-  searchQuestions(query: string, tags?: string): Observable<{ success: boolean; count: number; data: Question[] }> {
-    let params = new HttpParams().set('q', query);
-    if (tags) {
-      params = params.set('tags', tags);
+  // Question Methods
+  getQuestions(params?: any): Observable<Question[]> {
+    let httpParams = new HttpParams();
+    if (params) {
+      Object.keys(params).forEach(key => {
+        httpParams = httpParams.append(key, params[key]);
+      });
     }
-    return this.http.get<{ success: boolean; count: number; data: Question[] }>(
-      `${this.apiUrl}/search/tags`,
-      { headers: this.getAuthHeaders(), params }
-    );
+    return this.http.get<Question[]>(`${this.apiUrl}/questions`, { params: httpParams });
   }
 
-  // Advanced search
-  
-
-  // Get frequent questions
-  getFrequentQuestions(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/frequent`, { headers: this.getAuthHeaders() });
+  getQuestion(id: string): Observable<Question> {
+    return this.http.get<Question>(`${this.apiUrl}/questions/${id}`);
   }
 
-  // Post a new question
-  askQuestion(questionData: Partial<Question>): Observable<Question> {
-    return this.http.post<Question>(`${this.apiUrl}/questions`, questionData, { headers: this.getAuthHeaders() });
+  createQuestion(data: any): Observable<Question> {
+    return this.http.post<Question>(`${this.apiUrl}/questions`, data);
   }
 
-  // Update a question
-  updateQuestion(questionId: string, questionData: Partial<Question>): Observable<Question> {
-    return this.http.put<Question>(`${this.apiUrl}/questions/${questionId}`, questionData, { headers: this.getAuthHeaders() });
+  updateQuestion(id: string, data: any): Observable<Question> {
+    return this.http.put<Question>(`${this.apiUrl}/questions/${id}`, data);
   }
 
-  // Delete a question
-  deleteQuestion(questionId: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/questions/${questionId}`, { headers: this.getAuthHeaders() });
+  deleteQuestion(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/questions/${id}`);
   }
-
-  // Vote on a question
   voteQuestion(questionId: string, userId: string, voteType: 'up' | 'down'): Observable<Question> {
-    return this.http.post<Question>(
-      `${this.apiUrl}/questions/${questionId}/vote`,
-      { userId, voteType },
-      { headers: this.getAuthHeaders() }
-    );
+    return this.http.post<Question>(`${this.apiUrl}/questions/${questionId}/vote`, { userId, voteType });
   }
 
-  // Post an answer to a question
-  answerQuestion(questionId: string, answerData: Partial<Answer>): Observable<Answer> {
-    return this.http.post<Answer>(
-      `${this.apiUrl}/questions/${questionId}/answers`,
-      answerData,
-      { headers: this.getAuthHeaders() }
-    );
+  // Answer Methods
+  getAnswers(questionId: string): Observable<Answer[]> {
+    return this.http.get<Answer[]>(`${this.apiUrl}/questions/${questionId}/answers`);
   }
 
-  // Update an answer
-  updateAnswer(answerId: string, answerData: Partial<Answer>): Observable<Answer> {
-    return this.http.put<Answer>(`${this.apiUrl}/answers/${answerId}`, answerData, { headers: this.getAuthHeaders() });
+  createAnswer(questionId: string, data: any): Observable<Answer> {
+    return this.http.post<Answer>(`${this.apiUrl}/questions/${questionId}/answers`, data);
   }
 
-  // Delete an answer
-  deleteAnswer(answerId: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/answers/${answerId}`, { headers: this.getAuthHeaders() });
+  updateAnswer(answerId: string, data: any): Observable<Answer> {
+    return this.http.put<Answer>(`${this.apiUrl}/answers/${answerId}`, data);
   }
 
-  // Vote on an answer
+  deleteAnswer(answerId: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/answers/${answerId}`);
+  }
   voteAnswer(answerId: string, userId: string, voteType: 'up' | 'down'): Observable<Answer> {
-    return this.http.post<Answer>(
-      `${this.apiUrl}/answers/${answerId}/vote`,
-      { userId, voteType },
-      { headers: this.getAuthHeaders() }
-    );
+    return this.http.post<Answer>(`${this.apiUrl}/answers/${answerId}/vote`, { userId, voteType });
   }
 
-  // Accept an answer
-  acceptAnswer(answerId: string, questionAuthorId: string): Observable<Answer> {
-    return this.http.post<Answer>(
-      `${this.apiUrl}/answers/${answerId}/accept`,
-      { questionAuthorId },
-      { headers: this.getAuthHeaders() }
-    );
+  // Reply Methods
+  getReplies(answerId: string): Observable<Reply[]> {
+    return this.http.get<Reply[]>(`${this.apiUrl}/answers/${answerId}/replies`);
   }
 
-  // Create a reply
-  createReply(answerId: string, replyData: Partial<Reply>): Observable<Reply> {
-    return this.http.post<Reply>(
-      `${this.apiUrl}/answers/${answerId}/replies`,
-      replyData,
-      { headers: this.getAuthHeaders() }
-    );
+  createReply(answerId: string, data: any): Observable<Reply> {
+    return this.http.post<Reply>(`${this.apiUrl}/answers/${answerId}/replies`, data);
   }
 
-  // Update a reply
-  updateReply(replyId: string, replyData: Partial<Reply>): Observable<Reply> {
-    return this.http.put<Reply>(`${this.apiUrl}/replies/${replyId}`, replyData, { headers: this.getAuthHeaders() });
+  updateReply(replyId: string, data: any): Observable<Reply> {
+    return this.http.put<Reply>(`${this.apiUrl}/replies/${replyId}`, data);
   }
 
-  // Delete a reply
-  deleteReply(replyId: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/replies/${replyId}`, { headers: this.getAuthHeaders() });
+  deleteReply(replyId: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/replies/${replyId}`);
   }
 }

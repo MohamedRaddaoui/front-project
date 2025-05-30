@@ -2,65 +2,66 @@
     <div class="app-container">
       <div class="main-content">
         <app-side-bar></app-side-bar>
-        <main class="project-content" >
+        <main *ngIf="project" class="project-content" >
           <div class="project-header-section">  
             <div class="project-title-section">
               <div class="project-path">
-                Projects / {{project.title}}
+                Projects / 
               </div>
 
               <div class="project-title-container">
                 <span class="project-title">{{project.title}}
                 </span>
-            <span>
-              <!-- Not Started -->
-               <i *ngIf="project.status === 'Not Started'"
-                   class="fa-solid fa-circle"
-                   style="color: #adb5bd;"
-                   title="Not Started"></i>
+             <span 
+                class="status-badge"
+                [ngClass]="{
+                  'status-done': project.status === 'Done',
+                  'status-inprogress': project.status === 'In Progress',
+                  'status-notstarted': project.status === 'Not Started',
+                   'status-canceled': project.status === 'Canceled'
 
-                   <i *ngIf="project.status === 'Canceled'"
-                   class="fa-solid fa-circle"
-                   style="color: #f63858;"
-                   title="Canceled"></i>
-
-                <!-- In Progress -->
-                <i *ngIf="project.status === 'In Progress'"
-                  class="fa-solid fa-spinner fa-spin"
-                  style="color: #0d6efd;"
-                  title="In Progress"></i>
-
-                <!-- Done -->
-                <i *ngIf="project.status === 'Done'"
-                  class="fa-solid fa-circle-check"
-                  style="color: #198754;"
-                  title="Done"  aria-label="Project done"></i>
-
-                <!-- Canceled -->
-                <i *ngIf="project.status === 'Canceled'"
-                  class="fa-solid fa-circle-xmark"
-                  style="color: #dc3545;"
-                  title="Canceled"></i>
-
-                <!-- Overdue -->
-                <i *ngIf="project.status === 'Overdue'"
-                  class="fa-solid fa-triangle-exclamation"
-                  style="color: #fd7e14;"
-                  title="Overdue"></i>
-            </span>
+                }">
+                {{ project.status }}
+              </span>
             <div class="icons">
-              <i class="fa-solid fa-trash"  style="color: #dc3545; font-size: 15px" title="Delete Project" (click)="openPopup()" ></i>
-              <i class="fa-solid fa-users" style="color: #198754; font-size: 15px" title="Assign Users" (click)="openAddUserPopup($event)" #addIcon></i>
+              <i class="fa-solid fa-trash"  style="color: #dc3545; font-size: 15px" title="Delete Project" (click)="openPopup()" *ngIf="isManager()"></i>
+                             
+                <i class="fa-solid fa-users" style="color: #198754; font-size: 15px" title="Assign Users" (click)="openAddUserPopup($event)" #addIcon *ngIf="isManager() || isProjectManager()"></i>
+           
               <!-- Affichage conditionnel du composant AddUser -->
-                    <app-assign-user 
-                      *ngIf="showAddPopup" 
-                      [position]="popupPosition" 
-                      (close)="closeAddUserPopup()"
-                    ></app-assign-user>
-              <i class="fa-solid fa-folder" style="color: #6c757d; font-size: 15px" title="Archived Project"  (click)="archivedFunction()"></i>
-              <i class="fa-solid fa-pen-to-square" style="color: #0d6efd; font-size: 15px" title="Edit" [routerLink]="['/updateProject',project.id]"></i>
+                                          <!-- Dans l'appel à app-assign-user -->
+                      <app-assign-user
+                        *ngIf="showAddPopup && (isManager() || isProjectManager())" 
+                        [position]="popupPosition" 
+                        (close)="closeAddUserPopup()"
+                        (userAssigned)="onUserAssigned($event)"
+                        [assignedUsersList]="project.usersID ?? []" 
+                        [projectOwner]="project.ownerID"
+                      >
+                      </app-assign-user>
+
+                     
+              <i  class="fa-solid fa-folder" style="color: #6c757d; font-size: 15px" title="Archived Project"  (click)="archivedFunction()" *ngIf="isManager()"></i>
+              <i class="fa-solid fa-pen-to-square" style="color: #0d6efd; font-size: 15px" title="Edit" [routerLink]="['/updateProject',project.id]" *ngIf="isManager()"></i>
              </div>
-             
+<!-- 
+              <div class="category-tag category-position-4" 
+             >
+      <div class="category-icon">
+        <i class="fa-solid fa-code"></i>
+      </div>
+      <span class="category-text">{{project.category}}</span>
+    </div> -->
+              <!-- Espace réservé pour le tag de catégorie -->
+    <div class="category-container">
+      <!-- Tag de catégorie positionné sous le titre, avant les métriques -->
+      <div class="category-tag category-position-5" data-category="">
+        <div class="category-icon">
+          <i class="fa-solid fa-code"></i>
+        </div>
+        <span class="category-text">{{project.category}}</span>
+      </div>
+    </div>
                 <div class="project-metrics">
                   <div class="time-spent-section">
                     <div class="metric-details">
@@ -97,16 +98,49 @@
 
 
                <!-- Icônes supplémentaires -->
-              <div class="team-members"   >
-                <div *ngFor="let user of project.usersID">
-                <img
-                  [src]="'http://localhost:5000/uploads/' + user.photo"  class="team-avatar"
-                  class="team-avatar"
-                />  
-               </div>
-               
-                <div class="more-members">+2</div>
-              </div>
+<div class="team-members">
+  <!-- Boucle sur les utilisateurs -->
+  <div *ngFor="let user of project.usersID; let i = index" class="team-member-item">
+    <!-- Afficher l'utilisateur seulement si showAllUsers est vrai OU si l'index est inférieur à la limite initiale -->
+    <ng-container *ngIf="showAllUsers || i < initialUserLimit">
+      <img
+        [src]="'http://localhost:5000/uploads/' + user.photo" 
+        class="team-avatar"
+        [title]="user.firstname || 'User'" 
+      />
+      <!-- Icône de suppression -->
+      <ng-container *ngIf="user && user._id">
+        <i 
+          class="fa-solid fa-user-minus remove-user-icon" 
+          title="Remove {{ user.firstname || 'User' }} from project" 
+
+*ngIf="(isManager() && user._id !== project.created_by?._id) 
+    || 
+       (isProjectManager() && !isManager() && user.role === 'user' && user._id !== project.created_by?._id)"
+
+          (click)="requestRemoveUser(user._id, user.firstname || 'cet utilisateur')" 
+        >
+        </i>
+      </ng-container>
+    </ng-container>
+  </div>
+
+  <!-- Indicateur/Bouton Toggle (+N ou Réduire) -->
+  <!-- S'affiche seulement s'il y a plus d'utilisateurs que la limite initiale -->
+  <div 
+    class="more-members toggle-members" 
+    *ngIf="hasMoreUsersThanLimit()" 
+    (click)="toggleUserDisplay()" 
+    [title]="showAllUsers ? 'Réduire la liste' : 'Afficher tous les membres'"
+  >
+    <!-- Afficher +N si la liste est réduite -->
+    <span *ngIf="!showAllUsers">+{{ getHiddenUserCount() }}</span>
+    <!-- Afficher une icône (ou texte) 'Réduire' si la liste est étendue -->
+    <i class="fa-solid fa-chevron-up" *ngIf="showAllUsers"></i> 
+    <!-- Alternative texte: <span *ngIf="showAllUsers">Réduire</span> -->
+  </div>
+</div>
+
              
 
 
@@ -116,14 +150,19 @@
            
           </div> 
 
-          <div class="description"> {{project.category}}</div>
+          <div class="description">
+            <!-- Affichage moderne de la catégorie -->
+
+
+ 
+</div>
 
           <!-- Sprints affichés si le type de projet est Scrum -->
 
 
           
     <div class="project-icons">
-    <i class="fa-solid fa-list-check" style="color: #0d6efd;" title="Tasks"></i>
+    <i class="fa-solid fa-list-check" style="color: #0d6efd;" title="Tasks" *ngIf="isManager()"></i>
     <!-- <i class="fa-solid fa-file-lines" style="color: #6c757d;" title="Résumé"></i> -->
   </div>       
 <div class="tasks-container">
@@ -162,130 +201,23 @@
     </div>
   </ng-template>
 </div>
-
-
-            <!-- Task Card -->
-            <!-- <div class="task-card" >
-              <div class="task-header">
-                    <div class="task-content">
-                      <div class="task-info">
-                        <div class="task-title">
-                          <i class="icon">💡</i>
-                          <span>Make an Automatic Payment System that enable the design</span>
-                        </div>
-                        <div class="task-meta">
-                          <span class="status cancelled">Cancelled</span>
-                          <span class="status completed">Completed</span>
-                        </div>
-                        <div class="task-dates">
-                          <div>
-                            <label>Start Date</label>
-                            <span>25/9/2023</span>
-                          </div>
-                          <div>
-                            <label>End Date</label>
-                            <span>25/9/2023</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="task-footer">
-                        <span class="time">⏱️ 00:30:00</span>
-                        <img class="avatar" src="https://via.placeholder.com/32" alt="User" />
-                        <i class="more">⋮</i>
-                      </div>
-                    </div> -->
-
-
-                      
-
-                <!-- <img
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/9df8fc697bd762ba26cec9712c361a5dddce2cd0?placeholderIfAbsent=true"
-                  alt="Task icon"
-                  class="task-icon"
-                /> -->
-                <!-- <div class="task-details">
-                  <div class="task-title-row">
-                    <div class="task-title" *ngIf="project.tasksID?.length">
-                     
-                       
-                        <div *ngFor="let task of project.tasksID">
-                          {{ task.title }}
-                        </div>
-                     
-                      
-                    </div>
-                    <div class="date-label">Start Date</div>
-                  </div>
-                  <div class="task-meta-row">
-                    <div class="task-id" *ngFor="let task of project.tasksID">
-                      {{task.description}} 
-                    </div>
-                    <div class="status-badges">
-                      <div class="status-badge canceled">Canceled</div>
-                      <div class="status-badge completed">Completed</div>
-                    </div>
-                    <div class="date-display">
-                      <img
-                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/39c895c174086dce646d342bb200a4bfb9cf3ee8?placeholderIfAbsent=true"
-                        alt="Calendar icon"
-                        class="calendar-icon"
-                      />
-                      <div>25/3/2023</div>
-                    </div>
-                  </div>
-                </div> -->
-              
-              <!-- <div class="task-footer">
-                <div class="end-date-section">
-                  <div class="date-label">End Date</div>
-                  <div class="date-display">
-                    <img
-                      src="https://cdn.builder.io/api/v1/image/assets/TEMP/39a680638f294917f26aa1739272f015d739c652?placeholderIfAbsent=true"
-                      alt="Calendar icon"
-                      class="calendar-icon"
-                    />
-                    <div>25/3/2023</div>
-                  </div>
-                </div>
-                <div class="task-progress">
-                  <div class="time-display">
-                    <img
-                      src="URL_100"
-                      alt="Timer icon"
-                      class="timer-icon"
-                    />
-                    <div>00 : 30 : 00</div>
-                  </div>
-                  <img
-                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/8f94942e04f43f04a0f5fc9c310d37b4cb211a1f?placeholderIfAbsent=true"
-                    alt="Progress"
-                    class="progress-bar"
-                  />
-                </div>
-              </div> -->
-            <!-- </div> -->
-
-            <!-- Task counters -->
-            <!-- <div class="task-counters">
-              <div class="task-count">50 tasks</div>
-              <div class="file-count">
-                <img
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/680975ffd361c29b5013ad03211e8f4ffdbf641f?placeholderIfAbsent=true"
-                  alt="Files icon"
-                  class="files-icon"
-                />
-                <div>15 files</div>
-              </div>
-            </div> -->
-        
-      <!-- </div>-->
     
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
 
 
+    <app-delete-project 
+ [visible]="showRemoveUserPopup"
+ [title]="removeUserPopupTitle"
+ [message]="removeUserPopupMessage"
+ [confirmLabel]="'Oui, Retirer'" 
+ [cancelLabel]="'Annuler'"
+ (onConfirm)="confirmRemoveUser()"
+ (onCancel)="cancelRemoveUser()">
+</app-delete-project >
 
     <app-delete-project 
+   *ngIf="isManager()"
  [visible]="popupVisible"
   [title]="'Delete Project?'"
   [message]="'Are you sure you want to delete this project? This action cannot be undone.'"

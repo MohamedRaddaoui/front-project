@@ -1,206 +1,189 @@
-/* Style du bouton + */
-.open-btn {
-  font-size: 24px;
-  padding: 10px 20px;
-  border-radius: 50%;
-  border: none;
-  background-color: #28a745;
-  color: white;
-  cursor: pointer;
-}
+/* Modernized Popup Styles - NgIf Controlled Visibility */
 
-/* Style de la modale */
+/* Apply a base font using system fonts */
 .modal {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
-  display: flex;
+  /* Modern background: semi-transparent black */
+  background-color: rgba(0, 0, 0, 0.5);
+  /* Always display: flex; Angular's *ngIf will add/remove from DOM */
+  display: flex; 
   align-items: center;
   justify-content: center;
   z-index: 9999;
+  /* Removed opacity, visibility, transition, backdrop-filter */
+  /* System font stack for modern look */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
+
+/* Removed the .modal.visible rule */
 
 .modal-content {
   position: relative;
-   background: white;
-    border-radius: 6px;
-    box-shadow: 0 0 8px rgb(0 0 0 / 0.1);
-    padding: 1rem;
-    overflow-y: auto;
+  background: #ffffff;
+  /* Increased border-radius for a softer look */
+  border-radius: 12px;
+  /* Modern shadow */
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  /* Increased padding */
+  padding: 2rem;
+  width: 90%;
+  max-width: 550px; /* Limit width */
+  max-height: 90vh; /* Limit height */
+  overflow-y: auto;
+  /* Removed transform and transition */
 }
+
+/* --- Rest of the styles remain the same as the stable version --- */
 
 .close {
   position: absolute;
-  right: 15px;
-  top: 10px;
-  font-size: 28px;
-  color: #333;
-  cursor: pointer;
-}
-
-
-
-label {
-  margin-top: 10px;
-  font-weight: bold;
-}
-
-input {
-  padding: 8px;
-  margin-top: 5px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-}
-
-.button-group {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
-button[type="submit"],
-button[type="button"] {
-  padding: 8px 16px;
+  top: 1rem;
+  right: 1rem;
+  background: #f1f5f9;
   border: none;
-  border-radius: 4px;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #64748b;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 
-button[type="submit"] {
-  background-color: #007bff;
+.close:hover {
+  background-color: #e2e8f0;
+  color: #1e293b;
+  transform: rotate(90deg);
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  margin-bottom: 1.8rem;
+  color: #111827;
+  font-size: 1.6rem;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.modal-content form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin-bottom: 0;
+}
+
+.modal-content label {
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: -0.6rem;
+  display: block;
+  font-size: 0.9rem;
+}
+
+.modal-content input[type="text"],
+.modal-content textarea {
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background-color: #fff;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  color: #1f2937;
+}
+
+.modal-content input[type="text"]::placeholder,
+.modal-content textarea::placeholder {
+  color: #9ca3af;
+}
+
+.modal-content input[type="text"]:focus,
+.modal-content textarea:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+  outline: none;
+}
+
+.modal-content textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+.modal-content button[type="submit"] {
+  background: linear-gradient(to right, #4f46e5, #7c3aed);
   color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.1s ease, box-shadow 0.2s ease;
+  margin-top: 1.5rem;
+  box-shadow: 0 3px 6px rgba(79, 70, 229, 0.2);
+  width: 100%;
+  box-sizing: border-box;
 }
 
-button[type="button"] {
-  background-color: #ccc;
+.modal-content button[type="submit"]:hover {
+  background: linear-gradient(to right, #4338ca, #6d28d9);
+  box-shadow: 0 5px 10px rgba(79, 70, 229, 0.3);
 }
 
-
-
-
-
-
-
- 
-
- 
-  /* Colonnes */
- 
-/* Colonnes avec même taille */
-#user-stories,
-#backlog,
-#sprints {
-  width: 330px; /* Valeur à ajuster selon ton design */
-  flex-shrink: 0;
+.modal-content button[type="submit"]:active {
+  transform: scale(0.98);
+  box-shadow: 0 2px 4px rgba(79, 70, 229, 0.2);
 }
 
-  h2 {
-    margin-top: 0;
-    margin-bottom: 0.8rem;
-    color: #003366;
-  }
+.modal-content button[type="button"] {
+  background-color: #e5e7eb;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 0.5rem;
+}
 
-  /* Formulaire user story */
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-  }
-  input[type="text"], select, textarea {
-    padding: 0.4rem;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  textarea {
-    resize: vertical;
-    min-height: 60px;
-  }
-  button {
-    background: #003366;
-    color: white;
-    border: none;
-    padding: 0.6rem;
-    font-size: 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  button:hover {
-    background: #0055a3;
-  }
+.modal-content button[type="button"]:hover {
+  background-color: #d1d5db;
+  border-color: #9ca3af;
+}
 
+.modal-content #user-stories,
+.modal-content #backlog,
+.modal-content #sprints {
+  width: auto;
+  flex-shrink: 1;
+}
 
-
- 
-
-  /* Scrollbar custom */
-  section::-webkit-scrollbar {
-    width: 8px;
-  }
-  section::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 4px;
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+.modal-content::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 8px;
+}
+.modal-content::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 8px;
+}
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
 
