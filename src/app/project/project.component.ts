@@ -148,7 +148,7 @@ export class ProjectComponent implements OnInit {
     } else {
       alert('Type non pris en charge');
     }
-  }}
+  }
   
   // Propriété pour gérer l'affichage de la description complète
 

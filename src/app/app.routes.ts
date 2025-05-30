@@ -18,16 +18,12 @@ import { SignupComponent } from './signup/signup.component';
 import { TaskComponent } from './task/task.component';
 import { TaskDetailsComponent } from './task-details/task-details.component';
 import { NgModule } from '@angular/core';
-import { QuestionsListComponent } from './questions-list/questions-list.component';
-import { QuestionDetailComponent } from './question-detail/question-detail.component';
-import { CreateQuestionComponent } from './create-question/create-question.component';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { StatistiquesComponent } from './statistique/statistique.component';
 import { ForumComponent } from './forum/forum.component';
 import { AskQuestionComponent } from './ask-question/ask-question.component';
 import { QuestionViewComponent } from './question-details/question-details.component';
-import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 import { BacklogComponent } from './backlog/backlog.component';
 import { DetailsBacklogComponent } from './details-backlog/details-backlog.component';
 export const routes: Routes = [
@@ -167,8 +163,8 @@ export const routes: Routes = [
         component: DetailsBacklogComponent
       },
 
-
-  // Q&A routes
+/*
+  // Q&A routes matching backend API structure
   {
     path: 'questions',
     children: [
@@ -225,9 +221,10 @@ export const routes: Routes = [
       //     }
       //   ]
       // },
-      
+     
     ]
   }
+      */
 ];
 
 

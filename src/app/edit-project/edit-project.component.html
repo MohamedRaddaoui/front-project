@@ -11,7 +11,7 @@
         <div class="content-header">
           <h1 class="content-title">Edit project</h1>
         </div>
-<form [formGroup]="formProject"  (ngSubmit)="updateProject()"> 
+<form *ngIf="project" [formGroup]="formProject"  (ngSubmit)="updateProject()"> 
   <div class="form-container">
     <!-- Première ligne -->
     <div class="form-row first-row">
