@@ -46,9 +46,10 @@
                                         </button>
                                         <button *ngIf="isEditMode || isCreateMode" 
                                                 class="btn btn-primary" 
-                                                (click)="onSubmit()">
-                                            <i class="fas fa-save"></i>
-                                            Save
+                                                (click)="onSubmit()"
+                                                [disabled]="isTaskUpdating">
+                                            <i class="fas" [class.fa-spinner]="isTaskUpdating" [class.fa-spin]="isTaskUpdating" [class.fa-save]="!isTaskUpdating"></i>
+                                            {{ isTaskUpdating ? 'Saving...' : 'Save' }}
                                         </button>
                                         <button *ngIf="(isEditMode || !isCreateMode) && authService.canDeleteTask(task.userId)" 
                                                 class="btn btn-danger" 
@@ -183,9 +184,9 @@
                                                                 </button>
                                                                 <button type="submit" 
                                                                         class="btn-submit"
-                                                                        [disabled]="!newComment.text.trim()">
-                                                                    <i class="fas fa-paper-plane"></i>
-                                                                    Submit
+                                                                        [disabled]="!newComment.text.trim() || isCommentLoading">
+                                                                    <i class="fas" [class.fa-spinner]="isCommentLoading" [class.fa-spin]="isCommentLoading" [class.fa-paper-plane]="!isCommentLoading"></i>
+                                                                    {{ isCommentLoading ? 'Submitting...' : 'Submit' }}
                                                                 </button>
                                                             </div>
                                                         </div>
@@ -254,9 +255,9 @@
                                                                     <button type="button" 
                                                                             class="btn-submit"
                                                                             (click)="updateComment(editingComment)"
-                                                                            [disabled]="!editingComment.editText.trim()">
-                                                                        <i class="fas fa-check"></i>
-                                                                        Save
+                                                                            [disabled]="!editingComment.editText.trim() || isCommentUpdating[editingComment._id]">
+                                                                        <i class="fas" [class.fa-spinner]="isCommentUpdating[editingComment._id]" [class.fa-spin]="isCommentUpdating[editingComment._id]" [class.fa-check]="!isCommentUpdating[editingComment._id]"></i>
+                                                                        {{ isCommentUpdating[editingComment._id] ? 'Saving...' : 'Save' }}
                                                                     </button>
                                                                 </div>
                                                             </div>
@@ -407,6 +408,14 @@
                 Delete
             </button>
         </div>
+    </div>
+</div>
+
+<!-- Add a loading overlay for the entire task when updating -->
+<div class="loading-overlay" *ngIf="isTaskUpdating">
+    <div class="loading-spinner">
+        <i class="fas fa-spinner fa-spin"></i>
+        <span>Updating task...</span>
     </div>
 </div>
 

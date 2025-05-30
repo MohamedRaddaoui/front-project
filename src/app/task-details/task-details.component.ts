@@ -47,6 +47,9 @@ export class TaskDetailsComponent implements OnInit {
   activeTab: 'comments' | 'history' = 'comments';
   // Pour utilisation future avec l'authentification
   // currentUserId: string = '';
+  isTaskUpdating: boolean = false;
+  isCommentLoading: boolean = false;
+  isCommentUpdating: { [key: string]: boolean } = {};
 
   constructor(
     private route: ActivatedRoute,
@@ -153,6 +156,7 @@ export class TaskDetailsComponent implements OnInit {
         this.errorMessage = 'Vous n\'avez pas la permission d\'ajouter une nouvelle tâche';
         return;
       }
+      this.isTaskUpdating = true;
       this.taskService.createTask(this.task).subscribe({
         next: (response) => {
           console.log('Task created:', response);
@@ -161,6 +165,9 @@ export class TaskDetailsComponent implements OnInit {
         error: (error) => {
           this.errorMessage = error.error.message || 'Error creating task';
           console.error('Error creating task:', error);
+        },
+        complete: () => {
+          this.isTaskUpdating = false;
         }
       });
     } else {
@@ -196,6 +203,7 @@ export class TaskDetailsComponent implements OnInit {
         taskUpdate.dueDate = this.task.dueDate;
       }
 
+      this.isTaskUpdating = true;
       this.taskService.updateTask(this.task._id, taskUpdate).subscribe({
         next: (response) => {
           console.log('Task updated:', response);
@@ -205,6 +213,9 @@ export class TaskDetailsComponent implements OnInit {
         error: (error) => {
           this.errorMessage = error.error.message || 'Error updating task';
           console.error('Error updating task:', error);
+        },
+        complete: () => {
+          this.isTaskUpdating = false;
         }
       });
     }
@@ -246,6 +257,7 @@ export class TaskDetailsComponent implements OnInit {
         formData.append('attachments', file);
       });
 
+      this.isCommentLoading = true;
       this.commentService.addComment(formData).subscribe({
         next: (response) => {
           if (response.isFlagged) {
@@ -262,6 +274,9 @@ export class TaskDetailsComponent implements OnInit {
         error: (error) => {
           this.errorMessage = error.error.message || 'Error adding comment';
           console.error('Error adding comment:', error);
+        },
+        complete: () => {
+          this.isCommentLoading = false;
         }
       });
     } else if (!this.task.assignedUser) {
@@ -292,11 +307,7 @@ export class TaskDetailsComponent implements OnInit {
       userId: this.authService.getCurrentUserId()
     };
 
-    console.log('Updating comment:', {
-      commentId: comment._id,
-      data: updatedComment
-    });
-
+    this.isCommentUpdating[comment._id] = true;
     this.commentService.updateComment(comment._id, updatedComment).subscribe({
       next: (response) => {
         console.log('Comment updated successfully:', response);
@@ -306,6 +317,9 @@ export class TaskDetailsComponent implements OnInit {
       error: (error) => {
         console.error('Error updating comment:', error);
         this.errorMessage = error.error?.message || 'Error updating comment';
+      },
+      complete: () => {
+        this.isCommentUpdating[comment._id] = false;
       }
     });
   }
