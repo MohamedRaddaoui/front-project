@@ -105,6 +105,8 @@ export class TaskComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.authService.getCurrentUserId();
+    console.log('Current user ID:', this.authService.getCurrentUserId());
     this.loadProjects();
     this.loadUsers();
     this.performRefresh();
@@ -361,10 +363,14 @@ export class TaskComponent implements OnInit {
   }
 
   onDragStart(event: DragEvent, task: any) {
+    if (!this.authService.canModifyTask(task.idAssigned)) {
+      event.preventDefault();
+      return;
+    }
     this.draggedTask = task;
     if (event.dataTransfer) {
-      event.dataTransfer.effectAllowed = 'move';
       event.dataTransfer.setData('text/plain', task.Id);
+      event.dataTransfer.effectAllowed = 'move';
     }
     const element = event.target as HTMLElement;
     element.classList.add('dragging');
@@ -383,6 +389,11 @@ export class TaskComponent implements OnInit {
     element.classList.remove('drag-over');
 
     if (this.draggedTask && this.draggedTask.Status !== newStatus) {
+      if (!this.authService.canModifyTask(this.draggedTask.idAssigned)) {
+        console.error('User does not have permission to modify this task');
+        return;
+      }
+
       this.loadingTaskId = this.draggedTask.Id;
 
       const updatedTask = {

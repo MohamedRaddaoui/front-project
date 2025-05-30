@@ -135,7 +135,7 @@ export class TaskDetailsComponent implements OnInit {
   }
 
   onEdit() {
-    if (!this.authService.canEditTask(this.task.userId)) {
+    if (!this.authService.canModifyTask(this.task.assignedUser)) {
       this.errorMessage = 'Vous n\'avez pas la permission de modifier cette tâche';
       return;
     }
@@ -173,7 +173,7 @@ export class TaskDetailsComponent implements OnInit {
         }
       });
     } else {
-      if (!this.authService.canEditTask(this.task.userId)) {
+      if (!this.authService.canModifyTask(this.task.assignedUser)) {
         this.errorMessage = 'Vous n\'avez pas la permission de modifier cette tâche';
         return;
       }
@@ -225,7 +225,7 @@ export class TaskDetailsComponent implements OnInit {
   }
 
   onDelete() {
-    if (!this.authService.canDeleteTask(this.task.userId)) {
+    if (!this.authService.canModifyTask(this.task.assignedUser)) {
       this.errorMessage = 'Vous n\'avez pas la permission de supprimer cette tâche';
       return;
     }
@@ -233,7 +233,7 @@ export class TaskDetailsComponent implements OnInit {
   }
 
   confirmDelete() {
-    if (!this.authService.canDeleteTask(this.task.userId)) {
+    if (!this.authService.canModifyTask(this.task.assignedUser)) {
       this.errorMessage = 'Vous n\'avez pas la permission de supprimer cette tâche';
       return;
     }
