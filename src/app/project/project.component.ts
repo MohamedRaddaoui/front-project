@@ -58,54 +58,52 @@ export class ProjectComponent {
 
   ngOnInit() {
   this.route.queryParams.subscribe(params => {
-    this.successMessage = params['message'] || null;
+    this.successMessage = params["message"] || null;
+    // Determine the desired archived status from the route parameter
+    const filterArchived = params["archived"] === "true";
+    // Load and filter projects based on the status
+    this.loadAndFilterProjects(filterArchived);
 
-    const isArchived = params['archived'] === 'true'; // ← récupère le paramètre
-    if (isArchived) {
-      this.loadArchivedProjects();
-    } else {
-      this.loadProjects();
-    }
-
+    // Handle success message display
     if (this.successMessage) {
       setTimeout(() => {
         this.successMessage = null;
-      }, 3000);
+      }, 3000); // 3 seconds
     }
   });
 }
 
-
-  
-  loadProjects() {
-    this.projectService.getProjectByUser(this.userId).subscribe((projects) => {
-      this.listProject = projects;
-      console.log(this.listProject);
-      this.totalPages = Math.ceil(
-        this.listProject.length / this.projectsPerPage
-      );
-      this.totalPagesArray = Array.from(
-        { length: this.totalPages },
-        (_, i) => i + 1
-      );
-      this.updatePaginatedProjects();
-    });
+// Load and filter projects based on archived status
+loadAndFilterProjects(filterArchived: boolean) {
+  if (!this.userId) {
+    console.error("User ID is missing, cannot load projects.");
+    // Optionally handle this case, e.g., redirect to login or show an error
+    return;
   }
+  this.projectService.getProjectByUser(this.userId).subscribe({
+    next: (projects: Project[]) => {
+      // Filter the projects based on the archived status
+      // Assumes projects without an "archived" property are not archived (false)
+      this.listProject = projects.filter(project => (project.archived || false) === filterArchived);
 
+      console.log(`Loaded ${filterArchived ? "archived" : "active"} projects:`, this.listProject);
 
-  loadArchivedProjects() {
-  this.projectService.ArchiveProjectByUser().subscribe((projects) => {
-      this.listProject = projects;
-      console.log(this.listProject);
-      this.totalPages = Math.ceil(
-        this.listProject.length / this.projectsPerPage
-      );
-      this.totalPagesArray = Array.from(
-        { length: this.totalPages },
-        (_, i) => i + 1
-      );
+      // Update pagination based on the filtered list
+      this.totalPages = Math.ceil(this.listProject.length / this.projectsPerPage);
+      this.totalPagesArray = Array.from({ length: this.totalPages }, (_, i) => i + 1);
+      // Reset to page 1 when the filter changes or data reloads
+      this.currentPage = 1;
       this.updatePaginatedProjects();
-    });
+    },
+    error: (err) => {
+      console.error("Error loading projects:", err);
+      this.listProject = []; // Clear list on error
+      this.totalPages = 1;
+      this.totalPagesArray = []; // Clear pages array
+      this.updatePaginatedProjects(); // Update view with empty list
+      // Optionally show an error message to the user
+    }
+  });
 }
 
 
@@ -119,9 +117,9 @@ export class ProjectComponent {
     project.showFullDescription = false;
     
     // Initialiser l'état pour l'affichage des utilisateurs
-    if (project.id !== undefined && project.id !== null) {
-  if (!this.projectUsersExpandedState.has(project.id)) {
-    this.projectUsersExpandedState.set(project.id, false);
+    if (project._id !== undefined && project._id !== null) {
+  if (!this.projectUsersExpandedState.has(project._id)) {
+    this.projectUsersExpandedState.set(project._id, false);
   }
 }
   });

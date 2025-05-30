@@ -21,7 +21,7 @@
 
 /* Petite flèche sous le tooltip */
 .team-avatar:hover::before {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 100%;
   left: 50%;
@@ -92,13 +92,13 @@
 .close {
   position: absolute;
   right: 12px; /* Ajusté pour un meilleur placement */
-   /* Ajusté pour un meilleur placement */
+  top: 12px; /* Ajusté pour un meilleur placement */
   font-size: 24px;
   font-weight: 300;
   color: #7f8c8d; /* Valeur de --close-button-color */
   cursor: pointer;
   transition: color 0.2s ease;
-  z-index: 0; /* Assurer qu'il est au-dessus */
+  z-index: 1; /* Assurer qu'il est au-dessus */
 }
 
 .close:hover {
@@ -122,6 +122,13 @@ form {
   gap: 16px;
 }
 
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #34495e; /* Slightly darker label */
+}
+
 input,
 select {
   padding: 10px 12px;
@@ -129,8 +136,8 @@ select {
   border: 1.5px solid #bdc3c7; /* Valeur de --input-border-color */
   font-size: 14px; /* Valeur de --base-font-size */
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; /* Valeur de --font-family */
-  flex: 1;
-  min-width: 120px;
+  width: 100%; /* Use full width */
+  box-sizing: border-box; /* Include padding and border in width */
   background-color: rgba(255, 255, 255, 0.8);
   color: #2c3e50; /* Valeur de --text-color */
   transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
@@ -171,19 +178,112 @@ button[type="submit"] {
   cursor: pointer;
   transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
   box-shadow: 0 4px 10px rgba(106, 141, 146, 0.3);
+  margin-top: 8px; /* Add some space above the button */
 }
 
-button[type="submit"]:hover {
+button[type="submit"]:hover:not(:disabled) {
   background: #537075; /* Valeur de --primary-color-hover */
   box-shadow: 0 6px 15px rgba(83, 112, 117, 0.4);
   transform: translateY(-2px);
 }
 
-button[type="submit"]:active {
+button[type="submit"]:active:not(:disabled) {
   transform: translateY(0px);
   box-shadow: 0 3px 8px rgba(83, 112, 117, 0.3);
 }
 
+button[type="submit"]:disabled {
+  background-color: #bdc3c7; /* Lighter grey for disabled */
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
 
+/* --- Autocomplete Styles --- */
+.autocomplete-container {
+  position: relative; /* Needed for absolute positioning of suggestions */
+}
 
+.suggestions-list {
+  position: absolute;
+  top: calc(100% + 4px); /* Position below the input with a small gap */
+  left: 0;
+  right: 0;
+  background-color: #ffffff; /* White background */
+  border: 1px solid #dfe4ea; /* Light border */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12); /* Subtle shadow */
+  list-style: none;
+  padding: 6px 0;
+  margin: 0;
+  max-height: 150px; /* Limit height and enable scroll */
+  overflow-y: auto;
+  z-index: 1001; /* Ensure it's above other elements */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-5px);
+  transition: opacity 0.2s ease-out, transform 0.2s ease-out, visibility 0s 0.2s;
+}
+
+/* Show suggestions when needed */
+.suggestions-list:has(li) { /* Using :has() for modern browsers, fallback might be needed */
+  /* Or use a class added via TS if :has() is not supported enough */
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: opacity 0.2s ease-out, transform 0.2s ease-out, visibility 0s 0s;
+}
+
+.suggestions-list li {
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #34495e;
+  transition: background-color 0.15s ease;
+}
+
+.suggestions-list li:hover {
+  background-color: #f8f9fa; /* Very light grey on hover */
+  color: #2c3e50;
+}
+
+.suggestions-list li:not(:last-child) {
+  border-bottom: 1px solid #ecf0f1; /* Separator line */
+}
+
+/* Style for loading indicator */
+.loading-indicator {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background-color: #ffffff;
+  border: 1px solid #dfe4ea;
+  border-radius: 8px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+  padding: 10px 14px;
+  font-size: 14px;
+  color: #7f8c8d;
+  text-align: center;
+  z-index: 1001;
+}
+
+/* Custom scrollbar for suggestions (optional) */
+.suggestions-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.suggestions-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 8px;
+}
+
+.suggestions-list::-webkit-scrollbar-thumb {
+  background: #bdc3c7;
+  border-radius: 8px;
+}
+
+.suggestions-list::-webkit-scrollbar-thumb:hover {
+  background: #95a5a6;
+}
 

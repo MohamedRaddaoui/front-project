@@ -1,0 +1,269 @@
+<app-nav-bar></app-nav-bar>
+<div class="app-container">
+    <div class="main-container">
+        <app-side-bar></app-side-bar>
+        <div class="backlog-container">
+
+            <!-- l'édition d'un backlog -->
+            <div class="edit-backlog-container">
+                <!-- ... (Header and Form content remains the same) ... -->
+                <div class="edit-header">
+                    <div class="">
+                        <div class="header-title">
+                            <div class="orange-bar"></div>
+                            <h1>UPDATE<span class="orange-text">BACKLOG</span></h1>
+                        </div>
+                        <div class="header-actions">
+                            <button class="action-button cancel-button" (click)="cancelEdit()">Annuler</button>
+                            <button class="action-button save-button" (click)="saveBacklog()" [disabled]="!backlogForm.valid">Enregistrer</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="edit-content">
+                    <form [formGroup]="backlogForm" class="backlog-form">
+                        <div class="form-grid">
+                            <!-- Colonne de gauche -->
+                            <div class="form-column">
+                                <div class="form-section">
+                                    <h2>Informations générales</h2>
+
+                                    <div class="form-group">
+                                        <label for="title">Titre du backlog</label>
+                                        <input type="text" id="title" formControlName="title" class="form-control" placeholder="Entrez un titre descriptif">
+                                        <div class="form-error" *ngIf="backlogForm.get('title')?.invalid && backlogForm.get('title')?.touched">
+                                            Le titre est requis
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="description">Description</label>
+                                        <textarea id="description" formControlName="description" class="form-control textarea" placeholder="Décrivez l'objectif de ce backlog" rows="5"></textarea>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="project">Projet associé</label>
+                                        <select id="project" formControlName="projectID" class="form-control">
+                                            <option [ngValue]="null" disabled>Sélectionnez un projet</option>
+                                            <option *ngFor="let project of projects" [ngValue]="project">{{ project.title }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Colonne de droite -->
+                            <div class="form-column">
+                                <div class="form-section">
+                                    <div class="section-header">
+                                        <h2>User Stories</h2>
+                                        <!-- <button type="button" class="action-button add-button" (click)="openAddStoryModal()">
+                                            <i class="fas fa-plus"></i> Ajouter
+                                        </button> -->
+                                    </div>
+
+                                    <div class="stories-list">
+                                        <div class="story-item" *ngFor="let story of userStories; let i = index" [class.selected]="selectedStoryIndex === i" (click)="selectStory(i)">
+                                            <div class="story-drag-handle">
+                                                <i class="fas fa-grip-lines"></i>
+                                            </div>
+                                            <div class="story-content">
+                                                <div class="story-header">
+                                                    <h3 class="story-title">{{ story.title }}</h3>
+                                                    <div class="story-points">{{ story.storyPoints }} pts</div>
+                                                </div>
+                                                <p class="story-description">{{ story.description }}</p>
+                                                <!-- Afficher l'utilisateur assigné si présent -->
+                                                <div *ngIf="story.assignedTo" class="assigned-user-info">
+                                                    <i class="fas fa-user"></i> Assigné à: {{ getUserById(story.assignedTo)?.firstname || 'Utilisateur inconnu' }}
+                                                </div>
+                                            </div>
+                                            <div class="story-actions">
+                                                <button type="button" class="icon-button assign-button" (click)="openAssignUserModal(i, $event)" title="Assigner un utilisateur">
+                                                    <i class="fas fa-user-plus"></i>
+                                                </button>
+                                                <button type="button" class="icon-button edit-button" (click)="editStory(i, $event)" title="Modifier">
+                                                    <i class="fas fa-pencil-alt"></i>
+                                                </button>
+                                                <button type="button" class="icon-button delete-button" (click)="removeStory(i, $event)" title="Supprimer">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div class="empty-stories" *ngIf="!userStories || userStories.length === 0">
+                                            <div class="empty-icon">📋</div>
+                                            <p>Aucune user story n'est associée à ce backlog</p>
+                                            <!-- <button type="button" class="action-button add-button" (click)="openAddStoryModal()">
+                                                Ajouter une user story
+                                            </button> -->
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-section">
+                                    <h2>Résumé</h2>
+                                    <div class="summary-stats">
+                                        <div class="stat-card">
+                                            <div class="stat-value">{{ userStories?.length || 0 }}</div>
+                                            <div class="stat-label">User Stories</div>
+                                        </div>
+                                        <div class="stat-card">
+                                            <div class="stat-value">{{ getTotalPoints() }}</div>
+                                            <div class="stat-label">Points</div>
+                                        </div>
+                                        <div class="stat-card">
+                                            <div class="stat-value">{{ getCompletionPercentage() }}%</div>
+                                            <div class="stat-label">Complété</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- <div class="edit-footer">
+                    <div class="footer-info">
+                        <span>Dernière modification: </span>
+                    </div>
+                    <div class="footer-actions">
+                        <button class="action-button cancel-button" (click)="cancelEdit()">Annuler</button>
+                        <button class="action-button save-button" (click)="saveBacklog()" [disabled]="!backlogForm.valid">Enregistrer</button>
+                    </div>
+                </div> -->
+            </div>
+
+            <!-- Modal pour ajouter/éditer une user story -->
+            <div class="modal-overlay" *ngIf="showStoryModal">
+                <!-- ... (Modal content remains the same) ... -->
+                 <div class="modal-container">
+                    <div class="modal-header">
+                        <h2>{{ editingStoryIndex !== null ? 'Modifier' : 'Ajouter' }} une User Story</h2>
+                        <button class="close-button" (click)="closeStoryModal()">×</button>
+                    </div>
+                    <div class="modal-content">
+                        <form [formGroup]="storyForm">
+                            <div class="form-group">
+                                <label for="story-title">Titre</label>
+                                <input type="text" id="story-title" formControlName="title" class="form-control" placeholder="Titre de la user story">
+                                <div class="form-error" *ngIf="storyForm.get('title')?.invalid && storyForm.get('title')?.touched">
+                                    Le titre est requis
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="story-description">Description</label>
+                                <textarea id="story-description" formControlName="description" class="form-control textarea" placeholder="En tant que... je veux... afin de..."></textarea>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group half">
+                                    <label for="story-points">Points</label>
+                                    <input type="number" id="story-points" formControlName="storyPoints" class="form-control" min="0" step="1">
+                                </div>
+
+                                <div class="form-group half">
+                                    <label for="story-status">Statut</label>
+                                    <select id="story-status" formControlName="status" class="form-control">
+                                        <option value="To Do">À faire</option>
+                                        <option value="in-progress">En cours</option>
+                                        <option value="completed">Terminé</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="action-button cancel-button" (click)="closeStoryModal()">Annuler</button>
+                        <!-- <button class="action-button save-button" (click)="saveStory()" [disabled]="!storyForm.valid">
+                            {{ editingStoryIndex !== null ? 'Mettre à jour' : 'Ajouter' }}
+                        </button> -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- === MODAL ASSIGNATION UTILISATEUR (MODIFIÉ POUR ASSIGNATION UNIQUE) === -->
+            <div class="modal-overlay" *ngIf="showAssignModal">
+                <div class="modal-container assign-modal">
+                    <div class="modal-header">
+                        <h2>Assigner un utilisateur</h2>
+                        <button class="close-button" (click)="closeAssignModal()">×</button>
+                    </div>
+                    <div class="modal-content">
+                        <div class="assign-content">
+                            <!-- Afficher l'utilisateur actuellement assigné -->
+                            <div class="currently-assigned" *ngIf="currentlyAssignedUserId">
+                                <h3>Actuellement assigné</h3>
+                                <div class="user-item assigned">
+                                    <div class="user-info">
+                                        <div class="user-avatar">{{ getUserById(currentlyAssignedUserId)?.firstname?.charAt(0) || '?' }}</div>
+                                        <div class="user-details">
+                                            <div class="user-name">{{ getUserById(currentlyAssignedUserId)?.firstname || 'Utilisateur inconnu' }}</div>
+                                            <div class="user-email">{{ getUserById(currentlyAssignedUserId)?.email }}</div>
+                                        </div>
+                                    </div>
+                                    <button class="icon-button remove-button" (click)="unassignUser()" title="Désassigner">
+                                        <i class="fas fa-user-minus"></i> Désassigner
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="currently-assigned" *ngIf="!currentlyAssignedUserId">
+                                <p>Aucun utilisateur n'est actuellement assigné.</p>
+                            </div>
+
+                            <hr *ngIf="currentlyAssignedUserId">
+
+                            <!-- Liste des utilisateurs disponibles -->
+                            <h3>Utilisateurs disponibles</h3>
+                            <div class="search-box">
+                                <!-- <input type="text" placeholder="Rechercher un utilisateur..." class="form-control"> -->
+                                <!-- Logique de recherche à implémenter si nécessaire -->
+                            </div>
+                            <div class="users-list available-users single-assign">
+                                <div class="user-item" *ngFor="let user of availableUsers" [class.assigned]="isCurrentUserAssigned(user._id)">
+                                    <div class="user-info">
+                                        <div class="user-avatar">{{ user.firstname.charAt(0) }}</div>
+                                        <div class="user-details">
+                                            <div class="user-name">{{ user.firstname }}</div>
+                                            <div class="user-email">{{ user.email }}</div>
+                                        </div>
+                                    </div>
+                                    <!-- Bouton pour assigner cet utilisateur (s'il n'est pas déjà assigné) -->
+                                    <button 
+                                        *ngIf="!isCurrentUserAssigned(user._id)" 
+                                        class="icon-button add-button" 
+                                        (click)="assignUser(user._id)" 
+                                        title="Assigner cet utilisateur">
+                                        <i class="fas fa-user-plus"></i> Assigner
+                                    </button>
+                                    <!-- Indication si l'utilisateur est déjà assigné -->
+                                    <span *ngIf="isCurrentUserAssigned(user._id)" class="assigned-indicator">
+                                        <i class="fas fa-check-circle"></i> Assigné
+                                    </span>
+                                </div>
+                                <div class="empty-list" *ngIf="availableUsers.length === 0">
+                                    <p>Aucun utilisateur disponible</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="action-button save-button" (click)="closeAssignModal()">Terminer</button>
+                    </div>
+                </div>
+            </div>
+            <!-- === FIN MODAL ASSIGNATION === -->
+
+            <!-- === COMPOSANT DE CONFIRMATION DE SUPPRESSION === -->
+            <app-delete-project 
+                [visible]="showDeleteConfirmation" 
+                [title]="deleteConfirmationTitle" 
+                [message]="deleteConfirmationMessage" 
+                (onConfirm)="confirmDeleteStory()" 
+                (onCancel)="cancelDeleteStory()">
+            </app-delete-project>
+            <!-- === FIN DE L'AJOUT === -->
+
+        </div>
+    </div>
+</div>

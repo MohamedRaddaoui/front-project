@@ -32,6 +32,8 @@ import { CreateQuestionComponent } from './create-question/create-question.compo
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 import { BacklogComponent } from './backlog/backlog.component';
 import { DetailsBacklogComponent } from './details-backlog/details-backlog.component';
+import { EditBacklogComponent } from './edit-backlog/edit-backlog.component';
+import { DetailSprintComponent } from './detail-sprint/detail-sprint.component';
 
 export const routes: Routes = [
   {
@@ -141,7 +143,17 @@ export const routes: Routes = [
   {
         path: 'backlogDtails/:id',
         component: DetailsBacklogComponent
-      },
+       },
+
+        {
+        path: 'backlogUpdate/:id',
+        component: EditBacklogComponent
+       },
+
+       {
+        path: 'sprintDtails/:id',
+        component: DetailSprintComponent
+       },
 
 
   // Q&A routes matching backend API structure

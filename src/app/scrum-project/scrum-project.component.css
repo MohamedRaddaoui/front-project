@@ -318,7 +318,7 @@ header p {
 
 /* Tasks section styles */
 .tasks-container {
-  background-color: rgb(240, 252, 252);
+  background-color:  rgb(245 249 249);
   display: flex;
   flex-direction: column;
   gap: 30px;
