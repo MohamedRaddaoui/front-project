@@ -1,0 +1,161 @@
+<app-nav-bar></app-nav-bar>
+<div class="event-page">
+  <div class="hero-section">
+    <div class="particles"></div>
+    <div class="gradient-overlay"></div>
+    <div class="container hero-content">
+      <h1 class="event-title animate-fade-in" *ngIf="event">{{ event.title }}</h1>
+      <div class="countdown-container animate-fade-in" *ngIf="event">
+        <div class="countdown-boxes">
+          <div class="countdown-box">
+            <span class="number">{{ countdownValues.days }}</span>
+            <span class="label">Days</span>
+          </div>
+          <div class="countdown-box">
+            <span class="number">{{ countdownValues.hours }}</span>
+            <span class="label">Hours</span>
+          </div>
+          <div class="countdown-box">
+            <span class="number">{{ countdownValues.minutes }}</span>
+            <span class="label">Minutes</span>
+          </div>
+          <div class="countdown-box">
+            <span class="number">{{ countdownValues.seconds }}</span>
+            <span class="label">Seconds</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="event-details-section">
+    <div class="container">
+      <div class="event-grid">
+        <mat-card class="event-card main-details animate-fade-in">
+          <mat-card-header>
+            <mat-icon class="header-icon">event</mat-icon>
+            <mat-card-title>Event Details</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="detail-item">
+              <mat-icon>calendar_today</mat-icon>
+              <div class="detail-content">
+                <label>Date</label>
+                <p>{{ event?.date ? (event?.date?.toString() | date:'fullDate') : '' }}</p>
+              </div>
+            </div>
+            <div class="detail-item">
+              <mat-icon>schedule</mat-icon>
+              <div class="detail-content">
+                <label>Time</label>
+                <p>
+                  {{ event?.startTime != null ? (event?.startTime?.toString() | date:'shortTime') : '' }}
+                  -
+                  {{ event?.endTime != null ? (event?.endTime?.toString() | date:'shortTime') : '' }}
+                </p>
+              </div>
+            </div>
+            <div class="detail-item">
+              <mat-icon>location_on</mat-icon>
+              <div class="detail-content">
+                <label>Location</label>
+                <p>
+                  {{ event?.location || 'TBD' }}
+                  <a *ngIf="event?.location" 
+                     [href]="event?.location ? getGoogleMapsLink(event?.location || '') : null" 
+                     target="_blank"
+                     class="maps-link">
+                    <mat-icon>map</mat-icon>
+                    View on Maps
+                  </a>
+                </p>
+              </div>
+            </div>
+            <div class="detail-item">
+              <mat-icon>category</mat-icon>
+              <div class="detail-content">
+                <label>Type</label>
+                <p>{{ event?.type }}</p>
+              </div>
+            </div>
+            <div class="detail-item">
+              <mat-icon>visibility</mat-icon>
+              <div class="detail-content">
+                <label>Visibility</label>
+                <p>{{ event?.visibility || 'Private' }}</p>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="event-card status-card animate-fade-in">
+          <mat-card-content>
+            <div class="status-indicator" [ngStyle]="{'color': getStatusColor(event?.status)}">
+              <mat-icon>{{ getStatusIcon(event?.status) }}</mat-icon>
+              <span>{{ event?.status || 'Unknown' }}</span>
+            </div>
+            <div class="register-container">
+              <button *ngIf="shouldShowRegisterButton()"
+                      mat-raised-button 
+                      class="register-button" 
+                      (click)="registerForEvent()">
+                <span class="button-content">
+                  <span class="register-text">Register Now</span>
+                  <mat-icon class="register-icon">arrow_forward</mat-icon>
+                </span>
+                <div class="button-background"></div>
+              </button>
+
+              <!-- Show registered button if user is already registered -->
+              <button *ngIf="isRegistered"
+                      mat-raised-button 
+                      class="register-button registered" 
+                      disabled>
+                <span class="button-content">
+                  <span class="register-text">Registered</span>
+                  <mat-icon class="register-icon">how_to_reg</mat-icon>
+                </span>
+              </button>
+
+              <!-- Show status messages -->
+              <p class="status-message" *ngIf="!hasAvailableSpots() && !isRegistered">
+                <mat-icon>error_outline</mat-icon>
+                No available spots for this event
+              </p>
+              <p class="status-message" *ngIf="!userId">
+                <mat-icon>login</mat-icon>
+                Please login to register for this event
+              </p>
+
+              <!-- Show remaining spots if available -->
+              <p class="spots-left" *ngIf="hasAvailableSpots() && !isRegistered">
+                {{ getRemainingSpots() }} spots remaining
+              </p>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="event-card attachments-card animate-fade-in" *ngIf="event?.attachments?.length">
+          <mat-card-header>
+            <mat-icon class="header-icon">attach_file</mat-icon>
+            <mat-card-title>Event Attachments</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <mat-list>
+              <mat-list-item *ngFor="let attachment of event?.attachments">
+                <mat-icon matListIcon [class]="attachment.mimetype.split('/')[0]">
+                  {{ getAttachmentIcon(attachment.mimetype) }}
+                </mat-icon>
+                <span matListItemTitle>{{ attachment.originalname }}</span>
+                <span matListItemLine class="file-type">{{ attachment.mimetype }}</span>
+                <button mat-icon-button color="primary" (click)="downloadAttachment(attachment)">
+                  <mat-icon>download</mat-icon>
+                </button>
+              </mat-list-item>
+            </mat-list>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </section>
+</div>

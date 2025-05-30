@@ -5,7 +5,6 @@ export class User{
   password: String;
   role: String;
   status: String;
-  photo: String ;
   twoFACode:  String;
   twoFACodeExpires: Date;
   photo?:String;
@@ -19,7 +18,6 @@ export class User{
     photo: String,
     twoFACode:  String,
     twoFACodeExpires: Date,
-    photo:String,
   ) {
     this.firstname=firstname;
     this.lastname= lastname;

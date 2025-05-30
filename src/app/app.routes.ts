@@ -15,13 +15,10 @@ import { ResetPasswordComponent } from './resetpassword/resetpassword.component'
 
 import { AdminGuard } from './guards/admin.guard';
 
-
 import { EventdashboardComponent } from './eventdashboard/eventdashboard.component';
 
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
-
-
 
 import { TaskComponent } from './task/task.component';
 import { TaskDetailsComponent } from './task-details/task-details.component';
@@ -30,8 +27,14 @@ import { QuestionsListComponent } from './questions-list/questions-list.componen
 import { CreateQuestionComponent } from './create-question/create-question.component';
 
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
+import { LandingPageComponent } from './landing-page/landing-page.component';
+import { EventPageComponent } from './event-page/event-page.component';
 
 export const routes: Routes = [
+  {
+    path: '',
+    component: LandingPageComponent,
+  },
   {
     path: 'calendar',
     component: CalendarPageComponent,
@@ -43,7 +46,6 @@ export const routes: Routes = [
     component: UserDashboardComponent,
   },
   {
-
     path: 'signup',
     component: SignupComponent,
   },
@@ -98,43 +100,33 @@ export const routes: Routes = [
     component: EventdashboardComponent,
     // canActivate: [AuthGuard, AdminGuard],
   },
-
-
-
+  {
+    path: 'event/:id',
+    component: EventPageComponent,
+  },
   {
     path: 'scrum/:id',
-    component:ScrumProjectComponent,
-   
-
+    component: ScrumProjectComponent,
   },
 
-   {
+  {
     path: 'PO/:id',
-    component:ProductOwnerComponent,
-   
-
+    component: ProductOwnerComponent,
   },
 
   {
     path: 'standard/:id',
-    component:StandardProjectComponent,
-    
-
+    component: StandardProjectComponent,
   },
 
   {
     path: 'delete/:id',
-    component:DeleteProjectComponent,
-    
-
+    component: DeleteProjectComponent,
   },
 
-
-   {
+  {
     path: 'updateProject/:id',
-    component:EditProjectComponent,
-    
-
+    component: EditProjectComponent,
   },
 
   // Q&A routes matching backend API structure
@@ -143,32 +135,28 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        component: QuestionsListComponent
+        component: QuestionsListComponent,
       },
       {
         path: 'create',
-        component: CreateQuestionComponent
+        component: CreateQuestionComponent,
       },
       {
         path: 'search',
-        component: QuestionsListComponent
+        component: QuestionsListComponent,
       },
       {
         path: 'search/tags',
-        component: QuestionsListComponent
+        component: QuestionsListComponent,
       },
       {
         path: 'search/advanced',
-        component: QuestionsListComponent
+        component: QuestionsListComponent,
       },
       {
         path: 'frequent',
-        component: QuestionsListComponent
+        component: QuestionsListComponent,
       },
-      
-    ]
-  }
+    ],
+  },
 ];
-
-
-

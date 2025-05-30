@@ -7,8 +7,15 @@ import { Router } from '@angular/router';
 })
 export class TokenService {
   private jwtHelper = new JwtHelperService();
+  token: any;
+  userId: any;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    this.token = localStorage.getItem('token');
+    if (this.token) {
+      this.userId = this.getUserId();
+    }
+  }
 
   canActivate(): boolean {
     const token = localStorage.getItem('token');
@@ -41,5 +48,17 @@ export class TokenService {
 
   removeToken(): void {
     localStorage.removeItem('token');
+  }
+  getUserId(): string | null {
+    const token = this.getToken();
+    if (!token) {
+      return null;
+    }
+    try {
+      const decodedToken = this.jwtHelper.decodeToken(token);
+      return decodedToken.userId || null;
+    } catch {
+      return null;
+    }
   }
 }
