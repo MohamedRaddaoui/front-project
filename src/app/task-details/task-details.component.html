@@ -283,18 +283,23 @@
                                                     <div *ngFor="let entry of taskHistory" class="history-entry">
                                                         <div class="history-header">
                                                             <div class="user-info">
+                                                                <i class="fas fa-user-edit"></i>
                                                                 <span class="user-name">{{ entry.updatedBy.email }}</span>
                                                                 <span class="timestamp">{{ formatDate(entry.createdAt) }}</span>
                                                             </div>
                                                         </div>
                                                         <div class="changes">
-                                                            <div *ngFor="let field of entry.changes | keyvalue" class="change-item">
-                                                                <div class="field-name">{{ getFieldLabel(field.key) }}</div>
+                                                            <div *ngFor="let change of entry.changes | keyvalue" class="change-item">
+                                                                <div class="field-name">{{ getFieldLabel(change.key) }}</div>
                                                                 <div class="change-details">
                                                                     <div class="old-value">
-                                                                        <span class="value">{{ field.value.oldValue || 'Not set' }}</span>
-                                                                        <span class="arrow">→</span>
-                                                                        <span class="value new">{{ field.value.newValue }}</span>
+                                                                        <span class="label">Ancien :</span>
+                                                                        <span class="value">{{ formatValue(change.value.oldValue) }}</span>
+                                                                    </div>
+                                                                    <div class="arrow">→</div>
+                                                                    <div class="new-value">
+                                                                        <span class="label">Nouveau :</span>
+                                                                        <span class="value">{{ formatValue(change.value.newValue) }}</span>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -302,7 +307,8 @@
                                                     </div>
                                                     
                                                     <div *ngIf="taskHistory.length === 0" class="no-history">
-                                                        No changes have been recorded for this task.
+                                                        <i class="fas fa-history"></i>
+                                                        <p>Aucun historique disponible pour cette tâche.</p>
                                                     </div>
                                                 </div>
                                             </div>

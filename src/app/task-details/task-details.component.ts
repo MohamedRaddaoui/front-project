@@ -372,33 +372,56 @@ export class TaskDetailsComponent implements OnInit {
       this.taskService.getTaskHistory(this.task._id).subscribe({
         next: (history) => {
           this.taskHistory = history;
+          console.log('Loaded task history:', history);
         },
         error: (error) => {
           console.error('Error loading task history:', error);
+          this.errorMessage = 'Failed to load task history';
         }
       });
     }
   }
 
-  getFieldLabel(field: string): string {
+  getFieldLabel(key: string): string {
     const labels: { [key: string]: string } = {
-      title: 'Title',
+      title: 'Titre',
       description: 'Description',
-      status: 'Status',
-      priority: 'Priority',
-      assignedUser: 'Assigned User',
-      dueDate: 'Due Date',
-      tags: 'Tags'
+      status: 'Statut',
+      priority: 'Priorité',
+      assignedUser: 'Assigné à',
+      projectId: 'Projet',
+      tags: 'Tags',
+      dueDate: 'Date d\'échéance'
     };
-    return labels[field] || field;
+    return labels[key] || key;
   }
 
-  formatDate(date: string | Date): string {
-    return new Date(date).toLocaleString();
+  formatDate(date: Date): string {
+    if (!date) return '';
+    const d = new Date(date);
+    return d.toLocaleDateString('fr-FR', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
+
+  formatValue(value: any): string {
+    if (value === null || value === undefined) return 'Non défini';
+    if (typeof value === 'boolean') return value ? 'Oui' : 'Non';
+    if (typeof value === 'object' && value._id) {
+      return value.email || value.name || value.title || value._id;
+    }
+    return String(value);
   }
 
   switchTab(tab: 'comments' | 'history') {
     this.activeTab = tab;
+    if (tab === 'history') {
+      this.loadTaskHistory();
+    }
   }
 
   getDownloadUrl(commentId: string, attachmentId: string): string {
