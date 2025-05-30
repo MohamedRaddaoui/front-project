@@ -27,10 +27,12 @@ import { AskQuestionComponent } from './ask-question/ask-question.component';
 import { QuestionViewComponent } from './question-details/question-details.component';
 import { BacklogComponent } from './backlog/backlog.component';
 import { DetailsBacklogComponent } from './details-backlog/details-backlog.component';
+
 import { EditBacklogComponent } from './edit-backlog/edit-backlog.component';
 import { DetailSprintComponent } from './detail-sprint/detail-sprint.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { EventPageComponent } from './event-page/event-page.component';
+
 
 export const routes: Routes = [
   {
@@ -230,7 +232,7 @@ export const routes: Routes = [
     ],
   },
 ];
-=======
+
       // {
       //   path: ':id',
       //   component: QuestionDetailComponent,
