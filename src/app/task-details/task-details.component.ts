@@ -168,7 +168,35 @@ export class TaskDetailsComponent implements OnInit {
         this.errorMessage = 'Vous n\'avez pas la permission de modifier cette tâche';
         return;
       }
-      this.taskService.updateTask(this.task._id, this.task).subscribe({
+
+      // Create update object with only necessary fields
+      interface TaskUpdate {
+        title: string;
+        description?: string;
+        status: string;
+        priority: string;
+        tags?: string;
+        projectId: string;
+        assignedUser?: string;
+        dueDate?: string;
+      }
+
+      const taskUpdate: TaskUpdate = {
+        title: this.task.title,
+        description: this.task.description,
+        status: this.task.status,
+        priority: this.task.priority,
+        tags: this.task.tags,
+        projectId: this.task.projectId,
+        assignedUser: this.task.assignedUser
+      };
+
+      // Only include dueDate if it exists
+      if (this.task.dueDate) {
+        taskUpdate.dueDate = this.task.dueDate;
+      }
+
+      this.taskService.updateTask(this.task._id, taskUpdate).subscribe({
         next: (response) => {
           console.log('Task updated:', response);
           this.isEditMode = false;
