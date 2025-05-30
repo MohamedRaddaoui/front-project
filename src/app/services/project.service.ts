@@ -139,7 +139,35 @@ removeUserStoryFromSprint(id:string,data:UserStory):Observable<UserStory>{
   return this.http.put<UserStory>(`${this.apiUrl2}/removeUserStory/${id}`,data)
 }
 
+removeUserStoryFromSprintEX(id:string,data:UserStory):Observable<UserStory>{
+  return this.http.put<UserStory>(`${this.apiUrl2}/removeUserStoryFromSprintEX/${id}`,data)
+}
+updateUserStory(id:string,data:UserStory):Observable<UserStory>{
+  return this.http.put<UserStory>(`${this.apiUrl2}/updateUserStory/${id}`,data)
+}
 
+assignUserToStory(storyId: string, userId: string) {
+    return this.http.put(`${this.apiUrl2}/assignUser/${storyId}`, { userId });
+  }
+
+unassignUserFromStory(storyId: string) {
+  return this.http.put(`${this.apiUrl2}/unassignedUser/${storyId}`, {});
+}
+
+
+deleteUserStory(id:string):Observable<UserStory>{
+  return this.http.delete<UserStory>(`${this.apiUrl2}/deleteUserStory/${id}`)
+}
+
+ removeFromBacklog(userStoryId: string): Observable<any> {
+    return this.http.patch(`${this.apiUrl2}/remove-from-backlog/${userStoryId}`, {});
+  }
+  addToBacklog(userStoryId: string, backlogId: string): Observable<any> {
+  return this.http.post(`${this.apiUrl2}/addUserStoryToBacklog`, {
+    userStoryId,
+    backlogId
+  });
+}
 
 //sprint
 createSprint(id:string,data:Sprint):Observable<Sprint[]>{
@@ -151,6 +179,10 @@ getSprintByProject(id:string):Observable<Sprint[]>{
 // Dans project.service.ts
 addUserStoryToSprint(userStoryId: string, sprintId: string): Observable<any> {
   return this.http.post<any>(`${this.apiUrl3}/assignUserStory/${sprintId}/userStories`, { userStoryId });
+}
+
+getSprintById(id:string):Observable<Sprint>{
+  return this.http.get<Sprint>(`${this.apiUrl3}/sprintById/${id}`);
 }
 
 }

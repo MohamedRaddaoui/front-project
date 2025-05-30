@@ -27,8 +27,12 @@ import { AskQuestionComponent } from './ask-question/ask-question.component';
 import { QuestionViewComponent } from './question-details/question-details.component';
 import { BacklogComponent } from './backlog/backlog.component';
 import { DetailsBacklogComponent } from './details-backlog/details-backlog.component';
-import { EventPageComponent } from './event-page/event-page.component';
+
+import { EditBacklogComponent } from './edit-backlog/edit-backlog.component';
+import { DetailSprintComponent } from './detail-sprint/detail-sprint.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
+import { EventPageComponent } from './event-page/event-page.component';
+
 
 export const routes: Routes = [
   {
@@ -83,15 +87,15 @@ export const routes: Routes = [
     path: 'project',
     component: ProjectComponent,
     canActivate: [AuthGuard],
-    data: { roles: ['admin', 'user'] },
-    children: [{ path: '', component: SideBarComponent }],
+    // data: { roles: ['admin', 'user'] },
+    // children: [{ path: '', component: SideBarComponent }],
   },
   {
     path: 'add',
     component: AddProjectComponent,
     canActivate: [AuthGuard],
-    data: { roles: ['admin', 'manager'] },
-    children: [{ path: '', component: SideBarComponent }],
+    // data: { roles: ['admin', 'manager'] },
+    // children: [{ path: '', component: SideBarComponent }],
   },
   {
     path: 'event-dashboard',
@@ -107,13 +111,13 @@ export const routes: Routes = [
     path: 'scrum/:id',
     component: ScrumProjectComponent,
     canActivate: [AuthGuard],
-    data: { roles: ['manager'] },
+    // data: { roles: ['manager'] },
   },
   {
     path: 'PO/:id',
     component: ProductOwnerComponent,
     canActivate: [AuthGuard],
-    data: { roles: ['product_owner', 'admin'] },
+    // data: { roles: ['product_owner', 'admin'] },
   },
   {
     path: 'scrum/:id',
@@ -123,20 +127,20 @@ export const routes: Routes = [
     path: 'standard/:id',
     component: StandardProjectComponent,
     canActivate: [AuthGuard],
-    data: { roles: ['manager'] },
+    // data: { roles: ['manager'] },
   },
   {
     path: 'delete/:id',
     component: DeleteProjectComponent,
     canActivate: [AuthGuard],
-    data: { roles: ['admin'] },
+    // data: { roles: ['admin'] },
   },
 
   {
     path: 'updateProject/:id',
     component: EditProjectComponent,
     canActivate: [AuthGuard],
-    data: { roles: ['admin', 'manager'] },
+    // data: { roles: ['admin', 'manager'] },
   },
   {
   path: 'unauthorized',
@@ -165,7 +169,17 @@ export const routes: Routes = [
   {
         path: 'backlogDtails/:id',
         component: DetailsBacklogComponent
-      },
+       },
+
+        {
+        path: 'backlogUpdate/:id',
+        component: EditBacklogComponent
+       },
+
+       {
+        path: 'sprintDtails/:id',
+        component: DetailSprintComponent
+       },
 
 /*
   // Q&A routes matching backend API structure
@@ -218,7 +232,7 @@ export const routes: Routes = [
     ],
   },
 ];
-=======
+
       // {
       //   path: ':id',
       //   component: QuestionDetailComponent,

@@ -1,0 +1,94 @@
+<app-nav-bar></app-nav-bar>
+<div class="app-container">
+    <div class="main-container">
+        <app-side-bar></app-side-bar>
+        <div class="content-header">
+            <h1 class="content-title">Sprint / Détails</h1>
+        </div>
+        
+        <!-- Ajoutez *ngIf="sprint" ici pour attendre que les données soient chargées -->
+        <div class="backlog-container" *ngIf="sprint">
+            <div class="backlog-header">
+                <div class="backlog-title-container">
+                    <div class="orange-bar"></div>
+                    <h1>SPRINT<span class="orange-text">BACKLOG</span></h1>
+                </div>
+            </div>
+            
+            <div class="backlog-content">
+                <div class="backlog-info-section">
+                    <div class="info-card">
+                        <h2>Informations</h2>
+                        <div class="info-item">
+                            <span class="info-label">Titre:</span>
+                            <!-- Plus besoin de ?. ici car sprint est garanti d'exister -->
+                            <span class="info-value">{{ sprint.title }}</span> 
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Description:</span>
+                            <p class="info-value description">{{ sprint.goal }}</p>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Projet:</span>
+                            <!-- Ajoutez ici la propriété correspondante si elle existe -->
+                            <span class="info-value">{{ sprint.projectID?.title || 'N/A' }}</span> 
+                        </div>
+                        <div class="info-item">
+                            <!-- <span class="info-label">Créé le:</span> -->
+                            <!-- Ajoutez ici la propriété correspondante si elle existe -->
+                            <span class="info-value"></span> 
+                        </div>
+                        <div class="info-item">
+                            <!-- <span class="info-label">Mis à jour le:</span> -->
+                            <!-- Ajoutez ici la propriété correspondante si elle existe -->
+                            <span class="info-value"></span> 
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="user-stories-section">
+                    <h2>User Stories 
+                        <!-- Le ?. n'est plus strictement nécessaire ici mais ne fait pas de mal -->
+                        <span class="story-count">({{ sprint.userStories?.length || 0 }})</span>
+                    </h2>
+                    
+                    <div class="stories-container">
+                        <!-- La boucle ne s'exécutera que si sprint.userStories existe et a des éléments -->
+                        <div class="story-card" *ngFor="let story of sprint.userStories; let i = index">
+                            <div class="story-number">{{ i + 1 }}</div>
+                            <div class="story-content">
+                                <h3 class="story-title">{{ story.title }}</h3>
+                                <p class="story-description">{{ story.description }}</p>
+                                <div class="story-meta">
+                                    <span class="story-priority">Priorité: {{ story.priority }}</span>
+                                    <span class="story-points">Points: {{ story.storyPoints }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Ce message s'affichera si userStories est vide ou n'existe pas -->
+                        <div class="no-stories-message" *ngIf="!sprint.userStories || sprint.userStories.length === 0">
+                            <div class="empty-icon">📋</div>
+                            <p>Aucune user story n'est liée à ce backlog</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="backlog-footer">
+                    <div class="footer-actions">
+                        <button class="action-button edit-button">Modifier</button>
+                    </div>
+                    <div class="footer-info">
+                        <!-- Assurez-vous que sprint.updatedAt existe -->
+                        <!-- <div class="last-update">Dernière mise à jour: </div>  -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Optionnel : Afficher un indicateur de chargement tant que sprint n'est pas défini -->
+        <div *ngIf="!sprint" class="loading-indicator-container">
+            <p>Chargement des détails du sprint...</p>
+            <!-- Vous pouvez ajouter un spinner CSS ici -->
+        </div>
+    </div>
+</div>

@@ -5,7 +5,7 @@ import { User } from "./user";
 
 
 export class Project{
-    id?:string;
+    _id?:string;
     title?:string;
     description?:string;
     startDate?:string   
@@ -24,6 +24,7 @@ export class Project{
      showFullDescription?: boolean;
     
   constructor( 
+    _id?:string,
     
     title?:string,
     description?:string,
@@ -41,7 +42,7 @@ export class Project{
     sprintsID?: Sprint[],
     created_by?:User,
    showFullDescription?: boolean,){
-        
+        this._id=_id,
         
         this.title=title,
         this.description=description,

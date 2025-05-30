@@ -4,7 +4,7 @@ import { Backlog } from "./backlog.model";
 
 export class UserStory{
   _id?:string
-     title?:string;
+  title?:string;
   description?: string;
   status?:string;
   priority?:string ;
