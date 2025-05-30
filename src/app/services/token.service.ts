@@ -31,15 +31,15 @@ export class TokenService {
   }
 
   setToken(token: string): void {
-    localStorage.setItem(this.tokenKey, token);
+    localStorage.setItem(this.token, token);
   }
 
   getToken(): string | null {
-    return localStorage.getItem(this.tokenKey);
+    return localStorage.getItem(this.token);
   }
 
   removeToken(): void {
-    localStorage.removeItem(this.tokenKey);
+    localStorage.removeItem(this.token);
   }
 
   decodeToken(): any | null {
