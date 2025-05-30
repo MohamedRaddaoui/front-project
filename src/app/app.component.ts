@@ -2,10 +2,7 @@
 import { Component,NgModule } from '@angular/core';
 import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
-import {
-  AIAssistViewModule,
-  ChatUIModule,
-} from '@syncfusion/ej2-angular-interactive-chat';
+import {AIAssistViewModule,ChatUIModule,} from '@syncfusion/ej2-angular-interactive-chat';
 import { DialogModule, TooltipModule } from '@syncfusion/ej2-angular-popups';
 import {
   TextBoxModule,

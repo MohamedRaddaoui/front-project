@@ -30,27 +30,7 @@
       <!-- </div> -->
   
 
-    <!-- <div class="content">
-      <button class="filter-btn">⛛ Filtrer</button>
-      <div class="stats">
-        <div class="card">
-          <p><strong>0 élément(s)</strong> terminé(s)</p>
-          <span>au cours des 7 derniers jours</span>
-        </div>
-        <div class="card">
-          <p><strong>0 élément(s)</strong> mis à jour</p>
-          <span>au cours des 7 derniers jours</span>
-        </div>
-        <div class="card">
-          <p><strong>0 élément(s)</strong> créé(s)</p>
-          <span>au cours des 7 derniers jours</span>
-        </div>
-        <div class="card">
-          <p><strong>0 à échéance proche</strong></p>
-          <span>dans les 7 prochains jours</span>
-        </div>
-      </div>
-    </div> -->
+  
   
         </div>
         <div class="projects-container">
@@ -73,14 +53,55 @@
               </span>
             </div>
             <hr>
-            <p class="description">{{ u.description }}</p>
+            <!-- <p class="description">{{ u.description }}</p> -->
+<div class="description-container">
+  <p class="description" *ngIf="!u.showFullDescription">
+    {{ u.description && u.description.length > 50 ? (u.description | slice:0:50) + '...' : u.description }}
+  </p>
+  
+  <p class="description" *ngIf="u.showFullDescription">
+    {{ u.description }}
+  </p>
+  
+  <button 
+    *ngIf="u.description && u.description.length > 50" 
+    class="view-more-btn" 
+    (click)="toggleDescription($event, u)">
+    {{ u.showFullDescription ? 'Voir moins' : 'Voir plus' }}
+  </button>
+</div>
+
+
+
+
             <p class="deadline"><strong>Deadline:</strong> {{ formatDate(u.endDate) }}</p>
-            <div class="team">
-              <img src="avatar1.png" alt="Member 1">
-              <img src="avatar1.png" alt="Member 2">
-              <img src="avatar1.png" alt="Member 3">
-              <div class="more-avatars">+4</div>
-            </div>
+           <div class="team">
+  <!-- Affiche les avatars visibles avec tooltip pour le nom -->
+  <img *ngFor="let user of getVisibleUsers(u)"
+       [src]="'http://localhost:5000/uploads/' + user.photo" 
+       class="team-avatar"
+       [title]="user.firstname + ' ' + user.lastname"
+       alt="Avatar de membre d'équipe"
+  />
+  
+  <!-- Badge avec nombre exact d'utilisateurs supplémentaires -->
+  <div 
+    *ngIf="getHiddenUsersCount(u ) > 0" 
+    class="more-avatars"
+    (click)="toggleUsersDisplay($event, u)">
+    +{{ getHiddenUsersCount(u) }}
+  </div>
+  
+  <!-- Bouton pour réduire la liste si elle est développée -->
+  <button 
+    *ngIf="u.id && isUsersExpanded(u.id)" 
+    class="collapse-users-btn"
+    (click)="toggleUsersDisplay($event, u)">
+    Réduire
+  </button>
+</div>
+
+
           </div>
         </div>
         

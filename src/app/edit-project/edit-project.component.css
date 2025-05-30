@@ -1,203 +1,422 @@
+/* Polices et variables globales */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-  .form-error-message {
-    min-height: 20px;
-    color: red;
-    font-size: 0.875rem;
-    margin-top: 0.2rem;
-    margin-left: 0.2rem;
-  }
-
-  .form-error-message p {
+* {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', 'Segoe UI', Roboto, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 
-  .input-wrapper {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  
-  
-.project-form-container {
-    display: flex;
-    flex-direction: column;
-    margin-top: 5%;
-    margin-left: 20%;
-    border-radius: 3rem;
-    
-    
-    
-  }
-  .page-title {
-    margin-top: 6%;
-    align-self: flex-start;
-    margin-left: 0.75rem;
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #0f2a4a;
-  }
-  
-  .form-container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 2rem 2rem;
-    margin-top: 3.25rem;
-    width: 90%;
-    margin-left: 2%;
-    background-color: rgb(255, 255, 255);
-    border-radius: 1rem;
-    
-  }
-  
-  .form-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.25rem;
-    justify-content: space-between;
-    align-self: stretch;
-  }
-  
-  .form-group-row {
-    max-width: 100%;
-  }
-  
-  .form-group-labels {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.25rem;
-    justify-content: space-between;
-    max-width: 100%;
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #1A89C7;
-    width: 390px;
-  }
-  
-  .form-group-fields {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.25rem;
-    justify-content: space-between;
-    margin-top: 0.625rem;
-  }
-  
-  .form-field {
-    display: flex;
-    flex-shrink: 0;
-    max-width: 100%;
-    border-radius: 1rem;
-    border: 2px solid #d4d4d8;
-    height: 42px;
-    width: 260px;
-  }
-  
-  .form-group-date {
-    display: flex;
-    flex-direction: column;
-    color: #1A89C7;
-  }
-  
-  .form-label {
-     color: #1A89C7;
-    align-self: flex-start;
-    font-size: 1rem;
-    font-weight: 100;
-  }
-  
-  .date-field {
-    display: flex;
-    gap: 1.25rem;
-    justify-content: space-between;
-    padding: 0.550rem;
-    margin-top: 0.625rem;
-    font-size: 0.75rem;
-    line-height: 1.5rem;
-    white-space: nowrap;
-    border-radius: 1rem;
-    border: 2px solid #d4d4d8;
-    
-  }
-  
-  .calendar-icon {
-    object-fit: contain;
-    flex-shrink: 0;
-    margin: auto 0;
-    aspect-ratio: 1;
-    width: 15px;
-  }
-  
-  .form-group {
-    margin-top: 2rem;
-  }
-  
-  .description-field {
-    display: flex;
-    flex-shrink: 0;
-    align-self: stretch;
-    margin-top: 0.625rem;
-    border-radius: 1rem;
-    border: 2px solid #d4d4d8;
-    height: 100px;
-    width: 930px;
-    padding: 0.75rem;
-    font-size: 1rem;
-    line-height: 1.4;
-   
-  }
-  
-  .action-buttons {
-    display: flex;
-    gap: 1.75rem;
-    align-self: flex-end;
-    margin-top: 2rem;
-    font-weight: 500;
-    line-height: 1;
-    white-space: nowrap;
-    margin-top: 3%;
-  }
-  
-  .create-button {
-    gap: 0.25rem;
-    align-self: stretch;
-    padding: 1rem 2rem;
-    color:#8BC34A  ;
-    background-color:#ebf7da;
-    border-radius: 1rem;
-    min-height: 1rem;
-    border: #8BC34A;
-    
+input.custom-error {
+  border: 1px solid #dc3545 !important;
+}
 
-  }
+
+.app-container {
+  margin-top: 5%;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin-left: 20%;
+}
+
+
+/* Content Styles */
+.content {
+  flex-grow: 1;
+  padding: 2rem;
+  max-width: 1560px;
+}
+
+.content-header {
+  margin-top: 3%;
   
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+   display: block;
+}
+
+.content-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #0f2a4a;
+  /* color: #1A89C7; */
+}
+
+/* Conteneur d'input */
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+}
+
+:host { /* Apply variables locally to the component */
+  --primary-color: #6366f1; /* Indigo */
+  --success-color: #28a745; /* Green */
+  --danger-color: #dc3545;  /* Red */
+  --light-color: #f8fafc;   /* Light Gray */
+  --dark-color: #0075c4;    /* Dark Gray */
+  --border-color: #e2f0e5; /* Gray Border */
+  --border-focus-color: var(--primary-color);
+  --border-radius: 0.5rem;
+  --input-height: 42px;
+  --font-family: 'Inter', 'Segoe UI', Roboto, -apple-system, BlinkMacSystemFont, sans-serif;
+  --transition-speed: 0.2s;
+}
+
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 2rem 2.5rem; /* Adjusted padding */
+  margin-top: 1.5rem;
+  width: 100%; /* Take full width within its parent */
+  background-color:white ;
+  border-radius: var(--border-radius); /* Use local variable */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-color); /* Use local variable */
+  transition: all 0.3s ease;
+  font-family: var(--font-family); /* Ensure font applies */
+}
+
+.form-container:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* --- Form Rows & Field Wrappers --- */
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  /* justify-content: space-between; /* Let flex items determine spacing */
+  width: 100%;
+  margin-bottom: 1.5rem; /* Increased spacing */
+}
+
+/* Specific row adjustments */
+.first-row > .form-field-wrapper {
+  flex: 1 1 30%; /* Allow shrinking but prefer ~30% width */
+  min-width: 200px; /* Minimum width before wrapping */
+}
+
+.second-row > .form-field-wrapper {
+  flex: 1 1 45%;
+  min-width: 200px;
+}
+
+.form-field-wrapper {
+  display: flex;
+  flex-direction: column;
+  position: relative; /* For error messages */
+  width: 100%; /* Default to full width within its flex container */
+  margin-bottom: 0; /* Remove default margin, rely on row gap */
+}
+
+/* --- Labels --- */
+.form-label {
+  display: block;
+  color: var(--dark-color); /* Use local variable */
+  /* color: #1A89C7; /* Original color */
+  font-size: 0.9rem; /* Slightly smaller */
+  font-weight: 500;
+  margin-bottom: 0.5rem; /* Space below label */
+}
+
+/* --- Input Fields (Text, Date, Select, Textarea) --- */
+.form-field,
+.date-field,
+select.form-field, /* Target select specifically */
+.description-field {
+  display: block;
+  width: 100%;
+  height: var(--input-height); /* Use local variable */
+  padding: 0 1rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--dark-color); /* Use local variable */
+  background-color: white; /* Use white background */
+  background-clip: padding-box;
+  border: 1px solid var(--border-color); /* Use local variable */
+  border-radius: var(--border-radius); /* Use local variable */
+  transition: border-color var(--transition-speed) ease-in-out, box-shadow var(--transition-speed) ease-in-out;
+  outline: none;
+  box-sizing: border-box; /* Ensure padding/border included in width */
+  font-family: var(--font-family); /* Ensure font applies */
+}
+.form-field,
+.date-field,
+select.form-field,
+.form-field::placeholder,
+.description-field::placeholder {
+  color: #9ca3af; /* Lighter placeholder text */
+  opacity: 1;
+}
+
+/* Specific height/resize for textarea */
+.description-field {
+  min-height: 120px;
+  height: auto;
+  resize: vertical;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  line-height: 1.5; /* Ensure consistent line height */
+}
+
+/* Select specific styles */
+select.form-field {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23334155' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1em;
+  padding-right: 2.5rem;
+}
+
+/* Focus States */
+.form-field:focus,
+.date-field:focus,
+select.form-field:focus,
+.description-field:focus {
+  border-color: var(--border-focus-color); /* Use local variable */
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15); /* Softer focus shadow */
+}
+
+/* Hover States (non-focus) */
+.form-field:not(:focus):hover,
+.date-field:not(:focus):hover,
+select.form-field:not(:focus):hover,
+.description-field:not(:focus):hover {
+  border-color: #cbd5e1; /* Slightly darker border on hover */
+}
+
+/* Invalid Fields */
+.form-field.ng-touched.ng-invalid,
+.form-field.ng-dirty.ng-invalid,
+.date-field.ng-touched.ng-invalid,
+.date-field.ng-dirty.ng-invalid,
+select.form-field.ng-touched.ng-invalid,
+select.form-field.ng-dirty.ng-invalid,
+.description-field.ng-touched.ng-invalid,
+.description-field.ng-dirty.ng-invalid {
+  border-color: var(--danger-color); /* Use local variable */
+}
+
+.form-field.ng-touched.ng-invalid:focus,
+.form-field.ng-dirty.ng-invalid:focus,
+.date-field.ng-touched.ng-invalid:focus,
+.date-field.ng-dirty.ng-invalid:focus,
+select.form-field.ng-touched.ng-invalid:focus,
+select.form-field.ng-dirty.ng-invalid:focus,
+.description-field.ng-touched.ng-invalid:focus,
+.description-field.ng-dirty.ng-invalid:focus {
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.15); /* Red shadow */
+}
+
+/* Valid Fields */
+/* Optional: Only style invalid, or use a subtle valid style */
+.form-field.ng-touched.ng-valid,
+.form-field.ng-dirty.ng-valid,
+.date-field.ng-touched.ng-valid,
+.date-field.ng-dirty.ng-valid,
+select.form-field.ng-touched.ng-valid,
+select.form-field.ng-dirty.ng-valid,
+.description-field.ng-touched.ng-valid,
+.description-field.ng-dirty.ng-valid {
+   border-color: var(--success-color); /* Use local variable */
+}
+
+.form-field.ng-touched.ng-valid:focus,
+.form-field.ng-dirty.ng-valid:focus,
+.date-field.ng-touched.ng-valid:focus,
+.date-field.ng-dirty.ng-valid:focus,
+select.form-field.ng-touched.ng-valid:focus,
+select.form-field.ng-dirty.ng-valid:focus,
+.description-field.ng-touched.ng-valid:focus,
+.description-field.ng-dirty.ng-valid:focus {
+   box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.15); /* Green shadow */
+}
+
+/* --- Error Messages --- */
+.form-error-message {
+  color: var(--danger-color); /* Use local variable */
+  font-size: 0.875em; /* 14px */
+  margin-top: 0.3rem;
+  min-height: 1.2em; /* Reserve space */
+  font-weight: 500;
+  /* Modern animation for appearance */
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 0.3s ease, max-height 0.3s ease, margin-top 0.3s ease;
+}
+.form-error-message.active {
+  opacity: 1;
+  max-height: 5em; /* Allow space for multiple lines */
+  margin-top: 0.5rem; /* Increase space when visible */
+}
+
+.form-error-message p {
+  margin: 0 0 0.25rem 0; /* Spacing between multiple error lines */
+  display: flex;
+  align-items: center;
+}
+
+.form-error-message p::before {
+  content: "\26A0"; /* Warning sign unicode */
+  /* content: "•"; /* Original bullet */
+  margin-right: 0.4rem;
+  font-size: 0.9em;
+  display: inline-block;
+}
+
+/* --- Action Buttons --- */
+.action-buttons {
+  display: flex;
+  justify-content: flex-end; /* Align buttons to the right */
+  gap: 1rem;
+  margin-top: 2.5rem;
+  width: 100%;
+}
+
+.create-button,
+.delete-button { /* Assuming delete-button is for reset/cancel */
+  padding: 0.75rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border: none;
+  border-radius: var(--border-radius); /* Use local variable */
+  cursor: pointer;
+  transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: var(--input-height); /* Use local variable */
+  text-transform: capitalize;
+  font-family: var(--font-family); /* Ensure font applies */
+}
+
+/* Primary Button (Create) */
+.create-button {
+  /* background-color: var(--primary-color); /* Use local variable */
+  background-color: #8BC34A; /* Original green */
+  color: white;
+  box-shadow: 0 2px 4px rgba(139, 195, 74, 0.2); /* Shadow matching green */
+}
+
+.create-button:hover {
+  background-color: #7cb342; /* Darker Green */
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(139, 195, 74, 0.25);
+}
+
+.create-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(207, 245, 163, 0.2);
+}
+
+.create-button:disabled {
+  background-color: #effadf; /* Neutral disabled color */
+  color: #a4d76a;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* Secondary/Cancel Button (Delete/Reset) */
+.delete-button {
+  background-color: #e5e7eb; /* Light Gray */
+  color: rgb(54, 53, 53); /* Use local variable */
+  border: 1px solid #d1d5db;
+}
+
+.delete-button:hover {
+  background-color: #d1d5db; /* Darker Gray */
+  border-color: #9ca3af;
+  transform: translateY(-1px);
+}
+
+.delete-button:active {
+  transform: translateY(0);
+}
+
+
+.form-field-wrapper:has(#allowCancel),
+.form-field-wrapper:has(#projectStatus) {
+  margin-top: 20px; 
+}
+
+.checkbox-container {
+  display: flex; 
+  align-items: center; 
+  gap: 8px; 
+}
+
+.checkbox-label {
+  margin-bottom: 0; 
+  font-weight: normal; 
+}
+
+
+.form-checkbox {
+  width: 16px; 
+  height: 16px;
+  cursor: pointer;
+}
+
+
+#projectStatus {
+    width: 100%;
+    box-sizing: border-box; 
+}
+
+
+
+/* Tablet and smaller */
+@media (max-width: 992px) {
+  .form-row {
+    gap: 1rem;
+  }
+
+  .first-row > .form-field-wrapper,
+  .second-row > .form-field-wrapper {
+    flex-basis: 100%; /* Stack fields vertically */
+  }
+
+  .action-buttons {
+   justify-content: space-between; /* Keep aligned right or center? */
+  }
+
+  .create-button,
   .delete-button {
-    gap: 0.25rem;
-    align-self: stretch;
-    padding: 1rem 2rem;
-    color: #1A89C7;
-    border-radius: 1rem;
-    border: #1A89C7;
-    background-color: #cdebfc;
-    min-height: 3.5rem;
+     flex-grow: 1; /* Let them take natural width or full width? */
+     margin: 0 0.25rem; 
   }
-  
-  @media (max-width: 768px) {
-    .project-form-container {
-      margin-top: 2.5rem;
-    }
-  
-    .page-title {
-      margin-left: 0.625rem;
-    }
-  
-    .form-container {
-      padding: 1.25rem;
-      margin-top: 2.5rem;
-    }
-  
-    .action-buttons {
-      margin-top: 2.5rem;
-    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .form-container {
+    padding: 1.5rem;
   }
-  
+
+  .action-buttons {
+    flex-direction: column; /* Stack buttons */
+    gap: 0.75rem;
+    margin-top: 2rem;
+    align-items: stretch; /* Make buttons full width */
+  }
+
+  .create-button,
+  .delete-button {
+    width: 100%;
+    margin: 0;
+    justify-content: center; /* Center text in button */
+  }
+}
+

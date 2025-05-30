@@ -1,4 +1,4 @@
-import { User } from './user.model';
+import { User } from "./user";
 
 export interface Question {
   _id: string;
@@ -12,7 +12,7 @@ export interface Question {
   views: number;
   createdAt: Date;
   updatedAt: Date;
-  answers?: Answer[];
+  answer?: Answer[];
 }
 
 export interface Answer {

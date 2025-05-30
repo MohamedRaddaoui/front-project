@@ -1,0 +1,170 @@
+<div class="admin-dashboard">
+  <!-- Header -->
+  <div class="dashboard-header">
+    <div class="user-info">
+      <div class="avatar">FM</div>
+      <span class="username">Administrateur</span>
+    </div>
+    <div class="search-bar">
+      <input type="text" placeholder="Rechercher..." class="search-input">
+      <i class="search-icon">🔍</i>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="dashboard-content">
+    <!-- Overview Cards -->
+    <div class="overview-section">
+      <div class="overview-card primary">
+        <div class="card-header">
+          <h3>Vue d'ensemble</h3>
+          <div class="card-stats">
+            <span class="stat-item">{{ stats?.totalProjects || 0 }} Projets</span>
+            <div class="stat-icons">
+              <span class="icon">📊</span>
+              <span class="icon">📈</span>
+              <span class="icon">⚡</span>
+            </div>
+          </div>
+        </div>
+        <div class="progress-section">
+          <div class="progress-item">
+            <span>{{ stats?.activeProjects || 0 }} Actifs</span>
+            <span>{{ stats?.completedTasks || 0 }} Terminées</span>
+            <span>{{ getCompletionRate() }}% Complétées</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project Status Chart -->
+      <div class="chart-card">
+        <h4>Statut des Projets</h4>
+        <div class="pie-chart">
+          <div class="chart-container">
+            <div class="pie-segment" 
+                 [style.background]="'conic-gradient(#10B981 0deg ' + (projectStatusData[0].value / stats?.totalProjects * 360) + 'deg, #F59E0B ' + (projectStatusData[0].value / stats?.totalProjects * 360) + 'deg ' + ((projectStatusData[0].value + projectStatusData[1].value) / stats?.totalProjects * 360) + 'deg, #EF4444 ' + ((projectStatusData[0].value + projectStatusData[1].value) / stats?.totalProjects * 360) + 'deg 360deg)'">
+            </div>
+          </div>
+          <div class="chart-legend">
+            <div class="legend-item" *ngFor="let item of projectStatusData">
+              <span class="legend-color" [style.background]="item.color"></span>
+              <span>{{ item.name }}</span>
+              <span class="legend-value">{{ item.value }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Traffic Effectiveness -->
+      <div class="traffic-card">
+        <h4>Efficacité</h4>
+        <div class="traffic-stats">
+          <div class="traffic-item">
+            <span class="traffic-label">Projets</span>
+            <div class="circular-progress">
+              <span class="progress-value">{{ getActiveRate() }}%</span>
+            </div>
+          </div>
+          <div class="traffic-item">
+            <span class="traffic-label">Tâches</span>
+            <div class="circular-progress">
+              <span class="progress-value">{{ getCompletionRate() }}%</span>
+            </div>
+          </div>
+          <div class="traffic-item">
+            <span class="traffic-label">Équipe</span>
+            <div class="circular-progress">
+              <span class="progress-value">85%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Analytics Section -->
+    <div class="analytics-section">
+      <div class="analytics-card">
+        <div class="analytics-header">
+          <h4>Statistiques des Utilisateurs</h4>
+          <div class="metric-cards">
+            <div class="metric-card">
+              <span class="metric-value">{{ (stats?.users?.admin + stats?.users?.manager + stats?.users?.user) || 0 }}k</span>
+              <span class="metric-label">Total Utilisateurs</span>
+              <span class="metric-trend positive">+12%</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-value">{{ stats?.totalTasks || 0 }}k</span>
+              <span class="metric-label">Tâches Créées</span>
+              <span class="metric-trend positive">+8%</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-value">{{ stats?.activeProjects || 0 }}k</span>
+              <span class="metric-label">Projets Actifs</span>
+              <span class="metric-trend negative">-2%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Engagement Analytics -->
+      <div class="engagement-card">
+        <div class="engagement-header">
+          <h4>Analyse d'Engagement</h4>
+          <div class="filter-buttons">
+            <button class="filter-btn active">Mensuel</button>
+            <button class="filter-btn">Hebdomadaire</button>
+          </div>
+        </div>
+        <div class="chart-area">
+          <div class="bar-chart">
+            <div class="chart-bars">
+              <div class="bar-group" *ngFor="let data of engagementData">
+                <div class="bar tasks" [style.height.%]="(data.tasks / 70) * 100"></div>
+                <div class="bar projects" [style.height.%]="(data.projects / 30) * 100"></div>
+                <span class="bar-label">{{ data.month }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="chart-legend-horizontal">
+            <div class="legend-item">
+              <span class="legend-color tasks"></span>
+              <span>Tâches</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-color projects"></span>
+              <span>Projets</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- User Roles Summary -->
+    <div class="roles-summary">
+      <h4>Répartition des Rôles</h4>
+      <div class="roles-grid">
+        <div class="role-card admin">
+          <div class="role-icon">👑</div>
+          <div class="role-info">
+            <span class="role-count">{{ stats?.users?.admin || 0 }}</span>
+            <span class="role-label">Administrateurs</span>
+          </div>
+        </div>
+        <div class="role-card manager">
+          <div class="role-icon">👔</div>
+          <div class="role-info">
+            <span class="role-count">{{ stats?.users?.manager || 0 }}</span>
+            <span class="role-label">Managers</span>
+          </div>
+        </div>
+        <div class="role-card user">
+          <div class="role-icon">👤</div>
+          <div class="role-info">
+            <span class="role-count">{{ stats?.users?.user || 0 }}</span>
+            <span class="role-label">Utilisateurs</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
