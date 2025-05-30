@@ -29,7 +29,7 @@ export class EventService {
     const formData = new FormData();
     for (const key in eventData) {
       if (key === 'attachments' && Array.isArray(eventData[key])) {
-        eventData[key].forEach((file: File) =>
+        eventData[key].forEach((file: any) =>
           formData.append('attachments', file)
         );
       } else {
@@ -68,7 +68,7 @@ export class EventService {
     const formData = new FormData();
     for (const key in updatedData) {
       if (key === 'attachments' && Array.isArray(updatedData[key])) {
-        updatedData[key].forEach((file: File) =>
+        updatedData[key].forEach((file: any) =>
           formData.append('attachments', file)
         );
       } else {
@@ -122,12 +122,17 @@ export class EventService {
 
   // Add participants to an event
   addParticipants(eventId: string, userIds: string[]): Observable<any> {
-    console.log('Adding participants:', userIds);
-    console.log('Event ID:', eventId);
     return this.http.post(
       `${this.apiUrl}/${eventId}/add-participants`,
       { userIds },
       { headers: this.getAuthHeaders() }
     );
+  }
+
+  // Get public events
+  getPublicEvents(): Observable<any> {
+    return this.http.get<any[]>(`${this.apiUrl}/public`, {
+      headers: this.getAuthHeaders(),
+    });
   }
 }
