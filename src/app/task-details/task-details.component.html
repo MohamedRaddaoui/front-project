@@ -40,7 +40,7 @@
                                         </div>
                                     </div>
                                     <div class="action-buttons">
-                                        <button *ngIf="!isEditMode && !isCreateMode && authService.canEditTask(task.userId)" 
+                                        <button *ngIf="!isEditMode && !isCreateMode && authService.canModifyTask(task.assignedUser)" 
                                                 class="btn btn-primary" 
                                                 (click)="onEdit()">
                                             <i class="fas fa-edit"></i>
@@ -53,7 +53,7 @@
                                             <i class="fas" [class.fa-spinner]="isTaskUpdating" [class.fa-spin]="isTaskUpdating" [class.fa-save]="!isTaskUpdating"></i>
                                             {{ isTaskUpdating ? 'Saving...' : 'Save' }}
                                         </button>
-                                        <button *ngIf="(isEditMode || !isCreateMode) && authService.canDeleteTask(task.userId)" 
+                                        <button *ngIf="(isEditMode || !isCreateMode) && authService.canModifyTask(task.assignedUser)" 
                                                 class="btn btn-danger" 
                                                 (click)="onDelete()">
                                             <i class="fas fa-trash"></i>
