@@ -185,4 +185,21 @@ getSprintById(id:string):Observable<Sprint>{
   return this.http.get<Sprint>(`${this.apiUrl3}/sprintById/${id}`);
 }
 
+
+deleteSprint(id:string):Observable<Sprint>{
+  return this.http.delete<Sprint>(`${this.apiUrl3}/deleteSprint/${id}`);
+
+}
+
+getProjectTaskSummary(id: string): Observable<any> {
+  return this.http.get<any>(`${this.apiUrl}/getProjectTaskSummary/${id}`);
+}
+checkProjectOverdue(id: string): Observable<any> {
+  return this.http.get<any>(`${this.apiUrl}/checkProjectOverdue/${id}`);
+}
+
+
+
+
+
 }

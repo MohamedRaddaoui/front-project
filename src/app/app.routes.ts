@@ -32,6 +32,8 @@ import { DetailSprintComponent } from './detail-sprint/detail-sprint.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { EventPageComponent } from './event-page/event-page.component';
 
+
+
 export const routes: Routes = [
   {
     path: '',
@@ -178,6 +180,8 @@ export const routes: Routes = [
         path: 'sprintDtails/:id',
         component: DetailSprintComponent
        },
+       
+    
 
 /*
   // Q&A routes matching backend API structure

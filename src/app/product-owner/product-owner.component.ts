@@ -355,6 +355,7 @@ export class ProductOwnerComponent implements OnInit, AfterViewInit {
   // --- Gestion Suppression Backlog --- 
   popupVisible = false;
   backlogIdToDelete: string | null = null; // Renommé pour clarté
+  sprintToDelete: string | null = null;
 
   openPopup(backlogID: string): void {
     this.backlogIdToDelete = backlogID;
@@ -391,6 +392,35 @@ export class ProductOwnerComponent implements OnInit, AfterViewInit {
       this.popupVisible = false;
     }
   }
+
+
+
+    confirmDeleteSprint(): void {
+    if (this.sprintToDelete) {
+      console.log('ID du sprint à supprimer :', this.sprintToDelete);
+      this.projectService.deleteSprint(this.sprintToDelete).subscribe({
+        next: (res:any) => {
+          console.log("Suppression confirmée :", res.message);
+          this.backlog = this.backlog.filter(b => b._id !== this.sprintToDelete);
+          this.popupVisible = false;
+          this.sprintToDelete = null;
+          // Optionnel: Afficher une notification
+          alert('Backlog supprimé avec succès.');
+          // Pas de redirection automatique ici, laisser l'utilisateur sur la page
+        },
+        error: (err) => {
+          console.error('Erreur de suppression du backlog :', err);
+          alert('Échec de la suppression du backlog.');
+          this.popupVisible = false;
+          this.sprintToDelete = null;
+        }
+      });
+    } else {
+      console.warn('Aucun ID de backlog sélectionné pour suppression');
+      this.popupVisible = false;
+    }
+  }
+
 
 
   // Fonction de validation personnalisée (peut être mise hors de la classe si elle ne dépend pas de 'this')
