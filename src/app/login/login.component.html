@@ -21,21 +21,21 @@
           height="500"
         />
       </section>
-
+ 
       <section class="login-section">
         <header class="logo-header"></header>
-
+ 
         <div class="login-form-container">
           <h1 class="welcome-heading">Welcome back</h1>
           <p class="welcome-text">Welcome back! Please enter your details.</p>
-
+ 
           <!-- Login Form -->
           <form
             *ngIf="!showVerificationStep"
             [formGroup]="loginForm"
             (ngSubmit)="onSubmit()"
             class="login-form"
-            >
+          >
             <div class="form-field">
               <label for="email">Email</label>
               <input
@@ -46,7 +46,7 @@
                 class="input-field"
               />
             </div>
-
+ 
             <div class="form-field">
               <label for="password">Password</label>
               <div class="password-input-wrapper">
@@ -68,7 +68,7 @@
                 </button>
               </div>
             </div>
-
+ 
             <div class="form-options">
               <div class="terms-container">
                 <mat-checkbox
@@ -99,12 +99,11 @@
                 Forgot Password?
               </button>
             </div>
-
+ 
             <div *ngIf="errorMessage" class="error-message">
               {{ errorMessage }}
             </div>
-
-
+ 
             <button
               type="submit"
               class="login-button"
@@ -112,7 +111,7 @@
             >
               Log in
             </button>
-
+ 
             <div class="signup-container">
               <span>Don't have an account?</span>
               <button
@@ -124,19 +123,7 @@
               </button>
             </div>
           </form>
-          </div>
-          <button type="button" class="forgot-password" (click)="forgotPassword()">
-            Forgot Password?
-          </button>
-        </div>
-        <button 
-          type="submit" 
-          class="login-button"
-          [disabled]="!loginForm.get('termsAccepted')?.value"
-        >
-          Log in
-        </button>
-
+ 
           <!-- Verification Form -->
           <form
             *ngIf="showVerificationStep"
@@ -148,7 +135,7 @@
             <p class="verification-text">
               Please enter the 6-digit code sent to your email
             </p>
-
+ 
             <div class="form-field">
               <label for="code">Verification Code</label>
               <input
@@ -160,11 +147,11 @@
                 maxlength="6"
               />
             </div>
-
+ 
             <div *ngIf="errorMessage" class="error-message">
               {{ errorMessage }}
             </div>
-
+ 
             <button type="submit" class="submit-button">
               Verify and Login
             </button>

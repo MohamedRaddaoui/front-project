@@ -1,0 +1,125 @@
+.profile-card {
+  max-width: 480px;
+  margin: 30px auto;
+  padding: 25px;
+  background: #fff;
+  box-shadow: 0 4px 10px rgb(0 0 0 / 0.1);
+  border-radius: 12px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.profile-photo {
+  text-align: center;
+  margin-bottom: 25px;
+  position: relative;
+}
+
+.profile-photo img {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #3f51b5;
+  box-shadow: 0 0 8px rgba(63, 81, 181, 0.3);
+}
+
+.photo-label {
+  cursor: pointer;
+  display: inline-block;
+  margin-top: 10px;
+  color: #3f51b5;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.photo-label:hover {
+  color: #303f9f;
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 6px;
+}
+
+.input-edit {
+  display: flex;
+  align-items: center;
+}
+
+input[readonly] {
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  padding: 8px 10px;
+  border-radius: 5px;
+  flex-grow: 1;
+  font-size: 16px;
+  color: #555;
+}
+
+input:not([readonly]) {
+  border: 1px solid #3f51b5;
+  padding: 8px 10px;
+  border-radius: 5px;
+  flex-grow: 1;
+  font-size: 16px;
+  color: #222;
+  outline-color: #3f51b5;
+}
+
+.edit-btn {
+  background: none;
+  border: none;
+  margin-left: 8px;
+  font-size: 18px;
+  cursor: pointer;
+  color: #3f51b5;
+  transition: color 0.3s ease;
+}
+
+.edit-btn:hover {
+  color: #303f9f;
+}
+
+.actions {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.submit-btn {
+  background-color: #3f51b5;
+  color: white;
+  padding: 10px 28px;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-btn:disabled {
+  background-color: #9fa8da;
+  cursor: not-allowed;
+}
+
+.submit-btn:hover:not(:disabled) {
+  background-color: #303f9f;
+}

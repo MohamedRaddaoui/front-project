@@ -17,6 +17,7 @@ export class SideBarComponent implements OnInit {
   isProjectDropdownOpen = false;
   isSettingsDropdownOpen = false;
   isRoleLoaded = false;
+  isDarkMode: boolean = false;
 
   constructor(private tokenService: TokenService, private router: Router) {}
 
@@ -34,6 +35,9 @@ export class SideBarComponent implements OnInit {
       }
     }
     this.isRoleLoaded = true;
+    
+    // Charger le thème sauvegardé
+    this.loadTheme();
   }
 
   toggleProjectDropdown(): void {
@@ -42,6 +46,37 @@ export class SideBarComponent implements OnInit {
 
   toggleSettingsDropdown(): void {
     this.isSettingsDropdownOpen = !this.isSettingsDropdownOpen;
+  }
+
+  toggleTheme(): void {
+    this.isDarkMode = !this.isDarkMode;
+    this.applyTheme();
+    this.saveTheme();
+  }
+
+  private loadTheme(): void {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      this.isDarkMode = true;
+      this.applyTheme();
+    } else {
+      this.isDarkMode = false;
+      this.applyTheme();
+    }
+  }
+
+  private saveTheme(): void {
+    localStorage.setItem('theme', this.isDarkMode ? 'dark' : 'light');
+  }
+
+  private applyTheme(): void {
+    if (this.isDarkMode) {
+      document.body.classList.add('dark-theme');
+      document.body.classList.remove('light-theme');
+    } else {
+      document.body.classList.add('light-theme');
+      document.body.classList.remove('dark-theme');
+    }
   }
 
   @HostListener('document:click', ['$event'])
