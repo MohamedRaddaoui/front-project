@@ -14,7 +14,7 @@
       <a mat-button href="#sdg" class="nav-link">SDG Impact</a>
     </nav>
     <div class="navbar-auth">
-      <button mat-stroked-button color="primary" routerLink="/signin" class="pulse">Sign In</button>
+      <button mat-stroked-button color="primary" routerLink="/login" class="pulse">Sign In</button>
       <button mat-raised-button color="primary" routerLink="/signup" class="pulse">Sign Up</button>
     </div>
   </div>
@@ -33,11 +33,11 @@
     <h1 class="hero-title">Orchestrate Your Projects with Orkestra</h1>
     <p class="hero-subtitle">Master project management with seamless collaboration and cutting-edge tools.</p>
     <div class="hero-buttons">
-      <button mat-raised-button color="primary" class="btn-primary pulse">
+      <button routerLink="/login" mat-raised-button color="primary" class="btn-primary pulse">
         Start Free Trial
         <mat-icon>arrow_forward</mat-icon>
       </button>
-      <button mat-stroked-button color="primary" class="btn-secondary pulse">
+      <button mat-stroked-button color="primary" class="btn-secondary pulse" (click)="requestDemo()">
         Request Demo
         <mat-icon>play_circle</mat-icon>
       </button>
@@ -117,34 +117,40 @@
     </div>
     <div class="grid">
       <mat-card class="team-card animate-card" style="--delay: 0.1s;">
-        <img src="assets/images/team-jane.jpg" alt="Jane Doe" class="team-img">
-        <h3>Jane Doe</h3>
+        <img src="images/team-jane.jpg" alt="Jane Doe" class="team-img">
+        <h3>Linda Ouerfelli</h3>
         <p class="team-role">CEO & Founder</p>
         <p>20+ years in project management innovation.</p>
       </mat-card>
       <mat-card class="team-card animate-card" style="--delay: 0.2s;">
         <img src="assets/images/team-john.jpg" alt="John Smith" class="team-img">
-        <h3>John Smith</h3>
+        <h3>Rabaa Khlifi</h3>
         <p class="team-role">CTO</p>
         <p>Expert in AI and software architecture.</p>
       </mat-card>
       <mat-card class="team-card animate-card" style="--delay: 0.3s;">
         <img src="assets/images/team-emily.jpg" alt="Emily Johnson" class="team-img">
-        <h3>Emily Johnson</h3>
+        <h3>Nidhal Gharbi</h3>
         <p class="team-role">COO</p>
         <p>15 years optimizing global operations.</p>
       </mat-card>
       <mat-card class="team-card animate-card" style="--delay: 0.4s;">
         <img src="assets/images/team-mike.jpg" alt="Mike Wilson" class="team-img">
-        <h3>Mike Wilson</h3>
+        <h3>Hiba Mezni</h3>
         <p class="team-role">CFO</p>
         <p>10 years in financial strategy for tech firms.</p>
       </mat-card>
       <mat-card class="team-card animate-card" style="--delay: 0.5s;">
         <img src="assets/images/team-lisa.jpg" alt="Lisa Chen" class="team-img">
-        <h3>Lisa Chen</h3>
+        <h3>Eya Brahmi</h3>
         <p class="team-role">CMO</p>
         <p>12 years in digital marketing and branding.</p>
+      </mat-card>
+      <mat-card class="team-card animate-card" style="--delay: 0.5s;">
+        <img src="assets/images/team-lisa.jpg" alt="Lisa Chen" class="team-img">
+        <h3>Mohamed Raddaoui</h3>
+        <p class="team-role">CBO</p>
+        <p>25 years in doing nothing and procrastinating.</p>
       </mat-card>
     </div>
   </div>
