@@ -519,7 +519,7 @@ export class TaskComponent implements OnInit {
 
   getProjectTitle(project: any): string {
     if (typeof project === 'string') {
-      const foundProject = this.projects.find(p => p.id === project);
+      const foundProject = this.projects.find(p => p._id === project);
       return foundProject?.title || 'Unassigned';
     }
     return project?.title || 'Unassigned';
