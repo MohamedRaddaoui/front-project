@@ -34,4 +34,8 @@ export class CommentService {
   deleteAttachment(commentId: string, attachmentId: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/deleteAttachementFromComment/${commentId}/${attachmentId}`);
   }
+
+  updateComment(commentId: string, commentData: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/updateComment/${commentId}`, commentData);
+  }
 } 

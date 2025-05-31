@@ -1,5 +1,17 @@
 import { map } from "rxjs";
 
+interface TaskUpdate {
+  _id: string;
+  title: string;
+  description: string;
+  status: string;
+  assignedUser: string | null;
+  tags: string;
+  priority: string;
+  projectId: string;
+  dueDate?: string;
+}
+
 // task-kanban.mapper.ts
 export class TaskKanbanMapper {
   static toKanbanCard(task: any): any {
@@ -14,32 +26,39 @@ export class TaskKanbanMapper {
     };
   }
 
- 
-  static toTaskObject(card: any): any {
-    return {
+  static toTaskObject(card: any): TaskUpdate {
+    // Only include essential fields for task update
+    const taskUpdate: TaskUpdate = {
       _id: card.Id,
       title: card.Title,
       description: card.Summary,
       status: this.mapStatus(card.Status),
       assignedUser: card.idAssigned || null,
-      tags: card.Tags ,
+      tags: card.Tags,
       priority: card.Priority,
-      dueDate: new Date().toISOString(), 
       projectId: card.ProjectId,
     };
+
+    // Only include dueDate if it exists
+    if (card.DueDate) {
+      taskUpdate.dueDate = card.DueDate;
     }
-    static mapStatus(Status: any) {
-        switch (Status) {
-            case 'Open':
-                return 'To Do';
-            case 'InProgress':
-                return 'In Progress';
-            case 'Review':
-                return 'Review';
-            case 'Close':
-                return 'Done';
-            default:
-                return 'Open';
-        }
+
+    return taskUpdate;
+  }
+
+  static mapStatus(Status: any): string {
+    switch (Status) {
+      case 'Open':
+        return 'To Do';
+      case 'InProgress':
+        return 'In Progress';
+      case 'Review':
+        return 'Review';
+      case 'Close':
+        return 'Done';
+      default:
+        return 'Open';
     }
+  }
 }

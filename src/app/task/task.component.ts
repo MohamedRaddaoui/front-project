@@ -10,7 +10,9 @@ import { Router } from '@angular/router';
 
 import { addClass } from '@syncfusion/ej2-base';
 import { TaskService } from '../services/task.service';
+import { ProjectService } from '../services/project.service';
 import { Task } from '../models/task.model';
+import { Project } from '../models/project.model';
 import { CommonModule } from '@angular/common';
 import { SideBarComponent } from '../side-bar/side-bar.component';
 import { KanbanModule } from '@syncfusion/ej2-angular-kanban';
@@ -21,6 +23,8 @@ import { SBDescriptionComponent } from '../common/dp/dp.component';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
 import { Subject, debounceTime } from 'rxjs';
 import { ViewportScroller } from '@angular/common';
+import { AuthService } from '../services/auth.service';
+import { UserService } from '../services/user.service';
 
 interface Column {
   headerText: string;
@@ -82,25 +86,51 @@ export class TaskComponent implements OnInit {
   private readonly cardIncrement = 3;
   private scrollThreshold = 0.8; // 80% of scroll height
 
+  projects: Project[] = [];
+
   constructor(
-    private taskService: TaskService, 
+    private taskService: TaskService,
+    private userService: UserService,
+    private projectService: ProjectService,
     private router: Router,
-    private viewportScroller: ViewportScroller
+    private viewportScroller: ViewportScroller,
+    public authService: AuthService
   ) {
-    // Set up debounced refresh
-    this.refreshSubject.pipe(
-      debounceTime(300) // Wait 300ms before refreshing
-    ).subscribe(() => {
-      this.performRefresh();
-    });
+    this.refreshSubject
+      .pipe(debounceTime(300))
+      .subscribe(() => this.loadTasks());
   }
 
   ngOnInit(): void {
-    this.loadTasks();
-    this.users = [
-      { _id: '67d99644b4e02ca9a8b0991f', firstname: 'Mohamed', lastname: 'Raddaoui' },
-      { _id: '67dea703b0a765d6ff287d98', firstname: 'jean', lastname: 'philip' }
-    ];
+    this.authService.getCurrentUserId();
+    console.log('Current user ID:', this.authService.getCurrentUserId());
+    this.loadProjects();
+    this.loadUsers();
+    this.performRefresh();
+  }
+
+  loadProjects() {
+    this.projectService.getAllProject().subscribe({
+      next: (response) => {
+        this.projects = response;
+        console.log('Loaded projects:', this.projects);
+      },
+      error: (error) => {
+        console.error('Error loading projects:', error);
+      }
+    });
+  }
+
+  loadUsers() {
+    this.userService.getAllUsers().subscribe({
+      next: (response) => {
+        this.users = response;
+        console.log('Loaded users:', this.users);
+      },
+      error: (error) => {
+        console.error('Error loading users:', error);
+      }
+    });
   }
 
   loadTasks() {
@@ -142,7 +172,7 @@ export class TaskComponent implements OnInit {
   getProjectid(project: any): string {
     return typeof project === 'string'
       ? project
-      : project?._id || 'Unassigned';
+      : project?.id || 'Unassigned';
   }
 
   getAssigneeId(assignee: any): string {
@@ -252,9 +282,11 @@ export class TaskComponent implements OnInit {
   } 
 
   onFilterChange(filters: any) {
+    console.log('Applying filters:', filters); // Pour debug
     this.isLoading = true;
     this.taskService.filterTasks(filters).subscribe({
       next: (response) => {
+        console.log('Filter response:', response); // Pour debug
         if (!response.tasks || response.tasks.length === 0) {
           this.clearBoard();
           return;
@@ -328,10 +360,14 @@ export class TaskComponent implements OnInit {
   }
 
   onDragStart(event: DragEvent, task: any) {
+    if (!this.authService.canModifyTask(task.idAssigned)) {
+      event.preventDefault();
+      return;
+    }
     this.draggedTask = task;
     if (event.dataTransfer) {
-      event.dataTransfer.effectAllowed = 'move';
       event.dataTransfer.setData('text/plain', task.Id);
+      event.dataTransfer.effectAllowed = 'move';
     }
     const element = event.target as HTMLElement;
     element.classList.add('dragging');
@@ -350,6 +386,11 @@ export class TaskComponent implements OnInit {
     element.classList.remove('drag-over');
 
     if (this.draggedTask && this.draggedTask.Status !== newStatus) {
+      if (!this.authService.canModifyTask(this.draggedTask.idAssigned)) {
+        console.error('User does not have permission to modify this task');
+        return;
+      }
+
       this.loadingTaskId = this.draggedTask.Id;
 
       const updatedTask = {
@@ -416,7 +457,9 @@ export class TaskComponent implements OnInit {
           Assignee: this.getAssigneeName(task.assignedUser),
           idAssigned: this.getAssigneeId(task.assignedUser),
           Type: 'story',
-          ProjectId: this.getProjectid(task.projectId)
+          ProjectId: this.getProjectid(task.projectId),
+          ProjectTitle: this.getProjectTitle(task.projectId),
+          userId: task.userId
         }));
 
         // Update the data sources
@@ -469,5 +512,13 @@ export class TaskComponent implements OnInit {
   getTaskCountByStatus(status: string): number {
     if (!this.kanbanData) return 0;
     return this.kanbanData.filter(task => task.Status === status).length;
+  }
+
+  getProjectTitle(project: any): string {
+    if (typeof project === 'string') {
+      const foundProject = this.projects.find(p => p._id === project);
+      return foundProject?.title || 'Unassigned';
+    }
+    return project?.title || 'Unassigned';
   }
 }

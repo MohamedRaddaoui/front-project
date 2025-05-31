@@ -11,7 +11,7 @@ export interface Task {
   comments?: any[];
   createdAt?: string;
   updatedAt?: string;
-
+  userId?: string;
 }
 
 export interface TaskHistory {

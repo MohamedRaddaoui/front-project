@@ -74,14 +74,14 @@ export const routes: Routes = [
   {
     path: 'task-details/:id',
     component: TaskDetailsComponent,
-    canActivate: [AuthGuard],
-    data: { roles: ['user', 'manager'] },
   },
   {
     path: 'tasks',
     component: TaskComponent,
-    canActivate: [AuthGuard],
-    data: { roles: ['user', 'manager'] },
+  },
+  {
+    path: 'task-details',
+    component: TaskDetailsComponent,
   },
   {
     path: 'project',
