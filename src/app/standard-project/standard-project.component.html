@@ -41,8 +41,8 @@
                       </app-assign-user>
 
                      
-              <i  class="fa-solid fa-folder" style="color: #6c757d; font-size: 15px" title="Archived Project"  (click)="archivedFunction()" *ngIf="isManager()"></i>
-              <i class="fa-solid fa-pen-to-square" style="color: #0d6efd; font-size: 15px" title="Edit" [routerLink]="['/updateProject',project.id]" *ngIf="isManager()"></i>
+              <i  class="fa-solid fa-folder" style="color: #6c757d; font-size: 15px" title="Archived Project"  (click)="archiveProject()" *ngIf="isManager()"></i>
+              <i class="fa-solid fa-pen-to-square" style="color: #0d6efd; font-size: 15px" title="Edit" [routerLink]="['/updateProject',project._id]" *ngIf="isManager()"></i>
              </div>
 <!-- 
               <div class="category-tag category-position-4" 

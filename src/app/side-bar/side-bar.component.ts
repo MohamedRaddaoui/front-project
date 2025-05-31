@@ -59,4 +59,13 @@ export class SideBarComponent implements OnInit {
     localStorage.removeItem('token');
     this.router.navigate(['/login']);
   }
+
+   isDropdownOpen = false;
+
+  toggleDropdown(): void {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
+ 
+ 
 }

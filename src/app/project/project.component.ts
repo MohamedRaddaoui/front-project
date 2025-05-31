@@ -15,81 +15,99 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   templateUrl: './project.component.html',
   styleUrls: ['./project.component.css']
 })
-export class ProjectComponent implements OnInit {
-  successMessage: string | null = null;
-  token: string | null = null;
-  userId: string = '';
-  role: string = '';
-  listProject: Project[] = [];
-  paginatedProjects: Project[] = [];
-  projectsPerPage = 6;
-  currentPage = 1;
-  totalPages = 1;
-  totalPagesArray: number[] = [];
-
+export class ProjectComponent {
+  successMessage: string | null = null; // ✅ Ajoute cette ligne
+    token:string |null;
+  userId:string="";
   private jwtHelper = new JwtHelperService();
 
-  constructor(
-    private projectService: ProjectService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private tokenService: TokenService
-  ) {
-    this.token = this.tokenService.getToken();
+  constructor(private projectService: ProjectService, private router:Router, private route :ActivatedRoute,private tokenService:TokenService) {
 
-    if (this.token) {
-      const decodedToken = this.jwtHelper.decodeToken(this.token);
-      this.userId = decodedToken.userId;
-      this.role = decodedToken.role;
-    }
-  }
+     this.token = this.tokenService.getToken();
+      if (this.token) {
+        const decodedToken = this.jwtHelper.decodeToken(this.token);
+        this.userId = decodedToken.userId;
 
-  ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.successMessage = params['message'] || null;
-      const isArchived = params['archived'] === 'true';
-
-      if (isArchived) {
-        this.loadArchivedProjects();
-      } else {
-        this.loadProjects();
-      }
-
       if (this.successMessage) {
         setTimeout(() => {
           this.successMessage = null;
-        }, 3000);
+        }, 3000); // 3 secondes
       }
     });
-  }
+  }}
+  listProject: Project[]=[]
 
-  loadProjects(): void {
-    if (this.role === 'admin') {
-      this.projectService.getAllProject().subscribe(projects => {
-        this.listProject = projects;
-        this.setupPagination();
-      });
-    } else {
-      this.projectService.getProjectByUser(this.userId).subscribe(projects => {
-        this.listProject = projects;
-        this.setupPagination();
-      });
-    }
-  }
+  //extraire le date d'un date de type iso
+  formatDate(isoDate: String | undefined): string {
+    if (!isoDate) return 'Date invalide';
 
-  loadArchivedProjects(): void {
-    this.projectService.ArchiveProjectByUser().subscribe(projects => {
-      this.listProject = projects;
-      this.setupPagination();
+    const date = new Date(isoDate.toString()); // <- conversion explicite
+    return date.toLocaleDateString('fr-FR', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
     });
   }
 
-  setupPagination(): void {
-    this.totalPages = Math.ceil(this.listProject.length / this.projectsPerPage);
-    this.totalPagesArray = Array.from({ length: this.totalPages }, (_, i) => i + 1);
-    this.updatePaginatedProjects();
+  projectsPerPage = 6; // 2 rows × 3 columns
+  currentPage = 1;
+  paginatedProjects: Project[] = [];
+  totalPages = 1;
+  totalPagesArray: number[] = [];
+
+  ngOnInit() {
+  this.route.queryParams.subscribe(params => {
+    this.successMessage = params["message"] || null;
+    // Determine the desired archived status from the route parameter
+    const filterArchived = params["archived"] === "true";
+    // Load and filter projects based on the status
+    this.loadAndFilterProjects(filterArchived);
+
+    // Handle success message display
+    if (this.successMessage) {
+      setTimeout(() => {
+        this.successMessage = null;
+      }, 3000); // 3 seconds
+    }
+  });
+}
+
+// Load and filter projects based on archived status
+loadAndFilterProjects(filterArchived: boolean) {
+  if (!this.userId) {
+    console.error("User ID is missing, cannot load projects.");
+    // Optionally handle this case, e.g., redirect to login or show an error
+    return;
   }
-  
+  this.projectService.getProjectByUser(this.userId).subscribe({
+    next: (projects: Project[]) => {
+      // Filter the projects based on the archived status
+      // Assumes projects without an "archived" property are not archived (false)
+      this.listProject = projects.filter(project => (project.archived || false) === filterArchived);
+
+      console.log(`Loaded ${filterArchived ? "archived" : "active"} projects:`, this.listProject);
+
+      // Update pagination based on the filtered list
+      this.totalPages = Math.ceil(this.listProject.length / this.projectsPerPage);
+      this.totalPagesArray = Array.from({ length: this.totalPages }, (_, i) => i + 1);
+      // Reset to page 1 when the filter changes or data reloads
+      this.currentPage = 1;
+      this.updatePaginatedProjects();
+    },
+    error: (err) => {
+      console.error("Error loading projects:", err);
+      this.listProject = []; // Clear list on error
+      this.totalPages = 1;
+      this.totalPagesArray = []; // Clear pages array
+      this.updatePaginatedProjects(); // Update view with empty list
+      // Optionally show an error message to the user
+    }
+  });
+}
+
+
  updatePaginatedProjects() {
   const start = (this.currentPage - 1) * this.projectsPerPage;
   const end = start + this.projectsPerPage;
@@ -100,9 +118,9 @@ export class ProjectComponent implements OnInit {
     project.showFullDescription = false;
     
     // Initialiser l'état pour l'affichage des utilisateurs
-    if (project.id !== undefined && project.id !== null) {
-  if (!this.projectUsersExpandedState.has(project.id)) {
-    this.projectUsersExpandedState.set(project.id, false);
+    if (project._id !== undefined && project._id !== null) {
+  if (!this.projectUsersExpandedState.has(project._id)) {
+    this.projectUsersExpandedState.set(project._id, false);
   }
 }
   });
@@ -129,22 +147,14 @@ export class ProjectComponent implements OnInit {
     }
   }
 
-  formatDate(isoDate: string | undefined): string {
-    if (!isoDate) return 'Date invalide';
-    const date = new Date(isoDate.toString());
-    return date.toLocaleDateString('fr-FR', {
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric',
-    });
-  }
+ 
 
   onProjectClick(project: Project): void {
     console.log('Projet cliqué:', project);
     if (project.type === 'Scrum') {
-      this.router.navigate(['/scrum', project.id]);
+      this.router.navigate(['/scrum', project._id]);
     } else if (project.type === 'Kanban') {
-      this.router.navigate(['/standard', project.id]);
+      this.router.navigate(['/standard', project._id]);
     } else {
       alert('Type non pris en charge');
     }

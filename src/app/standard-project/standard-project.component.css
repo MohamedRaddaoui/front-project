@@ -217,7 +217,7 @@
 
 /* Tasks section styles */
 .tasks-container {
-  background-color: rgb(240, 252, 252);
+  background-color: rgb(245 249 249);
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -641,5 +641,8 @@ color: #F4A529;
 .more-members:hover {
   background-color: #ced4da; 
 }
+
+
+
 
 
