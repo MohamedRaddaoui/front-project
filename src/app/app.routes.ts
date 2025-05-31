@@ -19,12 +19,6 @@ import { SignupComponent } from './signup/signup.component';
 import { TaskComponent } from './task/task.component';
 import { TaskDetailsComponent } from './task-details/task-details.component';
 import { NgModule } from '@angular/core';
-<<<<<<< HEAD
-// import { QuestionsListComponent } from './questions-list/questions-list.component';
-// import { QuestionDetailComponent } from './question-detail/question-detail.component';
-// import { CreateQuestionComponent } from './create-question/create-question.component';
-=======
->>>>>>> 2510ab8337b83e03442459df54cbdbcdcd3007a1
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { StatistiquesComponent } from './statistique/statistique.component';
@@ -33,9 +27,7 @@ import { AskQuestionComponent } from './ask-question/ask-question.component';
 import { QuestionViewComponent } from './question-details/question-details.component';
 import { BacklogComponent } from './backlog/backlog.component';
 import { DetailsBacklogComponent } from './details-backlog/details-backlog.component';
-<<<<<<< HEAD
 import { UserDetailsComponent } from './user-details/user-details.component';
-=======
 
 import { EditBacklogComponent } from './edit-backlog/edit-backlog.component';
 import { DetailSprintComponent } from './detail-sprint/detail-sprint.component';
@@ -43,7 +35,6 @@ import { LandingPageComponent } from './landing-page/landing-page.component';
 import { EventPageComponent } from './event-page/event-page.component';
 
 
->>>>>>> 2510ab8337b83e03442459df54cbdbcdcd3007a1
 export const routes: Routes = [
   {
     path: '',
@@ -179,19 +170,14 @@ export const routes: Routes = [
   {
         path: 'backlogDtails/:id',
         component: DetailsBacklogComponent
-<<<<<<< HEAD
   },
   { path: 'profile', component: UserDetailsComponent },
-=======
-       },
->>>>>>> 2510ab8337b83e03442459df54cbdbcdcd3007a1
 
         {
         path: 'backlogUpdate/:id',
         component: EditBacklogComponent
        },
 
-<<<<<<< HEAD
   // Q&A routes
   // {
   //   path: 'questions',
@@ -252,7 +238,6 @@ export const routes: Routes = [
       
 //     ]
 //   }
-=======
        {
         path: 'sprintDtails/:id',
         component: DetailSprintComponent
@@ -324,6 +309,5 @@ export const routes: Routes = [
     ]
   }
       */
->>>>>>> 2510ab8337b83e03442459df54cbdbcdcd3007a1
 ];
 
