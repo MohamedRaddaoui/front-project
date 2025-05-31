@@ -25,13 +25,18 @@
                                 <!-- Header -->
                                 <div class="task-header">
                                     <div class="task-title-section">
+                                        <!-- Title Field -->
                                         <div class="title-input-wrapper" *ngIf="isEditMode || isCreateMode">
                                             <i class="fas fa-pen"></i>
                                             <input [(ngModel)]="task.title" 
                                                    name="title" 
                                                    placeholder="Task title"
                                                    class="title-input"
+                                                   [class.is-invalid]="isFieldInvalid('title')"
                                                    required />
+                                            <div class="invalid-feedback" *ngIf="isFieldInvalid('title')">
+                                                {{ getFieldError('title') }}
+                                            </div>
                                         </div>
                                         <h2 *ngIf="!isEditMode && !isCreateMode">{{ task.title }}</h2>
                                         <div class="task-id" *ngIf="task.id">
@@ -96,6 +101,7 @@
                                                    class="input-field" />
                                         </div>
 
+                                        <!-- Priority Field -->
                                         <div class="field-group">
                                             <label>
                                                 <i class="fas fa-flag"></i>
@@ -104,11 +110,16 @@
                                             <select [(ngModel)]="task.priority" 
                                                     name="priority"
                                                     [disabled]="(!isEditMode && !isCreateMode) || !authService.canEditTask(task.userId)"
-                                                    class="select-field">
+                                                    class="select-field"
+                                                    [class.is-invalid]="isFieldInvalid('priority')">
                                                 <option *ngFor="let p of priorities" [value]="p">{{ p }}</option>
                                             </select>
+                                            <div class="invalid-feedback" *ngIf="isFieldInvalid('priority')">
+                                                {{ getFieldError('priority') }}
+                                            </div>
                                         </div>
 
+                                        <!-- Description Field -->
                                         <div class="field-group">
                                             <label>
                                                 <i class="fas fa-align-left"></i>
@@ -119,7 +130,11 @@
                                                       [disabled]="(!isEditMode && !isCreateMode) || !authService.canEditTask(task.userId)"
                                                       rows="5"
                                                       placeholder="Enter task description"
-                                                      class="textarea-field task-description"></textarea>
+                                                      class="textarea-field task-description"
+                                                      [class.is-invalid]="isFieldInvalid('description')"></textarea>
+                                            <div class="invalid-feedback" *ngIf="isFieldInvalid('description')">
+                                                {{ getFieldError('description') }}
+                                            </div>
                                         </div>
 
                                         <!-- Comments Section -->
@@ -322,6 +337,7 @@
                                         <!-- People Section -->
                                         <div class="people-section">
                                            
+                                            <!-- Assigned User Field -->
                                             <div class="field-group">
                                                 <label>
                                                     <i class="fas fa-user-check"></i>
@@ -330,12 +346,19 @@
                                                 <select [(ngModel)]="task.assignedUser" 
                                                         name="assignedUser"
                                                         [disabled]="!isEditMode && !isCreateMode"
-                                                        class="select-field">
+                                                        class="select-field"
+                                                        [class.is-invalid]="isFieldInvalid('assignedUser')">
+                                                    <option value="">Select a user</option>
                                                     <option *ngFor="let user of users" [value]="user._id">
                                                         {{ user.firstname }} {{ user.lastname }}
                                                     </option>
                                                 </select>
+                                                <div class="invalid-feedback" *ngIf="isFieldInvalid('assignedUser')">
+                                                    {{ getFieldError('assignedUser') }}
+                                                </div>
                                             </div>
+
+                                            <!-- Project Field -->
                                             <div class="field-group">
                                                 <label>
                                                     <i class="fas fa-project-diagram"></i>
@@ -345,12 +368,16 @@
                                                         name="projectId"
                                                         [disabled]="!isEditMode && !isCreateMode"
                                                         class="select-field"
+                                                        [class.is-invalid]="isFieldInvalid('projectId')"
                                                         required>
                                                     <option value="">Select a project</option>
                                                     <option *ngFor="let project of projects" [value]="project._id">
                                                         {{ project.title }}
                                                     </option>
                                                 </select>
+                                                <div class="invalid-feedback" *ngIf="isFieldInvalid('projectId')">
+                                                    {{ getFieldError('projectId') }}
+                                                </div>
                                             </div>
                                         </div>
 

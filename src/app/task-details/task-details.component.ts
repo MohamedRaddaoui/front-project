@@ -31,6 +31,10 @@ export class TaskDetailsComponent implements OnInit {
     comments: []
   };
 
+  // Form validation states
+  formErrors: { [key: string]: string } = {};
+  isFormValid: boolean = true;
+
   users: any[] = [];
   projects: any[] = [];
   priorities = ['Low', 'Medium', 'High'];
@@ -141,15 +145,74 @@ export class TaskDetailsComponent implements OnInit {
     }
     this.isEditMode = true;
   }
+  ///Title: Required, min 3 characters, max 100 characters
+///Description: Optional, max 1000 characters
+//Priority: Required
+//Status: Required
+//Assigned User: Required
+//Project: Required
 
-  onSubmit() {
-    if (!this.task.title.trim()) {
-      this.errorMessage = 'Title is required';
-      return;
+  // Validation methods
+  validateForm(): boolean {
+    this.formErrors = {};
+    this.isFormValid = true;
+
+    // Title validation
+    if (!this.task.title?.trim()) {
+      this.formErrors['title'] = 'Title is required';
+      this.isFormValid = false;
+    } else if (this.task.title.length < 3) {
+      this.formErrors['title'] = 'Title must be at least 3 characters';
+      this.isFormValid = false;
+    } else if (this.task.title.length > 100) {
+      this.formErrors['title'] = 'Title cannot exceed 100 characters';
+      this.isFormValid = false;
     }
 
+    // Description validation
+    if (this.task.description && this.task.description.length > 1000) {
+      this.formErrors['description'] = 'Description cannot exceed 1000 characters';
+      this.isFormValid = false;
+    }
+
+    // Priority validation
+    if (!this.task.priority) {
+      this.formErrors['priority'] = 'Priority is required';
+      this.isFormValid = false;
+    }
+
+    // Status validation
+    if (!this.task.status) {
+      this.formErrors['status'] = 'Status is required';
+      this.isFormValid = false;
+    }
+
+    // Assigned User validation
+    if (!this.task.assignedUser) {
+      this.formErrors['assignedUser'] = 'Please select an assigned user';
+      this.isFormValid = false;
+    }
+
+    // Project validation
     if (!this.task.projectId) {
-      this.errorMessage = 'Project ID is required';
+      this.formErrors['projectId'] = 'Please select a project';
+      this.isFormValid = false;
+    }
+
+    return this.isFormValid;
+  }
+
+  getFieldError(fieldName: string): string {
+    return this.formErrors[fieldName] || '';
+  }
+
+  isFieldInvalid(fieldName: string): boolean {
+    return !!this.formErrors[fieldName];
+  }
+
+  onSubmit() {
+    if (!this.validateForm()) {
+      this.errorMessage = 'Please fix the form errors before submitting';
       return;
     }
 
@@ -178,32 +241,16 @@ export class TaskDetailsComponent implements OnInit {
         return;
       }
 
-      // Create update object with only necessary fields
-      interface TaskUpdate {
-        title: string;
-        description?: string;
-        status: string;
-        priority: string;
-        tags?: string;
-        projectId: string;
-        assignedUser?: string;
-        dueDate?: string;
-      }
-
-      const taskUpdate: TaskUpdate = {
+      const taskUpdate = {
         title: this.task.title,
         description: this.task.description,
         status: this.task.status,
         priority: this.task.priority,
         tags: this.task.tags,
         projectId: this.task.projectId,
-        assignedUser: this.task.assignedUser
+        assignedUser: this.task.assignedUser,
+        ...(this.task.dueDate && { dueDate: this.task.dueDate })
       };
-
-      // Only include dueDate if it exists
-      if (this.task.dueDate) {
-        taskUpdate.dueDate = this.task.dueDate;
-      }
 
       this.isTaskUpdating = true;
       this.taskService.updateTask(this.task._id, taskUpdate).subscribe({
