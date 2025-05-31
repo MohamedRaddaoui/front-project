@@ -4,9 +4,26 @@
 
       <!-- Dashboard -->
 
-      <li class="nav-item" *ngIf="role === 'user'">
+      <!-- <li class="nav-item" *ngIf="role === 'user'">
   <a class="nav-link" [routerLink]="'/event-dashboard'">
-<!-- 
+    <div class="icon-container">
+      <div class="icon project-icon"></div>
+    </div>
+    <span class="link-text">Dashboard</span>
+  </a>
+</li> -->
+
+<!-- Dashboard for admin -->
+<!-- <li class="nav-item" *ngIf="role === 'admin'">
+  <a class="nav-link" [routerLink]="'/user-dashboard'">
+    <div class="icon-container">
+      <div class="icon project-icon"></div>
+    </div>
+    <span class="link-text">Dashboard</span>
+  </a>
+</li> -->
+
+    <!-- Dashboard -->
       <li class="nav-item">
         <a href="" class="nav-link">
           <div class="icon-container">
@@ -15,54 +32,37 @@
           <span class="link-text">Dashboard</span>
         </a>
       </li>
-      Project avec liste déroulante -->
-<!--      <li class="nav-item has-dropdown">
-  <div class="nav-link dropdown-toggle" (click)="toggleDropdown()">  -->
-    <div class="icon-container">
-      <div class="icon project-icon"></div>
-    </div>
-    <span class="link-text">Dashboard</span>
-  </a>
-</li>
-
-<!-- Dashboard for admin -->
-<li class="nav-item" *ngIf="role === 'admin'">
-  <a class="nav-link" [routerLink]="'/user-dashboard'">
-    <div class="icon-container">
-      <div class="icon project-icon"></div>
-    </div>
-    <span class="link-text">Dashboard</span>
-  </a>
-</li>
+      <!-- Project avec liste déroulante -->
 
       <!-- Project Dropdown -->
-      <li class="nav-item has-dropdown project">
-        <div class="nav-link dropdown-toggle" (click)="toggleProjectDropdown()">
-          <div class="icon-container">
-            <div class="icon project-icon"></div>
-          </div>
-          <span class="link-text">Project</span>
-          <span class="arrow" [class.rotated]="isProjectDropdownOpen">&#9662;</span>
+     <!-- Project avec liste déroulante -->
+     <li class="nav-item has-dropdown">
+  <div class="nav-link dropdown-toggle" (click)="toggleDropdown()">
+    <div class="icon-container">
+      <div class="icon project-icon" routerLink="/add"></div>
+    </div>
+    <span class="link-text" >Project</span>
+    <span class="arrow" [class.rotated]="isDropdownOpen">&#9662;</span>
+  </div>
+   <ul class="dropdown-menu" [class.show]="isDropdownOpen">
+    <div class="dropdown-item">
+      <a routerLink="/project" [queryParams]="{ archived: false }" class="nav-link">
+        <div class="icon-container">
+          <i class="fas fa-list-alt"></i>
         </div>
-        <ul class="dropdown-menu" [class.show]="isProjectDropdownOpen">
-          <li class="dropdown-item">
-            <a routerLink="/project" [queryParams]="{ archived: false }" class="nav-link">
-              <div class="icon-container">
-                <i class="fas fa-list-alt"></i>
-              </div>
-              <span class="link-text">Active Projects</span>
-            </a>
-          </li>
-          <li class="dropdown-item">
-            <a routerLink="/project" [queryParams]="{ archived: true }" class="nav-link">
-              <div class="icon-container">
-                <i class="fas fa-archive"></i>
-              </div>
-              <span class="link-text">Archived Projects</span>
-            </a>
-          </li>
-        </ul>
-      </li>
+        <span class="link-text">Active Projects</span>
+      </a>
+    </div>
+    <div class="dropdown-item">
+      <a routerLink="/project" [queryParams]="{ archived: true }" class="nav-link">
+        <div class="icon-container">
+          <i class="fas fa-archive"></i>
+        </div>
+        <span class="link-text">Archived Projects</span>
+      </a>
+    </div>
+  </ul>
+</li>
 
       <!-- Tasks -->
       <li class="nav-item">

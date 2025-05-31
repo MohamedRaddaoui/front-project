@@ -3,12 +3,13 @@ import { Component } from '@angular/core';
 import { SideBarComponent } from '../side-bar/side-bar.component';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
 import { ProjectService } from '../services/project.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Backlog } from '../models/backlog.model';
+import { DeleteProjectComponent } from '../delete-project/delete-project.component';
 
 @Component({
   selector: 'app-details-backlog',
-  imports: [CommonModule,SideBarComponent,NavBarComponent],
+  imports: [CommonModule,SideBarComponent,NavBarComponent,RouterLink,DeleteProjectComponent],
   templateUrl: './details-backlog.component.html',
   styleUrl: './details-backlog.component.css'
 })

@@ -3,23 +3,41 @@
     <span class="close" (click)="closeModal()">&times;</span>
     <section id="user-stories">
       <h2>Create New Sprint</h2>
-      <form id="userStoryForm" [formGroup]="formSprint" >
+      <form id="userStoryForm" [formGroup]="formSprint" (ngSubmit)="addSprint()" >
         <input type="hidden" id="us-id" />
 
+        <!-- Title -->
         <label for="us-title">Title</label>
-        <input type="text" id="us-title" required placeholder="Ex: Ajouter authentification" formControlName="title" />
+        <input type="text" id="us-title" placeholder="Ex: Ajouter authentification" formControlName="title" />
+        <!-- Utilisation du getter pour la clarté -->
+        <div *ngIf="title?.invalid && (title?.dirty || title?.touched)" class="error-message">
+          <div *ngIf="title?.errors?.['required']">Title is required.</div>
+        </div>
 
+        <!-- Goal -->
         <label for="us-description">Goal</label>
         <textarea id="us-description" placeholder="Décrire la fonctionnalité" formControlName="goal"></textarea>
+        <!-- No validation specified for goal -->
 
         <div class="form-row">
+          <!-- Start Date -->
           <div class="form-group">
             <label for="start-date">Start Date</label>
             <input type="date" id="start-date" formControlName="start_date" />
+            <div *ngIf="startDate?.invalid && (startDate?.dirty || startDate?.touched)" class="error-message">
+              <div *ngIf="startDate?.errors?.['required']">Start date is required.</div>
+              <div *ngIf="startDate?.errors?.['dateInPast']">Start date cannot be in the past.</div>
+            </div>
           </div>
+          <!-- End Date -->
           <div class="form-group">
             <label for="deadline">Deadline</label>
             <input type="date" id="deadline" formControlName="end_date" />
+            <div *ngIf="endDate?.invalid && (endDate?.dirty || endDate?.touched)" class="error-message">
+              <div *ngIf="endDate?.errors?.['required']">Deadline is required.</div>
+              <div *ngIf="endDate?.errors?.['endDateNotAfterStartDate']">Deadline must be after the start date.</div>
+              <!-- Note: dateInPast validation for end_date might be redundant if start_date cannot be in the past and end_date must be after start_date -->
+            </div>
           </div>
         </div>
 
@@ -27,17 +45,31 @@
         <fieldset class="event-fieldset">
           <legend>Daily Meeting</legend>
           <div class="form-row">
+            <!-- Daily Date -->
             <div class="form-group">
               <label for="daily-date">Date</label>
               <input type="date" id="daily-date" formControlName="planning" />
-            </div> 
+              <div *ngIf="planningDate?.invalid && (planningDate?.dirty || planningDate?.touched)" class="error-message">
+                 <div *ngIf="planningDate?.errors?.['dateInPast']">Daily meeting date cannot be in the past.</div>
+                 <div *ngIf="planningDate?.errors?.['dateNotAfterStartDate']">Daily meeting date must be on or after the sprint start date.</div>
+              </div>
+            </div>
+            <!-- Daily Start Time -->
             <div class="form-group">
               <label for="daily-start">Start Time</label>
               <input type="time" id="daily-start" formControlName="dailyStartTime" />
+              <div *ngIf="dailyStartTime?.invalid && (dailyStartTime?.dirty || dailyStartTime?.touched)" class="error-message">
+                <div *ngIf="dailyStartTime?.errors?.['required']">Start time is required.</div>
+              </div>
             </div>
+            <!-- Daily End Time -->
             <div class="form-group">
               <label for="daily-end">End Time</label>
               <input type="time" id="daily-end" formControlName="dailyEndTime" />
+              <div *ngIf="dailyEndTime?.invalid && (dailyEndTime?.dirty || dailyEndTime?.touched)" class="error-message">
+                <div *ngIf="dailyEndTime?.errors?.['required']">End time is required.</div>
+                <div *ngIf="dailyEndTime?.errors?.['endTimeNotAfterStart']">End time must be after start time.</div>
+              </div>
             </div>
           </div>
         </fieldset>
@@ -46,17 +78,31 @@
         <fieldset class="event-fieldset">
           <legend>Review</legend>
           <div class="form-row">
+            <!-- Review Date -->
             <div class="form-group">
               <label for="review-date">Date</label>
               <input type="date" id="review-date" formControlName="reviews" />
+               <div *ngIf="reviewsDate?.invalid && (reviewsDate?.dirty || reviewsDate?.touched)" class="error-message">
+                 <div *ngIf="reviewsDate?.errors?.['dateInPast']">Review date cannot be in the past.</div>
+                 <div *ngIf="reviewsDate?.errors?.['dateNotAfterStartDate']">Review date must be on or after the sprint start date.</div>
+              </div>
             </div>
+            <!-- Review Start Time -->
             <div class="form-group">
               <label for="review-start">Start Time</label>
               <input type="time" id="review-start" formControlName="reviewStartTime" />
+              <div *ngIf="reviewStartTime?.invalid && (reviewStartTime?.dirty || reviewStartTime?.touched)" class="error-message">
+                <div *ngIf="reviewStartTime?.errors?.['required']">Start time is required.</div>
+              </div>
             </div>
+            <!-- Review End Time -->
             <div class="form-group">
               <label for="review-end">End Time</label>
               <input type="time" id="review-end" formControlName="reviewEndTime" />
+              <div *ngIf="reviewEndTime?.invalid && (reviewEndTime?.dirty || reviewEndTime?.touched)" class="error-message">
+                <div *ngIf="reviewEndTime?.errors?.['required']">End time is required.</div>
+                <div *ngIf="reviewEndTime?.errors?.['endTimeNotAfterStart']">End time must be after start time.</div>
+              </div>
             </div>
           </div>
         </fieldset>
@@ -65,23 +111,38 @@
         <fieldset class="event-fieldset">
           <legend>Retrospective</legend>
           <div class="form-row">
+            <!-- Retro Date -->
             <div class="form-group">
               <label for="retro-date">Date</label>
               <input type="date" id="retro-date" formControlName="retrospectives" />
+              <div *ngIf="retrospectivesDate?.invalid && (retrospectivesDate?.dirty || retrospectivesDate?.touched)" class="error-message">
+                 <div *ngIf="retrospectivesDate?.errors?.['dateInPast']">Retrospective date cannot be in the past.</div>
+                 <div *ngIf="retrospectivesDate?.errors?.['dateNotAfterStartDate']">Retrospective date must be on or after the sprint start date.</div>
+              </div>
             </div>
+            <!-- Retro Start Time -->
             <div class="form-group">
               <label for="retro-start">Start Time</label>
               <input type="time" id="retro-start" formControlName="retroStartTime" />
+              <div *ngIf="retroStartTime?.invalid && (retroStartTime?.dirty || retroStartTime?.touched)" class="error-message">
+                <div *ngIf="retroStartTime?.errors?.['required']">Start time is required.</div>
+              </div>
             </div>
+            <!-- Retro End Time -->
             <div class="form-group">
               <label for="retro-end">End Time</label>
               <input type="time" id="retro-end" formControlName="retroEndTime" />
+              <div *ngIf="retroEndTime?.invalid && (retroEndTime?.dirty || retroEndTime?.touched)" class="error-message">
+                <div *ngIf="retroEndTime?.errors?.['required']">End time is required.</div>
+                <div *ngIf="retroEndTime?.errors?.['endTimeNotAfterStart']">End time must be after start time.</div>
+              </div>
             </div>
           </div>
         </fieldset>
 
         <div class="btn-container">
-          <button type="submit" (click)="addSprint()">Save Sprint</button>
+          <!-- Disable button if form is invalid -->
+          <button type="submit" [disabled]="formSprint.invalid">Save Sprint</button>
         </div>
       </form>
     </section>

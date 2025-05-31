@@ -29,7 +29,7 @@ private jwtHelper = new JwtHelperService();
  }
  }
  formProject = new FormGroup({
-  title :new FormControl('', [Validators.required, Validators.minLength(3),this.validateTitle()]),
+  title :new FormControl('', [Validators.required, Validators.minLength(3),Validators.maxLength(10), this.validateTitle()]),
   description : new FormControl ('', [Validators.required, Validators.minLength(50)]),
   startDate : new FormControl('', [Validators.required,this.validateStartDate() ]),
   endDate : new FormControl('', [Validators.required,this.validateEndDate()]),

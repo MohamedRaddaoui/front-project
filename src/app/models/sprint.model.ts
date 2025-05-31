@@ -1,4 +1,6 @@
 import { Backlog } from "./backlog.model";
+import { Event } from "./event.model";
+import { Project } from "./project.model";
 import { UserStory } from "./userStory.model";
 
 export class Sprint{
@@ -8,7 +10,7 @@ export class Sprint{
   start_date?:string;
   end_date?:string;
   status?:string; 
-  projectID?:string; 
+  projectID?:Project; 
   reviewStartTime?:string;
   reviewEndTime?:string;
   retroEndTime?:string;
@@ -29,7 +31,7 @@ export class Sprint{
   start_date:string,
   end_date:string,
   status:string, 
-  projectID:string, 
+  projectID:Project, 
   backlogId:string,
   reviewStartTime:string,
   reviewEndTime:string,
@@ -37,10 +39,10 @@ export class Sprint{
   retroStartTime:string,
   dailyEndTime:string,
   dailyStartTime:string,
-  userStories:[],
-  planning: [], 
-  reviews: [],
-  retrospectives:[] ){
+  userStories:UserStory[],
+  planning: Event[], 
+  reviews:Event [],
+  retrospectives:Event[] ){
     this._id=_id
     this.title=title,
     this.goal=goal,

@@ -12,6 +12,7 @@ import { ProductOwnerComponent } from './product-owner/product-owner.component';
 import { AuthGuard } from './guards/auth.guard';
 import { ForgetPasswordComponent } from './forgetpassword/forgetpassword.component';
 import { ResetPasswordComponent } from './resetpassword/resetpassword.component';
+import { AdminGuard } from './guards/admin.guard';
 import { EventdashboardComponent } from './eventdashboard/eventdashboard.component';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
@@ -26,7 +27,18 @@ import { AskQuestionComponent } from './ask-question/ask-question.component';
 import { QuestionViewComponent } from './question-details/question-details.component';
 import { BacklogComponent } from './backlog/backlog.component';
 import { DetailsBacklogComponent } from './details-backlog/details-backlog.component';
+
+import { EditBacklogComponent } from './edit-backlog/edit-backlog.component';
+import { DetailSprintComponent } from './detail-sprint/detail-sprint.component';
+import { LandingPageComponent } from './landing-page/landing-page.component';
+import { EventPageComponent } from './event-page/event-page.component';
+
+
 export const routes: Routes = [
+  {
+    path: '',
+    component: LandingPageComponent,
+  },
   {
     path: 'calendar',
     component: CalendarPageComponent,
@@ -39,12 +51,10 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     data: { roles: ['user', 'admin', 'manager'] },
   },
-
   { path: 'signup', component: SignupComponent },
   { path: 'login', component: LoginComponent },
   { path: 'forget-password', component: ForgetPasswordComponent },
   { path: 'reset-password/:token', component: ResetPasswordComponent },
-
   {
     path: 'signup',
     component: SignupComponent,
@@ -77,15 +87,15 @@ export const routes: Routes = [
     path: 'project',
     component: ProjectComponent,
     canActivate: [AuthGuard],
-    data: { roles: ['admin', 'user'] },
-    children: [{ path: '', component: SideBarComponent }],
+    // data: { roles: ['admin', 'user'] },
+    // children: [{ path: '', component: SideBarComponent }],
   },
   {
     path: 'add',
     component: AddProjectComponent,
     canActivate: [AuthGuard],
-    data: { roles: ['admin', 'manager'] },
-    children: [{ path: '', component: SideBarComponent }],
+    // data: { roles: ['admin', 'manager'] },
+    // children: [{ path: '', component: SideBarComponent }],
   },
   {
     path: 'event-dashboard',
@@ -93,46 +103,44 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     data: { roles: ['user'] },
   },
-
   {
-    path: 'scrum/:id',
-    component: ScrumProjectComponent,
-    canActivate: [AuthGuard],
-    data: { roles: ['manager'] },
-  },
-
-  {
-    path: 'PO/:id',
-    component: ProductOwnerComponent,
-    canActivate: [AuthGuard],
-    data: { roles: ['product_owner', 'admin'] },
+    path: 'event/:id',
+    component: EventPageComponent,
   },
   {
     path: 'scrum/:id',
     component: ScrumProjectComponent,
+    canActivate: [AuthGuard],
+    // data: { roles: ['manager'] },
   },
   {
     path: 'PO/:id',
     component: ProductOwnerComponent,
+    canActivate: [AuthGuard],
+    // data: { roles: ['product_owner', 'admin'] },
+  },
+  {
+    path: 'scrum/:id',
+    component: ScrumProjectComponent,
   },
   {
     path: 'standard/:id',
     component: StandardProjectComponent,
     canActivate: [AuthGuard],
-    data: { roles: ['manager'] },
+    // data: { roles: ['manager'] },
   },
   {
     path: 'delete/:id',
     component: DeleteProjectComponent,
     canActivate: [AuthGuard],
-    data: { roles: ['admin'] },
+    // data: { roles: ['admin'] },
   },
 
   {
     path: 'updateProject/:id',
     component: EditProjectComponent,
     canActivate: [AuthGuard],
-    data: { roles: ['admin', 'manager'] },
+    // data: { roles: ['admin', 'manager'] },
   },
   {
   path: 'unauthorized',
@@ -161,7 +169,17 @@ export const routes: Routes = [
   {
         path: 'backlogDtails/:id',
         component: DetailsBacklogComponent
-      },
+       },
+
+        {
+        path: 'backlogUpdate/:id',
+        component: EditBacklogComponent
+       },
+
+       {
+        path: 'sprintDtails/:id',
+        component: DetailSprintComponent
+       },
 
 /*
   // Q&A routes matching backend API structure
@@ -189,28 +207,32 @@ export const routes: Routes = [
 ];
       {
         path: '',
-        component: QuestionsListComponent
+        component: QuestionsListComponent,
       },
       {
         path: 'create',
-        component: CreateQuestionComponent
+        component: CreateQuestionComponent,
       },
       {
         path: 'search',
-        component: QuestionsListComponent
+        component: QuestionsListComponent,
       },
       {
         path: 'search/tags',
-        component: QuestionsListComponent
+        component: QuestionsListComponent,
       },
       {
         path: 'search/advanced',
-        component: QuestionsListComponent
+        component: QuestionsListComponent,
       },
       {
         path: 'frequent',
-        component: QuestionsListComponent
+        component: QuestionsListComponent,
       },
+    ],
+  },
+];
+
       // {
       //   path: ':id',
       //   component: QuestionDetailComponent,
@@ -226,5 +248,4 @@ export const routes: Routes = [
   }
       */
 ];
-
 

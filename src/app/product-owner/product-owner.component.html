@@ -4,202 +4,247 @@
       <app-side-bar></app-side-bar>
       <!-- Main Content -->
       <main class="content">
-      
+
         <div class="project-title-section">
-          <h1 class="project-path">Projects / {{project.title}}</h1>
+          <h1 class="project-path">Projects/</h1>
         </div>
-        <div class="projects-container">
-          <div class="container">
-            <!-- User Stories creation / edition -->
-           <section id="user-stories">
-                <h2>Créer User Story</h2>
-                <form [formGroup]="fromUserStory" >
-                  <label for="us-title">Title</label>
-                  <input type="text" id="us-title" formControlName="title" required placeholder="Ex: Ajouter authentification" />
-                  <label for="us-description">Description</label>
-                  <textarea id="us-description" formControlName="description" placeholder="Décrire la fonctionnalité"></textarea>                 
-                  <label for="us-priority">Priority</label>
-                  <select id="us-priority" formControlName="priority">
-                    <option value="High">High</option>
-                    <option value="Medium" selected>Medium</option>
-                    <option value="Low">Low</option>
-                  </select>
-                  <label for="us-points">Story point</label>
-                  <input type="number" id="us-points" formControlName="storyPoints" min="0" step="1" placeholder="Ex: 3" />
-                  <!-- Backlog selection -->       
-                <div *ngIf="backlog.length > 1">
-                  <label for="us-backlog">Backlog</label>
-                  <select id="us-backlog" formControlName="backlogID" required>
-                    <option value="" disabled>Select Backlog</option>
-                    <option *ngFor="let b of backlog" [value]="b._id">{{ b.title }}</option>
-                  </select>
-                </div>
-                  <div *ngIf="backlog.length === 1">
-                    <label>Backlog</label>
-                    <input type="text" [value]="backlog[0].title" disabled />
+        <div class="projects-container"> <!-- Garder cette classe si elle est utilisée ailleurs -->
+          <div class="container"> <!-- Container principal pour les sections -->
+
+            <!-- Section Création User Story -->
+            <section id="user-stories">
+    <h2>Créer User Story</h2>
+    <!-- Ajout de novalidate pour désactiver la validation HTML5 par défaut -->
+    <form [formGroup]="fromUserStory" (ngSubmit)="addUserStory()" novalidate>
+
+      <!-- Champ Titre -->
+      <div>
+        <label for="us-title">Title</label>
+        <input type="text" id="us-title" formControlName="title" placeholder="Ex: Ajouter authentification" />
+        <!-- Messages d'erreur pour le titre -->
+        <div *ngIf="fromUserStory.controls.title.invalid && (fromUserStory.controls.title.dirty || fromUserStory.controls.title.touched)"
+             style="color: red; font-size: 0.8em; margin-top: 4px;">
+          <div *ngIf="fromUserStory.controls.title.errors?.['required']">
+            Le titre est requis.
+          </div>
+        </div>
+      </div>
+
+      <!-- Champ Description -->
+      <div style="margin-top: 10px;">
+        <label for="us-description">Description</label>
+        <textarea id="us-description" formControlName="description" placeholder="Décrire la fonctionnalité (Format: En tant que ... je veux ... afin de ...)" rows="3"></textarea>
+        <!-- Messages d'erreur pour la description -->
+        <div *ngIf="fromUserStory.controls.description.invalid && (fromUserStory.controls.description.dirty || fromUserStory.controls.description.touched)"
+             style="color: red; font-size: 0.8em; margin-top: 4px;">
+          <div *ngIf="fromUserStory.controls.description.errors?.['required']">
+            La description est requise.
+          </div>
+          <div *ngIf="fromUserStory.controls.description.errors?.['pattern']">
+            La description doit suivre le format \"En tant que [rôle], je veux [action] afin de [bénéfice]\"\.
+          </div>
+        </div>
+      </div>
+
+      <!-- Champ Priorité -->
+      <div style="margin-top: 10px;">
+        <label for="us-priority">Priority</label>
+        <select id="us-priority" formControlName="priority">
+          <option value="High">High</option>
+          <option value="Medium">Medium</option>
+          <option value="Low">Low</option>
+        </select>
+        <!-- Pas de validation requise ici selon le code TypeScript fourni -->
+      </div>
+
+      <!-- Champ Story Points -->
+      <div style="margin-top: 10px;">
+        <label for="us-points">Story point</label>
+        <input type="number" id="us-points" formControlName="storyPoints" placeholder="Ex: 3 (0.5, 1, 2, 3, 5, 8...)" />
+        <!-- Messages d'erreur pour les Story Points -->
+        <div *ngIf="fromUserStory.controls.storyPoints.invalid && (fromUserStory.controls.storyPoints.dirty || fromUserStory.controls.storyPoints.touched)"
+             style="color: red; font-size: 0.8em; margin-top: 4px;">
+          <!-- Note: J'assume que votre validateur personnalisé 'allowedValueValidator' retourne une clé d'erreur 'allowedValue'. Adaptez si nécessaire. -->
+          <div *ngIf="fromUserStory.controls.storyPoints.errors?.['allowedValue']">
+             La valeur doit être l'une des suivantes : {{ validStoryPoints?.join(', ') }}.
+          </div>
+          <!-- Si le champ est aussi requis, ajoutez Validators.required dans le TS et décommentez ceci :
+          <div *ngIf="fromUserStory.controls.storyPoints.errors?.['required']"> Les points sont requis. </div>
+          -->
+        </div>
+      </div>
+
+      <!-- Sélection du Backlog -->
+      <!-- Cas: Plusieurs Backlogs -->
+      <div *ngIf="backlog.length > 1" style="margin-top: 10px;">
+        <label for="us-backlog">Backlog</label>
+        <!-- J'ai retiré l'attribut 'required' HTML car la validation est gérée par Angular -->
+        <select id="us-backlog" formControlName="backlogID">
+          <option [ngValue]="null" disabled>Select Backlog</option>
+          <option *ngFor="let b of backlog; trackBy: trackByBacklogId" [value]="b._id">{{ b.title }}</option>
+        </select>
+        <!-- Messages d'erreur pour la sélection du Backlog -->
+        <!-- IMPORTANT: Assurez-vous d'ajouter 'Validators.required' au contrôle 'backlogID' dans votre fichier TypeScript pour que ce message fonctionne correctement. -->
+        <div *ngIf="fromUserStory.controls.backlogID.invalid && (fromUserStory.controls.backlogID.dirty || fromUserStory.controls.backlogID.touched)"
+             style="color: red; font-size: 0.8em; margin-top: 4px;">
+           <div *ngIf="fromUserStory.controls.backlogID.errors?.['required']">
+             Veuillez sélectionner un backlog.
+           </div>
+        </div>
+      </div>
+      <!-- Cas: Un seul Backlog -->
+      <div *ngIf="backlog.length === 1" style="margin-top: 10px;">
+        <label>Backlog</label>
+        <input type="text" [value]="backlog[0].title" disabled />
+        <!-- Pas de validation nécessaire car le champ est désactivé et pré-rempli -->
+      </div>
+
+      <!-- Bouton de soumission -->
+      <button type="submit" [disabled]="fromUserStory.invalid" style="margin-top: 15px;">Enregistrer User Story</button>
+    </form>
+  </section>
+
+
+            <!-- Section Backlog -->
+            <section id="backlog">
+              <h2>Product Backlog</h2>
+              <div class="add-icon-box" title="Ajouter un backlog" (click)="openModal()">+</div>
+              <app-backlog [visible]="modalVisible" (close)="closeModal()"></app-backlog>
+
+              <!-- Afficher chaque backlog séparément -->
+              <div *ngFor="let b of backlog; let i = index; trackBy: trackByBacklogId" class="backlog-container">
+                <div class="backlog-header">
+                  <h3>{{ b.title }}</h3>
+                  <div class="backlog-actions">
+                    <!-- <i class="fas fa-edit" title="Modifier le backlog"></i> -->
+                    <i class="fas fa-trash-alt" title="Supprimer le backlog" (click)="openPopup(b._id!)"></i>
+                    <i class="fas fa-eye" title="Voir détail" [routerLink]="['/backlogDtails', b._id]"></i>
                   </div>
-                  <button type="submit" (click)="addUserStory()">Enregistrer User Story</button>
-                </form>
-                </section>
-<!-- BACKLOG -->
-<!-- BACKLOG avec Drag and Drop -->
-<section id="backlog">
-  <h2>Product Backlog</h2>
-  <div class="add-icon-box" title="Ajouter un backlog" (click)="openModal()">+</div>
-  <!-- Popup modale personnalisée -->
-  <app-backlog [visible]="modalVisible" (close)="closeModal()"></app-backlog>
-  
-  <!-- Afficher chaque backlog séparément -->
-  <div *ngFor="let b of backlog; let i = index" class="backlog-container">
-    <div class="backlog-header">
-      <h3>{{ b.title }}</h3>
-      <div class="backlog-actions">
-        <i class="fas fa-edit" title="Modifier le backlog" ></i>
-        <i class="fas fa-trash-alt" title="Supprimer le backlog"  (click)="openPopup(b._id!)" ></i>
-        <i  class="fas fa-eye" title="Voir détail" [routerLink]="['/backlogDtails',b._id]" ></i>
-      </div>
-    </div>
-    
-    <div 
-      cdkDropList
-      [cdkDropListData]="b.userStoriesId || []"
-      [cdkDropListConnectedTo]="sprintLists"
-      class="drop-list"
-      [id]="'backlog-list-' + i"
-      (cdkDropListDropped)="drop($event)">
-      
-      <div *ngIf="(b.userStoriesId || []).length === 0" class="empty-message">
-        Aucune user story dans ce backlog
-      </div>
-      
-      <!-- User stories avec menu contextuel -->
-      <div *ngFor="let story of b.userStoriesId || []; let j = index" 
-           cdkDrag 
-           class="item">
-        <div class="story-content">
-          <div class="story-title">{{ story.title }}</div>
-          <div class="story-details">
-            <span class="priority" [ngClass]="story.priority">{{ story.priority }}</span>
-            <span class="points">{{ story.storyPoints }} pts</span>
-          </div>
-        </div>
-        <!-- Icône de menu avec menu contextuel -->
-        <div class="story-menu-container">
-          <i class="fas fa-ellipsis-v story-menu-icon" (click)="toggleStoryMenu(i, j)"></i>
-          
-          <!-- Menu contextuel qui s'affiche sous les trois points -->
-          <div class="story-menu-dropdown" *ngIf="isMenuOpen(i, j)">
-            <div class="menu-item" (click)="showStoryDetails(story)">
-              <i class="fas fa-eye"></i>
-              <span>Voir détails</span>
-            </div>
-            <div class="menu-item" >
-              <i class="fas fa-edit"></i>
-              <span>Modifier</span>
-            </div>
-            <div class="menu-item" (click)="deleteStory(story)">
-              <i class="fas fa-trash-alt"></i>
-              <span>Supprimer</span>
-            </div>
-            <div class="menu-item" (click)="addUserToStory(story)">
-              <i class="fas fa-user-plus"></i>
-              <span>Ajouter utilisateur</span>
-            </div>
-            <div class="menu-item" (click)="removeUserFromStory(story)">
-              <i class="fas fa-user-minus"></i>
-              <span>Retirer utilisateur</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<!-- SPRINTS avec Drag and Drop -->
-<section id="sprints">
-  <h2>Sprints</h2>
-  <div class="add-icon-box" title="Ajouter un sprint" (click)="openModalSprint()">+</div>
-  
-  <app-sprint [visible]="modalSprintVisible" (close)="closeModalSprint()"></app-sprint>
-  
-  <div class="sprints-container">
-    <div *ngFor="let sprint of sprints; let i = index" class="sprint-box">
-     
-      <div class="backlog-header">
-       <h3>{{ sprint.title }}</h3>
-      <div class="backlog-actions">
-        <i class="fas fa-edit" title="Modifier le backlog" ></i>
-        <i class="fas fa-trash-alt" title="Supprimer le backlog" ></i>
-        <i  class="fas fa-eye" title="Voir détail" ></i>
-      </div>
-    </div>
-      
-      <!-- Informations du sprint -->
-      <div class="sprint-info">
-        <span class="sprint-dates" *ngIf="sprint.start_date && sprint.end_date">
-          {{ sprint.start_date | date:'dd/MM/yyyy' }} - {{ sprint.end_date | date:'dd/MM/yyyy' }}
-        </span>
-        <span class="sprint-status" [ngClass]="sprint.status">{{ sprint.status }}</span>
-        <span class="sprint-goal" *ngIf="sprint.goal">{{ sprint.goal }}</span>
-      </div>
-      
-      <!-- Liste des user stories avec drag and drop -->
-      <div 
-        cdkDropList
-        [cdkDropListData]="sprint.userStories || []"
-        [cdkDropListConnectedTo]="getBacklogListIds()"
-        class="drop-list"
-        [id]="'sprint-' + sprint._id"
-        (cdkDropListDropped)="drop($event)">
-        
-        <!-- Message si aucune user story -->
-        <div *ngIf="(sprint.userStories || []).length === 0" class="empty-message">
-          Glissez des user stories ici
-        </div>
-        
-        <!-- Liste des user stories -->
-        <div *ngFor="let story of sprint.userStories || []; trackBy: trackByFn" 
-             cdkDrag 
-             class="item">
-          {{ story.title || 'Sans titre' }}
-          <div class="story-details" *ngIf="story">
-            <span class="priority" [ngClass]="story.priority">{{ story.priority }}</span>
-            <span class="points">{{ story.storyPoints }} pts</span>
-              <!-- Icône de menu avec menu contextuel -->
-          
-        
-          </div>
-          
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+                </div>
 
+                <!-- Liste de dépôt pour les User Stories du Backlog -->
+                <div
+                  cdkDropList
+                  [id]="'backlog-list-' + i"
+                  [cdkDropListData]="b.userStoriesId || []"
+                  [cdkDropListConnectedTo]="getConnectedDropListsIds('backlog-list-' + i)"
+                  class="drop-list"
+                  (cdkDropListDropped)="drop($event)">
 
+                  <div *ngIf="(b.userStoriesId || []).length === 0" class="empty-message">
+                    Aucune user story dans ce backlog
+                  </div>
 
-          </div>
+                  <!-- User stories avec menu contextuel -->
+                  <!-- CORRECTION: Utiliser trackByStoryId -->
+                  <div *ngFor="let story of b.userStoriesId || []; let j = index; trackBy: trackByStoryId"
+                       cdkDrag
+                       class="item">
+                    <div class="story-content">
+                      <div class="story-title">{{ story.title }}</div>
+                      <div class="story-details">
+                        <span class="priority" [ngClass]="story.priority">{{ story.priority }}</span>
+                        <span class="points">{{ story.storyPoints }} pts</span>
+                      </div>
+                    </div>
+                    <!-- Icône de menu avec menu contextuel -->
+                    <!-- CORRECTION: Ajouter la classe 'menu-open' et corriger les appels -->
+                    <div class="story-menu-container" [class.menu-open]="isMenuOpen('backlog-list-' + i, story._id!)">
+                      <i class="fas fa-ellipsis-v story-menu-icon" (click)="toggleStoryMenu('backlog-list-' + i, story._id!, $event)"></i>
+                      <div class="story-menu-dropdown" *ngIf="isMenuOpen('backlog-list-' + i, story._id!)">
+                        <div class="menu-item" (click)="showStoryDetails(story)"><i class="fas fa-eye"></i><span>Voir détails</span></div>
+                        <div class="menu-item" (click)="editStory(story)"><i class="fas fa-edit"></i><span>Modifier</span></div>
+                        <!-- CORRECTION: Passer l'ID de la liste -->
+                        <div class="menu-item" (click)="deleteStory(story, 'backlog-list-' + i)"><i class="fas fa-trash-alt"></i><span>Supprimer</span></div>
+                        <div class="menu-item" (click)="addUserToStory(story)"><i class="fas fa-user-plus"></i><span>Ajouter utilisateur</span></div>
+                        <div class="menu-item" (click)="removeUserFromStory(story)"><i class="fas fa-user-minus"></i><span>Retirer utilisateur</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
 
+            <!-- Section Sprints -->
+            <section id="sprints">
+              <h2>Sprints</h2>
+              <div class="add-icon-box" title="Ajouter un sprint" (click)="openModalSprint()">+</div>
+              <app-sprint [visible]="modalSprintVisible" (close)="closeModalSprint()"></app-sprint>
 
+              <div class="sprints-container">
+                <!-- CORRECTION: Utiliser trackBySprintId -->
+                <div *ngFor="let sprint of sprints; let k = index; trackBy: trackBySprintId" class="sprint-box">
+                  <div class="backlog-header">
+                    <h3>{{ sprint.title }}</h3>
+                    <div class="backlog-actions">
+                      <!-- <i class="fas fa-edit" title="Modifier le sprint"></i> -->
+                      <i class="fas fa-trash-alt" title="Supprimer le sprint"></i>
+                      <i class="fas fa-eye" title="Voir détail" [routerLink]="['/sprintDtails', sprint._id]"></i>
+                    </div>
+                  </div>
 
+                  <div class="sprint-info">
+                    <span class="sprint-dates" *ngIf="sprint.start_date && sprint.end_date">
+                      {{ sprint.start_date | date:'dd/MM/yyyy' }} - {{ sprint.end_date | date:'dd/MM/yyyy' }}
+                    </span>
+                    <span class="sprint-status" [ngClass]="sprint.status">{{ sprint.status }}</span>
+                    <span class="sprint-goal" *ngIf="sprint.goal">{{ sprint.goal }}</span>
+                  </div>
 
+                  <!-- Liste des user stories avec drag and drop -->
+                  <div
+                    cdkDropList
+                    [id]="'sprint-' + sprint._id!"
+                    [cdkDropListData]="sprint.userStories || []"
+                    [cdkDropListConnectedTo]="getConnectedDropListsIds('sprint-' + sprint._id!)"
+                    class="drop-list"
+                    (cdkDropListDropped)="drop($event)">
+
+                    <div *ngIf="(sprint.userStories || []).length === 0" class="empty-message">
+                      Glissez des user stories ici
+                    </div>
+
+                    <!-- Liste des user stories -->
+                    <!-- CORRECTION: Utiliser trackByStoryId -->
+                    <div *ngFor="let story of sprint.userStories || []; trackBy: trackByStoryId"
+                         cdkDrag
+                         class="item">
+                      <div class="story-content">
+                        <div class="story-title">{{ story?.title || 'Sans titre' }}</div>
+                        <div class="story-details" *ngIf="story">
+                          <span class="priority" [ngClass]="story.priority">{{ story.priority }}</span>
+                          <span class="points">{{ story.storyPoints }} pts</span>
+                        </div>
+                      </div>
+                       <!-- Menu Contextuel pour les stories dans les sprints (similaire au backlog) -->
+                       <div class="story-menu-container" [class.menu-open]="isMenuOpen('sprint-' + sprint._id!, story._id!)">
+                         <i class="fas fa-ellipsis-v story-menu-icon" (click)="toggleStoryMenu('sprint-' + sprint._id!, story._id!, $event)"></i>
+                         <div class="story-menu-dropdown" *ngIf="isMenuOpen('sprint-' + sprint._id!, story._id!)">
+                           <div class="menu-item" (click)="showStoryDetails(story)"><i class="fas fa-eye"></i><span>Voir détails</span></div>
+                           <div class="menu-item" (click)="editStory(story)"><i class="fas fa-edit"></i><span>Modifier</span></div>
+                           <div class="menu-item" (click)="deleteStory(story, 'sprint-' + sprint._id!)"><i class="fas fa-trash-alt"></i><span>Supprimer</span></div>
+                           <div class="menu-item" (click)="addUserToStory(story)"><i class="fas fa-user-plus"></i><span>Ajouter utilisateur</span></div>
+                           <div class="menu-item" (click)="removeUserFromStory(story)"><i class="fas fa-user-minus"></i><span>Retirer utilisateur</span></div>
+                         </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+          </div> 
         </div> 
       </main>
-    </div>
-  </div>
+    </div> >
+  </div> 
 
-    <app-delete-project 
- [visible]="popupVisible"
-  [title]="'Delete Backlog?'"
-  [message]="'Are you sure you want to delete this Backlog? This action cannot be undone.'"
-  [confirmLabel]="'Yes, Delete'"
-  [cancelLabel]="'Cancel'"
+<app-delete-project
+  [visible]="popupVisible"
+  [title]="'Supprimer le Backlog?'" 
+  [message]="'Êtes-vous sûr de vouloir supprimer ce Backlog et toutes ses User Stories associées ? Cette action est irréversible.'" 
+  [confirmLabel]="'Oui, Supprimer'" 
+  [cancelLabel]="'Annuler'" 
   (onConfirm)="confirmDelete()"
   (onCancel)="cancelDelete()">
-</app-delete-project >
- 
-  
-
-
-
-
+</app-delete-project>

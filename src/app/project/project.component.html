@@ -4,9 +4,6 @@
   <app-side-bar></app-side-bar>
       <!-- Main Content -->
       <main class="content">
-        <div class="custom-success " *ngIf="successMessage" >
-          {{ successMessage }}
-        </div>
         
         <div class="content-header">
           <h1 class="content-title">Projects</h1>
@@ -94,7 +91,7 @@
   
   <!-- Bouton pour réduire la liste si elle est développée -->
   <button 
-    *ngIf="u.id && isUsersExpanded(u.id)" 
+    *ngIf="u._id && isUsersExpanded(u._id)" 
     class="collapse-users-btn"
     (click)="toggleUsersDisplay($event, u)">
     Réduire
@@ -125,23 +122,5 @@
     </div>
   </div>
 
-
- 
-  <script>
-    // Simple JavaScript for toggling mobile menu
-    document.addEventListener('DOMContentLoaded', function() {
-      // Add mobile menu toggle functionality if needed
-      const navItems = document.querySelectorAll('.nav-item');
-
-      navItems.forEach(item => {
-        item.addEventListener('click', function() {
-          // Remove active class from all items
-          navItems.forEach(i => i.classList.remove('active'));
-          // Add active class to clicked item
-          this.classList.add('active');
-        });
-      });
-    });
-  </script>
 
 

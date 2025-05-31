@@ -129,22 +129,27 @@ export class StandardProjectComponent implements OnInit { // Implemented OnInit
     }
   }
 
-  // --- Project Archiving --- 
-  archivedFunction(): void {
-    if (!this.id || !this.project) return;
-    // You might want to confirm this action as well
-    // Assuming archive just updates status, reuse updateProject or have a dedicated endpoint
-    const updatedProjectData = { ...this.project, status: 'Archived' }; // Or the correct status value
-    this.projectService.updateProject(this.id, updatedProjectData).subscribe({
-      next: () => {
+  // --- Project Archiving ---
+  archiveProject(): void { // Renamed function
+    if (!this.id || !this.project) {
+      console.error("Cannot archive project: ID or project data missing.");
+      return;
+    }
+    // Call updateProject with the archived flag set to true
+    const archiveUpdate = { archived: true };
+    this.projectService.updateProject(this.id, archiveUpdate).subscribe({
+      next: (updatedProject: Project) => { // Assuming updateProject returns the updated project
         console.log('Project archived successfully');
-        this.router.navigate(['/'], { // Navigate to a relevant page
+        // Update local project state if the service call returns the updated object
+        this.project = updatedProject;
+        // Navigate to a more relevant page like the project list
+        this.router.navigate(['/project'], {
           queryParams: { message: 'Project archived successfully' }
         });
       },
       error: (err) => {
         console.error("Error archiving project:", err);
-        // Show error message to user
+        // Consider implementing user-facing error feedback
       }
     });
   }
