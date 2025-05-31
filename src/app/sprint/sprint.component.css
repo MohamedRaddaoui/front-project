@@ -87,6 +87,8 @@ label {
 
 input[type="text"],
 input[type="datetime-local"],
+input[type="date"], /* Ajout pour les inputs date */
+input[type="time"], /* Ajout pour les inputs time */
 textarea,
 select {
   padding: 0.6rem;
@@ -94,6 +96,8 @@ select {
   border-radius: 6px;
   border: 1px solid #ccc;
   transition: border-color 0.2s ease;
+  box-sizing: border-box; /* Assure que padding et border sont inclus dans la largeur/hauteur */
+  width: 100%; /* Prend toute la largeur disponible dans son conteneur */
 }
 input:focus,
 textarea:focus,
@@ -114,15 +118,44 @@ textarea {
   gap: 1rem;
 }
 .form-group {
-  flex: 1 1 45%;
+  flex: 1 1 45%; /* Permet à deux groupes de tenir sur une ligne si assez d'espace */
+  min-width: 150px; /* Largeur minimale pour éviter qu'ils deviennent trop petits */
   display: flex;
   flex-direction: column;
+}
+
+/* Fieldset pour regrouper les heures */
+.event-fieldset {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.event-fieldset legend {
+  font-weight: 600;
+  color: #0056b3;
+  padding: 0 0.5rem;
+}
+
+/* Messages d'erreur */
+.error-message {
+  color: #dc3545; /* Rouge pour les erreurs */
+  font-size: 0.875rem;
+  margin-top: 4px;
+}
+
+/* Désactiver le bouton si le formulaire est invalide */
+button[type="submit"]:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
 }
 
 /* Bouton d'action */
 .btn-container {
   display: flex;
   justify-content: flex-end;
+  margin-top: 1rem; /* Ajouter un peu d'espace avant le bouton */
 }
 button[type="submit"] {
   background-color: #007bff;
@@ -134,15 +167,19 @@ button[type="submit"] {
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
-button[type="submit"]:hover {
+button[type="submit"]:not(:disabled):hover {
   background-color: #0056b3;
 }
 
-/* Scrollbar custom */
-section::-webkit-scrollbar {
+/* Scrollbar custom (optionnel, peut être retiré si non désiré) */
+.modal-content::-webkit-scrollbar {
   width: 8px;
 }
-section::-webkit-scrollbar-thumb {
+.modal-content::-webkit-scrollbar-thumb {
   background: #bbb;
   border-radius: 4px;
 }
+.modal-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+

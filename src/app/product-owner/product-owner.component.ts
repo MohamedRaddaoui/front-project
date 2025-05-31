@@ -7,165 +7,232 @@ import { SprintComponent } from '../sprint/sprint.component';
 import { ProjectService } from '../services/project.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Backlog } from '../models/backlog.model';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { UserStory } from '../models/userStory.model';
 import { Sprint } from '../models/sprint.model';
 import { CdkDragDrop, CdkDropList, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Project } from '../models/project.model';
 import { DeleteProjectComponent } from '../delete-project/delete-project.component';
+import { title } from 'process';
 
 @Component({
   selector: 'app-product-owner',
+  // standalone: true, // Assurez-vous que c'est bien standalone si votre projet l'utilise
   imports: [CommonModule, SideBarComponent, NavBarComponent, BacklogComponent, SprintComponent,DeleteProjectComponent, ReactiveFormsModule, FormsModule, DragDropModule,RouterLink],
   templateUrl: './product-owner.component.html',
-  styleUrl: './product-owner.component.css'
+  styleUrls: ['./product-owner.component.css'] // Correction: styleUrls au pluriel
 })
 export class ProductOwnerComponent implements OnInit, AfterViewInit {
   constructor(private projectService: ProjectService, private route: ActivatedRoute,private router:Router
     , private cdRef: ChangeDetectorRef
   ) {}
 
-  // Référence aux listes de drop pour les connecter
+   validStoryPoints: number[] = [0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100];
+
+  trackByStoryId(index: number, item: UserStory): string {
+    return item?._id || `story-${index}`;
+  }
+  
   @ViewChildren(CdkDropList) dropLists!: QueryList<CdkDropList>;
   sprintLists: CdkDropList[] = [];
 
   modalVisible = false;
   modalSprintVisible = false;
-  id!: string;
+  id!: string; // ID du projet
   backlog: Backlog[] = [];
   sprints: Sprint[] = [];
-  backlogID!: string;
+  // backlogID n'est plus nécessaire ici, géré par le formulaire
   project!:Project;
 
   fromUserStory = new FormGroup({
-    title: new FormControl(),
-    description: new FormControl(),
-    priority: new FormControl(),
-    storyPoints: new FormControl(),
-    backlogID: new FormControl(),
+    title: new FormControl('',[Validators.required]), // Initialiser
+    description: new FormControl('',[Validators.required,Validators.pattern(/^\s*En tant que\s+.*/i)]),
+    priority: new FormControl('Medium'), // Valeur par défaut
+    storyPoints: new FormControl<number | null>(null, [this.allowedValueValidator(this.validStoryPoints) // Validateur personnalisé
+      ]),
+    backlogID: new FormControl<string | null>(null), // Type explicite
   });
 
   openModal() {
-    console.log("Avant : modalVisible =", this.modalVisible);
     this.modalVisible = true;
-    console.log("Après : modalVisible =", this.modalVisible);
-    this.cdRef.detectChanges(); // <--- Ajouter cette ligne pour forcer la détection
+    this.cdRef.detectChanges();
   }
 
   closeModal() {
     this.modalVisible = false;
-    this.cdRef.detectChanges(); // <--- C'est bien de l'ajouter ici aussi
+    this.cdRef.detectChanges();
   }
 
   openModalSprint() {
     this.modalSprintVisible = true;
+    this.cdRef.detectChanges();
   }
 
   closeModalSprint() {
     this.modalSprintVisible = false;
+    this.cdRef.detectChanges();
   }
 
   ngOnInit() {
     this.id = this.route.snapshot.params['id'];
-     
-        if (this.id) {
-          this.projectService.getByIdProject(this.id).subscribe((data: Project) => {
-            this.project = data;
-          });
-        }
 
-    // Récupère le backlog du projet
+    if (this.id) {
+      this.projectService.getByIdProject(this.id).subscribe((data: Project) => {
+        this.project = data;
+      });
+      this.loadBacklogs();
+      this.loadSprints();
+    } else {
+        console.error("ProductOwnerComponent: Project ID manquant dans la route.");
+    }
+  }
+
+  loadBacklogs() {
+    if (!this.id) return;
     this.projectService.getBacklogByProject(this.id).subscribe((backlogs: Backlog[]) => {
-      this.backlog = backlogs;
-      console.log('Backlog récupéré:', this.backlog);
-      if (this.backlog.length === 1) {
-        console.log('ID du backlog unique:', this.backlog[0]._id);
-        if (this.backlog[0]._id) {
-          this.fromUserStory.patchValue({
-            backlogID: this.backlog[0]._id
-          });
-        }
-      }
+      // Assurer que userStoriesId est toujours un tableau
+      this.backlog = backlogs.map(b => ({ ...b, userStoriesId: b.userStoriesId || [] }));
+      console.log('Backlogs récupérés:', this.backlog);
+      const defaultBacklogId = (this.backlog.length === 1 && this.backlog[0]._id) ? this.backlog[0]._id : null;
+      this.fromUserStory.patchValue({ backlogID: defaultBacklogId });
+      this.updateDropLists(); // Mettre à jour les connexions après chargement
     });
+  }
 
-    // Récupère les sprints liés au projet
-  // Récupère les sprints liés au projet
-  this.projectService.getSprintByProject(this.id).subscribe((sprints: Sprint[]) => {
-    this.sprints = sprints;
-    console.log('Sprints récupérés:', this.sprints);
-    
-    this.sprints.forEach(s => {
-      s.userStories = s.userStories || [];
-      console.log('Sprint ID:', s._id); // Vérifiez que chaque sprint a un ID
+  loadSprints() {
+    if (!this.id) return;
+    this.projectService.getSprintByProject(this.id).subscribe((sprints: Sprint[]) => {
+      // Assurer que userStories est toujours un tableau
+      this.sprints = sprints.map(s => ({ ...s, userStories: s.userStories || [] }));
+      console.log('Sprints récupérés:', this.sprints);
+      this.updateDropLists(); // Mettre à jour les connexions après chargement
     });
-  });
-
   }
 
   ngAfterViewInit() {
-  // Récupérer toutes les listes de drop après l'initialisation de la vue
-  setTimeout(() => {
-    this.sprintLists = this.dropLists.toArray().filter(list => list.id?.startsWith('sprint-'));
-    console.log('Sprint drop lists:', this.sprintLists);
-    console.log('Backlog drop list:', this.dropLists.toArray().find(list => !list.id?.startsWith('sprint-')));
-  }, 500);
-}
+    this.updateDropLists();
+    // Écouter les changements si de nouvelles listes sont ajoutées dynamiquement
+    this.dropLists.changes.subscribe(() => this.updateDropLists());
+  }
 
-  // Méthode pour obtenir toutes les user stories du backlog
+  updateDropLists() {
+    // Utiliser setTimeout pour s'assurer que le DOM est prêt
+    setTimeout(() => {
+      if (this.dropLists) {
+        const allLists = this.dropLists.toArray();
+        const backlogDropLists = allLists.filter(list => list.id?.startsWith('backlog-list-'));
+        const sprintDropLists = allLists.filter(list => list.id?.startsWith('sprint-'));
+
+        // Connecter chaque backlog à tous les sprints
+        backlogDropLists.forEach(backlogList => {
+          backlogList.connectedTo = sprintDropLists;
+        });
+
+        // Connecter chaque sprint à tous les backlogs
+        sprintDropLists.forEach(sprintList => {
+          sprintList.connectedTo = backlogDropLists;
+        });
+
+        console.log('Drop lists connectées.');
+        this.sprintLists = sprintDropLists; // Garder une référence si utile
+        this.cdRef.detectChanges(); // Important pour que les connexions soient prises en compte
+      }
+    }, 0);
+  }
+
+  // Méthode pour obtenir toutes les user stories du backlog (peut-être plus nécessaire si géré dans le template)
   getBacklogUserStories(): UserStory[] {
+    // Attention: cette fonction suppose un seul backlog principal, à adapter si plusieurs backlogs.
     if (!this.backlog || this.backlog.length === 0) return [];
-    
-    // Si userStoriesId est un tableau d'objets UserStory
     return this.backlog[0].userStoriesId || [];
   }
 
-// Méthode appelée lors du drop d'une user story
-// Dans votre méthode drop, ajoutez cette vérification
-drop(event: CdkDragDrop<UserStory[]>) {
-  if (event.previousContainer === event.container) {
-    // Réorganisation dans la même liste
-    moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-  } else {
-    // Transfert entre listes
-    const userStory = event.previousContainer.data[event.previousIndex];
-    
-    // Identifier si on déplace vers un sprint
-    const targetContainerId = event.container.id;
-    if (targetContainerId && targetContainerId.startsWith('sprint-')) {
-      const sprintId = targetContainerId.replace('sprint-', '');
-      
-      // Appel au service pour enregistrer la user story dans le sprint
-      if (userStory && userStory._id) {
-        this.addUserStoryToSprint(userStory, sprintId);
+  // *** MÉTHODE DROP SIMPLIFIÉE ***
+  // *** MÉTHODE DROP SIMPLIFIÉE ***
+  // *** MÉTHODE DROP SIMPLIFIÉE ***
+  drop(event: CdkDragDrop<UserStory[]>) {
+    if (event.previousContainer === event.container) {
+      // ... (réorganisation)
+    } else {
+      // --- Transfert --- 
+      transferArrayItem(
+        event.previousContainer.data, 
+        event.container.data,       
+        event.previousIndex,        
+        event.currentIndex          
+      );
+
+      const userStory = event.container.data[event.currentIndex]; 
+      const previousContainerId = event.previousContainer.id;
+      const targetContainerId = event.container.id;
+
+      if (!userStory?._id) { /* ... gestion erreur ... */ return; }
+
+      // ---> SI ON DÉPLACE VERS UN SPRINT (Backlog -> Sprint) <--- 
+      if (targetContainerId.startsWith("sprint-")) {
+          const sprintId = targetContainerId.replace("sprint-", "");
+          const backlogIndex = parseInt(previousContainerId.replace("backlog-list-", ""), 10);
+          const backlogId = this.backlog[backlogIndex]?._id;
+          if (backlogId) {
+              console.log(`INFO BACKEND: Story ${userStory._id} de Backlog ${backlogId} vers Sprint ${sprintId}`);
+              
+              // 1. Ajouter au sprint (Utilise addUserStoryToSprint)
+              this.projectService.addUserStoryToSprint(userStory._id, sprintId).subscribe({ /* ... */ });
+              
+              // 2. Retirer du backlog (Utilise removeFromBacklog)
+              // Note: removeFromBacklog ne prend que userStoryId, assurez-vous que le backend sait de quel backlog retirer.
+              this.projectService.removeFromBacklog(userStory._id).subscribe({ /* ... */ }); 
+          }
+      // ---> SI ON DÉPLACE VERS UN BACKLOG (Sprint -> Backlog) <--- 
+      } else if (targetContainerId.startsWith("backlog-list-")) {
+          const sprintId = previousContainerId.replace("sprint-", "");
+          const backlogIndex = parseInt(targetContainerId.replace("backlog-list-", ""), 10);
+          const backlogId = this.backlog[backlogIndex]?._id;
+          if (backlogId) {
+              console.log(`INFO BACKEND: Story ${userStory._id} de Sprint ${sprintId} vers Backlog ${backlogId}`);
+              
+              // *** CORRECTION ICI ***
+              // 1. Retirer du sprint (Utilise removeUserStoryFromSprint)
+              this.projectService.removeUserStoryFromSprintEX(userStory._id, userStory).subscribe({ 
+                  next: () => console.log(`Serveur OK: Story ${userStory._id} retirée de Sprint ${sprintId}`),
+                  error: (err) => {
+                      console.error("Erreur serveur retrait sprint:", err);
+                      alert("Erreur serveur: Le retrait du sprint a échoué.");
+                  }
+              }); 
+              
+              // 2. Ajouter au backlog (Utilise addToBacklog)
+              this.projectService.addToBacklog(userStory._id, backlogId).subscribe({ 
+                  next: () => console.log(`Serveur OK: Story ${userStory._id} ajoutée à Backlog ${backlogId}`),
+                  error: (err) => {
+                      console.error("Erreur serveur ajout backlog:", err);
+                      alert("Erreur serveur: L'ajout au backlog a échoué.");
+                  }
+              });
+          }
       }
     }
-    
-    // Effectuer le déplacement visuel
-    transferArrayItem(
-      event.previousContainer.data,
-      event.container.data,
-      event.previousIndex,
-      event.currentIndex,
-    );
   }
-}
 
 
 
 
-  // Méthode pour ajouter une user story à un sprint
+  // Méthode pour ajouter une user story à un sprint (appelée depuis drop)
+  // Cette méthode est maintenant juste un exemple d'appel serveur *après* le drop.
   addUserStoryToSprint(userStory: UserStory, sprintId: string) {
     if (!userStory._id) {
       console.error('User story ID is undefined');
       return;
     }
-    
+    // Note: Cet appel se fait APRES le déplacement visuel.
     this.projectService.addUserStoryToSprint(userStory._id, sprintId).subscribe({
       next: (response) => {
-        console.log('User story ajoutée au sprint avec succès:', response);
+        console.log(`Serveur: Story ${userStory._id} ajoutée au sprint ${sprintId} (réponse: ${response})`);
       },
       error: (err) => {
-        console.error('Erreur lors de l\'ajout de la user story au sprint:', err);
+        console.error(`Erreur serveur lors de l'ajout de ${userStory._id} au sprint ${sprintId}:`, err);
+        // Ici, vous pourriez vouloir implémenter une logique pour annuler
+        // le déplacement visuel si l'appel serveur échoue, ou au moins notifier l'utilisateur.
       }
     });
   }
@@ -173,23 +240,20 @@ drop(event: CdkDragDrop<UserStory[]>) {
   addUserStory() {
     let userStoryData = this.fromUserStory.value;
 
-    // Nettoyage : si backlogID vaut "undefined" (string), on le remet à null ou on prend backlog[0].id
-    if (userStoryData.backlogID === 'undefined' || userStoryData.backlogID == null) {
-      if (this.backlog.length === 1 && this.backlog[0]._id) {
-        userStoryData.backlogID = this.backlog[0]._id;
-        this.fromUserStory.patchValue({ backlogID: this.backlog[0]._id });
-      } else {
-        alert('Please select a valid backlog.');
+    // Validation simple
+    if (!userStoryData.title || !userStoryData.backlogID) {
+        alert('Veuillez renseigner le titre et sélectionner un backlog.');
         return;
-      }
     }
 
     console.log('Sending user story data:', userStoryData);
 
-    this.projectService.createUserStory(userStoryData).subscribe({
+    this.projectService.createUserStory(userStoryData as UserStory).subscribe({ // Cast si sûr du type
       next: (response) => {
         console.log('User story successfully added:', response);
-        this.fromUserStory.reset();
+        this.fromUserStory.reset({ priority: 'Medium', backlogID: (this.backlog.length === 1 ? this.backlog[0]._id : null) });
+        // Recharger seulement le backlog où la story a été ajoutée
+        this.loadBacklogs(); // Ou une méthode plus ciblée si possible
       },
       error: (err) => {
         console.error('Error while adding user story:', err);
@@ -197,159 +261,150 @@ drop(event: CdkDragDrop<UserStory[]>) {
       }
     });
   }
-// Méthode pour obtenir les IDs des listes de sprint
-getBacklogListIds(): string[] {
-  // Retourne un tableau avec les IDs de toutes les listes de backlog
-  return this.backlog.map((b, index) => 'backlog-list-' + index);
-}
 
-
-
-  // Fonction pour améliorer les performances de ngFor
-// Fonction pour améliorer les performances de ngFor
-trackByFn(index: number, item: UserStory): string {
-  return item._id || index.toString();
-}
-
-// Dans ngAfterViewInit
-
-
-
-
-showStoryOptions(story: UserStory) {
-  console.log('Afficher les options pour la story:', story);
-  // Vous pouvez ici afficher un menu contextuel ou une boîte de dialogue
-  // avec les options : voir détails, modifier, supprimer, ajouter/retirer utilisateur
-  
-  // Exemple avec une boîte de dialogue de confirmation
-  const action = confirm(
-    `Options pour "${story.title}":\n\n` +
-    `1. Voir les détails\n` +
-    `2. Modifier\n` +
-    `3. Supprimer\n` +
-    `4. Gérer les utilisateurs\n\n` +
-    `Que souhaitez-vous faire ?`
-  );
-  
-  if (action) {
-    // Implémentez votre logique en fonction de la réponse
+  // Méthode pour obtenir les IDs des listes connectées (utilisée dans le template)
+  getConnectedDropListsIds(currentListId: string): string[] {
+      if (!this.dropLists) return [];
+      const allListIds = this.dropLists.map(list => list.id).filter(id => !!id) as string[];
+      if (currentListId.startsWith('backlog-list-')) {
+          return allListIds.filter(id => id.startsWith('sprint-'));
+      } else if (currentListId.startsWith('sprint-')) {
+          return allListIds.filter(id => id.startsWith('backlog-list-'));
+      }
+      return [];
   }
-}
 
-
-
-
-// Variable pour suivre quel menu est ouvert
-activeMenu: { backlogIndex: number, storyIndex: number } | null = null;
-
-// Méthode pour basculer l'affichage du menu
-toggleStoryMenu(backlogIndex: number, storyIndex: number) {
-  if (this.isMenuOpen(backlogIndex, storyIndex)) {
-    // Si le menu est déjà ouvert, le fermer
-    this.activeMenu = null;
-  } else {
-    // Sinon, ouvrir ce menu et fermer tout autre menu ouvert
-    this.activeMenu = { backlogIndex, storyIndex };
+  // Fonctions trackBy pour ngFor
+  trackByFn(index: number, item: UserStory): string {
+    return item?._id || `story-${index}`;
   }
-}
+  trackByBacklogId(index: number, item: Backlog): string {
+    return item?._id || `backlog-${index}`;
+  }
+   trackBySprintId(index: number, item: Sprint): string {
+    return item?._id || `sprint-${index}`;
+  }
 
-// Méthode pour vérifier si un menu spécifique est ouvert
-isMenuOpen(backlogIndex: number, storyIndex: number): boolean {
-  return this.activeMenu !== null && 
-         this.activeMenu.backlogIndex === backlogIndex && 
-         this.activeMenu.storyIndex === storyIndex;
-}
+  // --- Gestion Menu Contextuel --- 
+  activeMenu: { listId: string, storyId: string } | null = null;
 
-// Ajouter un écouteur de clic global pour fermer le menu lorsqu'on clique ailleurs
-@HostListener('document:click', ['$event'])
-closeMenuOnOutsideClick(event: MouseEvent) {
-  // Vérifier si le clic est en dehors du menu
-  if (this.activeMenu !== null) {
-    const clickedElement = event.target as HTMLElement;
-    // Si l'élément cliqué n'est pas un élément de menu ou l'icône de menu
-    if (!clickedElement.closest('.story-menu-dropdown') && 
-        !clickedElement.classList.contains('story-menu-icon')) {
+  toggleStoryMenu(listId: string, storyId: string, event: MouseEvent) {
+    event.stopPropagation();
+    const menuKey = `${listId}-${storyId}`;
+    if (this.activeMenu?.listId === listId && this.activeMenu?.storyId === storyId) {
       this.activeMenu = null;
+    } else {
+      this.activeMenu = { listId, storyId };
+    }
+     this.cdRef.detectChanges();
+  }
+
+  isMenuOpen(listId: string, storyId: string): boolean {
+    return this.activeMenu?.listId === listId && this.activeMenu?.storyId === storyId;
+  }
+
+  @HostListener('document:click', ['$event'])
+  closeMenuOnOutsideClick(event: MouseEvent) {
+    if (this.activeMenu) {
+      const clickedElement = event.target as HTMLElement;
+      if (!clickedElement.closest('.story-menu-container.menu-open')) {
+         this.activeMenu = null;
+         this.cdRef.detectChanges();
+      }
     }
   }
-}
 
-// Méthodes pour les actions
-showStoryDetails(story: UserStory) {
-  console.log('Voir les détails de la story:', story);
-  this.activeMenu = null; // Fermer le menu après l'action
-  // Implémentez votre logique d'affichage des détails ici
-}
-
-editStory(story: UserStory) {
-  console.log('Modifier la story:', story);
-  this.activeMenu = null; // Fermer le menu après l'action
-  // Implémentez votre logique d'édition ici
-}
-
-deleteStory(story: UserStory) {
-  console.log('Supprimer la story:', story);
-  this.activeMenu = null; // Fermer le menu après l'action
-  // Implémentez votre logique de suppression ici
-}
-
-addUserToStory(story: UserStory) {
-  console.log('Ajouter un utilisateur à la story:', story);
-  this.activeMenu = null; // Fermer le menu après l'action
-  // Implémentez votre logique d'ajout d'utilisateur ici
-}
-
-removeUserFromStory(story: UserStory) {
-  console.log('Retirer un utilisateur de la story:', story);
-  this.activeMenu = null; // Fermer le menu après l'action
-  // Implémentez votre logique de retrait d'utilisateur ici
-}
-
-
-
-//fonction suppresion backlog and userStory
-popupVisible = false;
-
-openPopup(backlogID: string): void {
-  this.id = backlogID;
-  this.popupVisible = true;
-}
-
-cancelDelete() {
-  this.popupVisible = false;
-}
-
-confirmDelete(): void {
-  if (this.id) {
-    console.log('ID à supprimer :', this.id);
-
-    this.projectService.deleteBacklog(this.id).subscribe({
-      next: (res:any) => {
-        console.log("Suppression confirmée :", res.message);
-
-        // Si tu as une liste locale de backlogs à mettre à jour :
-        this.backlog = this.backlog.filter(b => b._id !== this.id);
-
-        // Redirection optionnelle (à adapter selon ton app)
-        this.router.navigate(['/'], {
-          queryParams: { message: 'Project deleted successfully' }
-        });
-      },
-      error: (err) => {
-        console.error('Erreur de suppression :', err);
-        alert('Failed to delete backlog and its user stories.');
-      }
-    });
-  } else {
-    console.warn('Aucun ID sélectionné pour suppression');
+  // Actions du menu (signatures corrigées si besoin)
+  showStoryDetails(story: UserStory) {
+    console.log('Voir détails:', story);
+    alert(`Détails de: ${story.title}`);
+    this.activeMenu = null;
   }
 
-  this.popupVisible = false;
+  editStory(story: UserStory) {
+    console.log('Modifier:', story);
+    alert(`Modifier: ${story.title}`);
+    this.activeMenu = null;
+  }
+
+  deleteStory(story: UserStory, listId: string) {
+    console.log('Supprimer:', story, 'from list:', listId);
+    if (!story._id) return;
+    if (confirm(`Êtes-vous sûr de vouloir supprimer la user story "${story.title}" ?`)) {
+      // Logique de suppression serveur à implémenter ici
+      // Exemple:
+      // if (listId.startsWith('backlog-list-')) { ... this.projectService.deleteUserStoryFromBacklog(...).subscribe(...); }
+      // else if (listId.startsWith('sprint-')) { ... this.projectService.deleteUserStoryFromSprint(...).subscribe(...); }
+      alert('Logique de suppression serveur à implémenter !');
+    }
+    this.activeMenu = null;
+  }
+
+  addUserToStory(story: UserStory) {
+    console.log('Ajouter utilisateur:', story);
+    alert(`Ajouter utilisateur à: ${story.title}`);
+    this.activeMenu = null;
+  }
+
+  removeUserFromStory(story: UserStory) {
+    console.log('Retirer utilisateur:', story);
+    alert(`Retirer utilisateur de: ${story.title}`);
+    this.activeMenu = null;
+  }
+
+  // --- Gestion Suppression Backlog --- 
+  popupVisible = false;
+  backlogIdToDelete: string | null = null; // Renommé pour clarté
+
+  openPopup(backlogID: string): void {
+    this.backlogIdToDelete = backlogID;
+    this.popupVisible = true;
+  }
+
+  cancelDelete() {
+    this.popupVisible = false;
+    this.backlogIdToDelete = null;
+  }
+
+  confirmDelete(): void {
+    if (this.backlogIdToDelete) {
+      console.log('ID du backlog à supprimer :', this.backlogIdToDelete);
+      this.projectService.deleteBacklog(this.backlogIdToDelete).subscribe({
+        next: (res:any) => {
+          console.log("Suppression confirmée :", res.message);
+          this.backlog = this.backlog.filter(b => b._id !== this.backlogIdToDelete);
+          this.popupVisible = false;
+          this.backlogIdToDelete = null;
+          // Optionnel: Afficher une notification
+          alert('Backlog supprimé avec succès.');
+          // Pas de redirection automatique ici, laisser l'utilisateur sur la page
+        },
+        error: (err) => {
+          console.error('Erreur de suppression du backlog :', err);
+          alert('Échec de la suppression du backlog.');
+          this.popupVisible = false;
+          this.backlogIdToDelete = null;
+        }
+      });
+    } else {
+      console.warn('Aucun ID de backlog sélectionné pour suppression');
+      this.popupVisible = false;
+    }
+  }
+
+
+  // Fonction de validation personnalisée (peut être mise hors de la classe si elle ne dépend pas de 'this')
+ allowedValueValidator(allowedValues: number[]): (control: AbstractControl) => ValidationErrors | null {
+  return (control: AbstractControl): ValidationErrors | null => {
+    if (control.value === null || control.value === '') {
+      return null; // Ne pas valider si le champ est vide (laisser faire Validators.required si besoin)
+    }
+    const isValueAllowed = allowedValues.includes(Number(control.value));
+    return isValueAllowed ? null : { allowedValue: { validValues: allowedValues, actualValue: control.value } };
+  };
 }
 
 
 
-
-
-
 }
+

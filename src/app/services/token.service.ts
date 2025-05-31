@@ -7,9 +7,15 @@ import { Router } from '@angular/router';
 })
 export class TokenService {
   private jwtHelper = new JwtHelperService();
-  private tokenKey = 'auth_token';
+  token: any;
+  userId: any;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    this.token = localStorage.getItem('token');
+    if (this.token) {
+      this.userId = this.getUserId();
+    }
+  }
 
   // Route guard method (optional - better to use separate AuthGuard service)
   canActivate(): boolean {
@@ -25,15 +31,15 @@ export class TokenService {
   }
 
   setToken(token: string): void {
-    localStorage.setItem(this.tokenKey, token);
+    localStorage.setItem(this.token, token);
   }
 
   getToken(): string | null {
-    return localStorage.getItem(this.tokenKey);
+    return localStorage.getItem(this.token);
   }
 
   removeToken(): void {
-    localStorage.removeItem(this.tokenKey);
+    localStorage.removeItem(this.token);
   }
 
   decodeToken(): any | null {
@@ -71,6 +77,18 @@ export class TokenService {
       const decodedToken = this.jwtHelper.decodeToken(token);
       // Ici, adapte "role" selon la clé exacte dans ton token
       return decodedToken?.role || null;
+    } catch {
+      return null;
+    }
+  }
+  getUserId(): string | null {
+    const token = this.getToken();
+    if (!token) {
+      return null;
+    }
+    try {
+      const decodedToken = this.jwtHelper.decodeToken(token);
+      return decodedToken.userId || null;
     } catch {
       return null;
     }

@@ -1,164 +1,85 @@
-<!-- <div class="backlog-card" >
-  <h2 class="backlog-title">{{ productBacklog.title }}</h2>
-  
-  <p class="backlog-description" >
-    {{ productBacklog.description }}
-  </p>
 
-  <div class="backlog-meta">
-    <strong>Project ID:</strong> {{ productBacklog?.projectID?.title}}
-  </div>
-
-  <div class="user-stories-section">
-    <h3>User Stories</h3>
-    <ul>
-      <li *ngFor="let story of productBacklog?.userStoriesId">
-        {{ story.title }}
-      </li>
-    </ul>
-   <p *ngIf="productBacklog?.userStoriesId?.length === 0" class="no-stories">
-  No user stories linked.
-</p>
-
-
-  </div>
-
- 
-</div> -->
-
-
-
-
-  <app-nav-bar></app-nav-bar>
-  <div class="app-container">
-    <div class="main-container">
-  <app-side-bar></app-side-bar>
-      <!-- Main Content -->
-      <main class="content">
-        <div class="content-header">
-          <h1 class="content-title">Create project</h1>
-        </div>
-<div class="projects-container">
-    <div class="container">
-        <header>
-            <div class="title-container">
-                <div class="orange-bar"></div>
-                <h1>PRODUCT<span class="orange-text">BACKLOG</span></h1>
+<app-nav-bar></app-nav-bar>
+    <div class="app-container">
+        <div class="main-container">
+            <app-side-bar></app-side-bar>
+            <div class="content-header">
+                
             </div>
-            <button class="expand-button">EXPAND</button>
-        </header>
-
-        <div class="content">
-            <div class="navigation-arrow left-arrow">
-                <div class="arrow-content">&lt;</div>
-            </div>
-
-            <div class="main-content">
-                <div class="column item-list">
-                    <div class="column-header">
-                        <h2>Item List To Do</h2>
-                    </div>
-                    <div class="item">
-                        <div class="item-number">5</div>
-                        <div class="item-description">Product List</div>
-                    </div>
-                    <div class="item">
-                        <div class="item-number">3</div>
-                        <div class="item-description">Product List</div>
-                    </div>
-                    <div class="item">
-                        <div class="item-number">6</div>
-                        <div class="item-description">Product List</div>
-                    </div>
-                    <div class="item">
-                        <div class="item-number">6</div>
-                        <div class="item-description">Product List</div>
-                    </div>
-                    <div class="item">
-                        <div class="item-number">1</div>
-                        <div class="item-description">Product List</div>
-                    </div>
-                    <div class="total orange">
-                        Product Total
+            
+            <div class="backlog-container">
+                <div class="backlog-header">
+                    <div class="backlog-title-container">
+                        <div class="orange-bar"></div>
+                        <h1>PRODUCT<span class="orange-text">BACKLOG</span></h1>
                     </div>
                 </div>
-
-                <div class="column product-name">
-                    <div class="column-header">
-                        <h2>Product Name</h2>
-                    </div>
-                    <div class="product-item">
-                        <div class="product-label">Item</div>
-                        <div class="product-value">Wish List</div>
-                    </div>
-                    <div class="product-item">
-                        <div class="product-label">Item</div>
-                        <div class="product-value">Increment</div>
-                    </div>
-                    <div class="product-item">
-                        <div class="product-label">Item</div>
-                        <div class="product-value">Dependency</div>
-                    </div>
-                    <div class="product-item">
-                        <div class="product-label">Item</div>
-                        <div class="product-value">Action</div>
-                    </div>
-                    <div class="product-item">
-                        <div class="product-label">Item</div>
-                        <div class="product-value">Opportunity</div>
-                    </div>
-                    <div class="total yellow">
-                        Product Total
-                    </div>
-                </div>
-
-                <div class="column progress-column">
-                    <div class="column-header">
-                        <h2>Mobile App for Company</h2>
-                    </div>
-                    <div class="progress-container">
-                        <div class="progress-label">Website Relaunch</div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 80%;"></div>
-                            <div class="progress-marker"></div>
+                
+                <div class="backlog-content">
+                    <div class="backlog-info-section">
+                        <div class="info-card">
+                            <h2>Informations</h2>
+                            <div class="info-item">
+                                <span class="info-label">Title:</span>
+                                <span class="info-value">{{ productBacklog.title }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Description:</span>
+                                <p class="info-value description">{{ productBacklog.description }}</p>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Project:</span>
+                                <span class="info-value">{{ productBacklog?.projectID?.title }}</span>
+                            </div>
+                            <div class="info-item">
+                                <!-- <span class="info-label">Créé le:</span> -->
+                                <span class="info-value"></span>
+                            </div>
+                            <div class="info-item">
+                                <!-- <span class="info-label">Mis à jour le:</span> -->
+                                <span class="info-value"></span>
+                            </div>
                         </div>
-                        <div class="progress-percentage">80%</div>
                     </div>
-                    <div class="progress-container">
-                        <div class="progress-label">UI/UX Design</div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 70%;"></div>
-                            <div class="progress-marker"></div>
+                    
+                    <div class="user-stories-section">
+                        <h2>User Stories <span class="story-count">({{ productBacklog?.userStoriesId?.length }})</span></h2>
+                        
+                        <div class="stories-container">
+                            <div class="story-card" *ngFor="let story of productBacklog.userStoriesId; let i = index">
+                                <div class="story-number">{{ i + 1 }}</div>
+                                <div class="story-content">
+                                    <h3 class="story-title">{{ story.title }}</h3>
+                                    <p class="story-description">{{ story.description }}</p>
+                                    <div class="story-meta">
+                                        <span class="story-priority">Priorité: {{ story.priority }}</span>
+                                        <span class="story-points">Points: {{ story.storyPoints }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="no-stories-message" *ngIf="productBacklog?.userStoriesId?.length === 0">
+                                <div class="empty-icon">📋</div>
+                                <p>Aucune user story n'est liée à ce backlog</p>
+                                <!-- <button class="add-story-button">Ajouter une user story</button> -->
+                            </div>
                         </div>
-                        <div class="progress-percentage">70%</div>
-                    </div>
-                    <div class="description-text">
-                        <p>Product backlog helps to ensure the development team is (a) check list of the tasks at hand to facilitate timely delivery</p>
                     </div>
                 </div>
-            </div>
-
-            <div class="navigation-arrow right-arrow">
-                <div class="arrow-content">&gt;</div>
+                
+                <div class="backlog-footer">
+                    <div class="footer-actions">
+                        <button class="action-button edit-button" [routerLink]="['/backlogUpdate',productBacklog._id]">Modifier</button>
+                    </div>
+                    <div class="footer-info">
+                        <!-- <div class="last-update">Dernière mise à jour: </div> -->
+                    </div>
+                </div>
             </div>
         </div>
-
-        <footer>
-            <div class="footer-left">
-                <div class="logo">POWERSLIDES</div>
-                <div class="page-indicator">
-                    <div class="page-dot active"></div>
-                </div>
-            </div>
-            <div class="footer-right">
-                <div class="website">WWW.POWERSLIDES.COM</div>
-            </div>
-        </footer>
-    </div> 
-    </div> 
-      </main>
     </div>
-  </div>
+ 
+
 
 
 

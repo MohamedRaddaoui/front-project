@@ -1,0 +1,381 @@
+<mat-toolbar class="navbar" [ngClass]="{'scrolled': isScrolled}">
+  <div class="container">
+    <div class="navbar-brand">
+      <img src="assets/images/Orkestra.png" alt="Orkestra Logo" class="logo">
+      <span class="brand-text">Orkestra</span>
+    </div>
+    <nav class="navbar-links">
+      <a mat-button href="#services" class="nav-link">Services</a>
+      <a mat-button href="#features" class="nav-link">Features</a>
+      <a mat-button href="#team" class="nav-link">Team</a>
+      <a mat-button href="#value" class="nav-link">Value</a>
+      <a mat-button href="#testimonials" class="nav-link">Testimonials</a>
+      <a mat-button href="#pricing" class="nav-link">Pricing</a>
+      <a mat-button href="#sdg" class="nav-link">SDG Impact</a>
+    </nav>
+    <div class="navbar-auth">
+      <button mat-stroked-button color="primary" routerLink="/signin" class="pulse">Sign In</button>
+      <button mat-raised-button color="primary" routerLink="/signup" class="pulse">Sign Up</button>
+    </div>
+  </div>
+</mat-toolbar>
+
+<section id="home" class="hero-section">
+  <div class="hero-background">
+    <div class="gradient-overlay"></div>
+    <div class="shapes-container">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+    </div>
+  </div>
+  <div class="container hero-content">
+    <h1 class="hero-title">Orchestrate Your Projects with Orkestra</h1>
+    <p class="hero-subtitle">Master project management with seamless collaboration and cutting-edge tools.</p>
+    <div class="hero-buttons">
+      <button mat-raised-button color="primary" class="btn-primary pulse">
+        Start Free Trial
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+      <button mat-stroked-button color="primary" class="btn-secondary pulse">
+        Request Demo
+        <mat-icon>play_circle</mat-icon>
+      </button>
+    </div>
+    <div class="trust-badges">
+      <span>Trusted by 1,200+ companies globally</span>
+      <div class="company-logos">
+        <img src="assets/images/company1.png" alt="Company 1" class="company-logo">
+        <img src="assets/images/company2.png" alt="Company 2" class="company-logo">
+        <img src="assets/images/company3.png" alt="Company 3" class="company-logo">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="services" class="section">
+  <div class="container">
+    <div class="section-header animate-on-scroll">
+      <h2>Our Core Services</h2>
+      <p>Empower your projects with Orkestra's expertise</p>
+    </div>
+    <div class="grid">
+      <mat-card class="card animate-card" style="--delay: 0.1s;">
+        <mat-icon class="card-icon">task</mat-icon>
+        <h3>Task Management</h3>
+        <p>Effortlessly organize and track tasks with real-time updates.</p>
+      </mat-card>
+      <mat-card class="card animate-card" style="--delay: 0.2s;">
+        <mat-icon class="card-icon">groups</mat-icon>
+        <h3>Team Collaboration</h3>
+        <p>Enhance teamwork with integrated communication tools.</p>
+      </mat-card>
+      <mat-card class="card animate-card" style="--delay: 0.3s;">
+        <mat-icon class="card-icon">insights</mat-icon>
+        <h3>Analytics & Insights</h3>
+        <p>Gain actionable insights with advanced reporting.</p>
+      </mat-card>
+      <mat-card class="card animate-card" style="--delay: 0.4s;">
+        <mat-icon class="card-icon">security</mat-icon>
+        <h3>Enterprise Security</h3>
+        <p>Protect your data with top-tier security protocols.</p>
+      </mat-card>
+    </div>
+  </div>
+</section>
+
+<section id="features" class="section section-gray">
+  <div class="container">
+    <div class="section-header animate-on-scroll">
+      <h2>Key Features</h2>
+      <p>Explore Orkestra's powerful tools</p>
+    </div>
+    <div class="feature-grid">
+      <div class="feature-item animate-card" style="--delay: 0.1s;">
+        <img src="assets/images/scrum-drawing.png" alt="Scrum Drawing" class="feature-img">
+        <div class="feature-text">
+          <h3>Scrum Framework</h3>
+          <p>Visualize sprints with interactive Scrum boards.</p>
+        </div>
+      </div>
+      <div class="feature-item animate-card" style="--delay: 0.2s;">
+        <img src="assets/images/kanban-board.png" alt="Kanban Board" class="feature-img">
+        <div class="feature-text">
+          <h3>Kanban Boards</h3>
+          <p>Manage workflows with drag-and-drop Kanban lanes.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="team" class="section">
+  <div class="container">
+    <div class="section-header animate-on-scroll">
+      <h2>Our Leadership Team</h2>
+      <p>Meet the minds driving Orkestra</p>
+    </div>
+    <div class="grid">
+      <mat-card class="team-card animate-card" style="--delay: 0.1s;">
+        <img src="assets/images/team-jane.jpg" alt="Jane Doe" class="team-img">
+        <h3>Jane Doe</h3>
+        <p class="team-role">CEO & Founder</p>
+        <p>20+ years in project management innovation.</p>
+      </mat-card>
+      <mat-card class="team-card animate-card" style="--delay: 0.2s;">
+        <img src="assets/images/team-john.jpg" alt="John Smith" class="team-img">
+        <h3>John Smith</h3>
+        <p class="team-role">CTO</p>
+        <p>Expert in AI and software architecture.</p>
+      </mat-card>
+      <mat-card class="team-card animate-card" style="--delay: 0.3s;">
+        <img src="assets/images/team-emily.jpg" alt="Emily Johnson" class="team-img">
+        <h3>Emily Johnson</h3>
+        <p class="team-role">COO</p>
+        <p>15 years optimizing global operations.</p>
+      </mat-card>
+      <mat-card class="team-card animate-card" style="--delay: 0.4s;">
+        <img src="assets/images/team-mike.jpg" alt="Mike Wilson" class="team-img">
+        <h3>Mike Wilson</h3>
+        <p class="team-role">CFO</p>
+        <p>10 years in financial strategy for tech firms.</p>
+      </mat-card>
+      <mat-card class="team-card animate-card" style="--delay: 0.5s;">
+        <img src="assets/images/team-lisa.jpg" alt="Lisa Chen" class="team-img">
+        <h3>Lisa Chen</h3>
+        <p class="team-role">CMO</p>
+        <p>12 years in digital marketing and branding.</p>
+      </mat-card>
+    </div>
+  </div>
+</section>
+
+<section id="value" class="section section-gray">
+  <div class="container">
+    <div class="section-header animate-on-scroll">
+      <h2>Our Value Proposition</h2>
+      <p>What sets Orkestra apart</p>
+    </div>
+    <div class="grid grid-2">
+      <mat-card class="card animate-card" style="--delay: 0.1s;">
+        <mat-icon class="card-icon">speed</mat-icon>
+        <h3>Efficiency</h3>
+        <p>Automate workflows to save time.</p>
+      </mat-card>
+      <mat-card class="card animate-card" style="--delay: 0.2s;">
+        <mat-icon class="card-icon">expand</mat-icon>
+        <h3>Scalability</h3>
+        <p>Grow with your business needs.</p>
+      </mat-card>
+      <mat-card class="card animate-card" style="--delay: 0.3s;">
+        <mat-icon class="card-icon">accessibility</mat-icon>
+        <h3>User-Friendly</h3>
+        <p>Intuitive for all team members.</p>
+      </mat-card>
+      <mat-card class="card animate-card" style="--delay: 0.4s;">
+        <mat-icon class="card-icon">eco</mat-icon>
+        <h3>Sustainability</h3>
+        <p>Support eco-conscious projects.</p>
+      </mat-card>
+    </div>
+  </div>
+</section>
+
+<section id="testimonials" class="section">
+  <div class="container">
+    <div class="section-header animate-on-scroll">
+      <h2>What Our Clients Say</h2>
+      <p>Real stories from Orkestra users</p>
+    </div>
+    <div class="grid">
+      <mat-card class="testimonial-card animate-card" style="--delay: 0.1s;">
+        <p class="quote">"Orkestra cut our project timelines by 25%! Amazing tool."</p>
+        <div class="author">
+          <h4>Michael Brown</h4>
+          <p>Project Manager, TechCorp Inc.</p>
+        </div>
+      </mat-card>
+      <mat-card class="testimonial-card animate-card" style="--delay: 0.2s;">
+        <p class="quote">"Collaboration across continents has never been easier."</p>
+        <div class="author">
+          <h4>Sarah Lee</h4>
+          <p>Operations Lead, GreenWave Ltd.</p>
+        </div>
+      </mat-card>
+      <mat-card class="testimonial-card animate-card" style="--delay: 0.3s;">
+        <p class="quote">"The AI insights are a game-changer for our planning."</p>
+        <div class="author">
+          <h4>David Patel</h4>
+          <p>CEO, Innovate Solutions</p>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+</section>
+
+<section id="pricing" class="section section-gray">
+  <div class="container">
+    <div class="section-header animate-on-scroll">
+      <h2>Pricing Plans</h2>
+      <p>Choose the perfect plan for your team</p>
+    </div>
+    <div class="grid">
+      <mat-card class="pricing-card animate-card" style="--delay: 0.1s;">
+        <h3>Basic</h3>
+        <div class="price">$39<span>/month</span></div>
+        <ul class="features-list">
+          <li><mat-icon>check</mat-icon> 5 users</li>
+          <li><mat-icon>check</mat-icon> Basic analytics</li>
+          <li><mat-icon>check</mat-icon> Email support</li>
+        </ul>
+        <button mat-raised-button color="primary">Get Started</button>
+      </mat-card>
+      <mat-card class="pricing-card popular animate-card" style="--delay: 0.2s;">
+        <div class="popular-badge">Best Value</div>
+        <h3>Pro</h3>
+        <div class="price">$79<span>/month</span></div>
+        <ul class="features-list">
+          <li><mat-icon>check</mat-icon> 20 users</li>
+          <li><mat-icon>check</mat-icon> Advanced analytics</li>
+          <li><mat-icon>check</mat-icon> 24/7 support</li>
+        </ul>
+        <button mat-raised-button color="primary">Get Started</button>
+      </mat-card>
+      <mat-card class="pricing-card animate-card" style="--delay: 0.3s;">
+        <h3>Enterprise</h3>
+        <div class="price">Custom</div>
+        <ul class="features-list">
+          <li><mat-icon>check</mat-icon> Unlimited users</li>
+          <li><mat-icon>check</mat-icon> Custom integrations</li>
+          <li><mat-icon>check</mat-icon> Dedicated account manager</li>
+        </ul>
+        <button mat-raised-button color="primary">Contact Us</button>
+      </mat-card>
+    </div>
+  </div>
+</section>
+
+<section id="sdg" class="section">
+  <div class="container">
+    <div class="section-header animate-on-scroll">
+      <h2>Commitment to SDGs</h2>
+      <p>Supporting global sustainability goals</p>
+    </div>
+    <div class="grid">
+      <mat-card class="card animate-card" style="--delay: 0.1s;">
+        <mat-icon class="card-icon">work</mat-icon>
+        <h3>SDG 8: Decent Work</h3>
+        <p>Boost productivity for economic growth.</p>
+      </mat-card>
+      <mat-card class="card animate-card" style="--delay: 0.2s;">
+        <mat-icon class="card-icon">build</mat-icon>
+        <h3>SDG 9: Innovation</h3>
+        <p>Drive sustainable infrastructure projects.</p>
+      </mat-card>
+      <mat-card class="card animate-card" style="--delay: 0.3s;">
+        <mat-icon class="card-icon">public</mat-icon>
+        <h3>SDG 13: Climate Action</h3>
+        <p>Enable eco-friendly project planning.</p>
+      </mat-card>
+    </div>
+  </div>
+</section>
+
+<section id="cta" class="cta-section">
+  <div class="container">
+    <div class="cta-content animate-on-scroll">
+      <h2>Start Orchestrating Your Success</h2>
+      <p>Join Orkestra today and transform your project management experience.</p>
+      <button mat-raised-button color="primary" class="btn-cta pulse">
+        Get Started
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </div>
+  </div>
+</section>
+
+<section class="public-events-section section">
+  <div class="container">
+    <div class="section-header animate-on-scroll">
+      <h2>Upcoming Public Events</h2>
+      <p>Join our community events and workshops</p>
+    </div>
+
+    <div class="events-carousel">
+      <button mat-icon-button class="nav-button prev" (click)="previousSlide()" [disabled]="!canSlidePrevious()">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+
+      <div class="carousel-container">
+        <div class="carousel-track" [style.transform]="'translateX(-' + (currentSlide * 33.333) + '%)'">
+          <mat-card class="event-card animate-card" *ngFor="let event of publicEvents">
+            <mat-card-header>
+              <div class="event-type-badge" [ngClass]="event.type.toLowerCase()">
+                {{ event.type }}
+              </div>
+              <mat-card-title>{{ event.title }}</mat-card-title>
+              <mat-card-subtitle>
+                {{ event.date | date:'mediumDate' }} at {{ event.startTime | date:'shortTime' }}
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <p class="event-description">{{ event['description'] }}</p>
+              <div class="event-details">
+                <div class="detail-item">
+                  <mat-icon>location_on</mat-icon>
+                  <span>{{ event.location }}</span>
+                </div>
+                <div class="detail-item">
+                  <mat-icon>group</mat-icon>
+                  <span>{{ event['attendees']?.length || 0 }} / {{ event['maxAttendees'] || '∞' }}</span>
+                </div>
+              </div>
+            </mat-card-content>
+            <mat-card-actions>
+              <button mat-raised-button color="primary" [routerLink]="['/event', event['_id']]">
+                Learn More
+                <mat-icon>arrow_forward</mat-icon>
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        </div>
+      </div>
+
+      <button mat-icon-button class="nav-button next" (click)="nextSlide()" [disabled]="!canSlideNext()">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container footer-content">
+    <div class="footer-section">
+      <h4>Orkestra</h4>
+      <p>Revolutionizing project management since 2023.</p>
+      <div class="social-links">
+        <a href="#" class="social-icon"><mat-icon>facebook</mat-icon></a>
+        <a href="#" class="social-icon"><mat-icon>twitter</mat-icon></a>
+        <a href="#" class="social-icon"><mat-icon>linkedin</mat-icon></a>
+      </div>
+    </div>
+    <div class="footer-section">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h4>Contact</h4>
+      <p>Email: info&#64;orkestra.io</p>
+      <p>Phone: +1-800-555-0123</p>
+      <p>Address: 789 Project Ave, Tech City, USA</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Orkestra. All rights reserved.</p>
+  </div>
+</footer>

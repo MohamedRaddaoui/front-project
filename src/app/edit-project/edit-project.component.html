@@ -11,7 +11,7 @@
         <div class="content-header">
           <h1 class="content-title">Edit project</h1>
         </div>
-<form [formGroup]="formProject"  (ngSubmit)="updateProject()"> 
+<form *ngIf="project" [formGroup]="formProject"  (ngSubmit)="updateProject()"> 
   <div class="form-container">
     <!-- Première ligne -->
     <div class="form-row first-row">
@@ -128,26 +128,7 @@
       </main>
     </div>
   </div>
-
     <!-- Exemple de notification de succès -->
   <div class="custom-success">Project created successfully!</div>
-
- 
-  <script>
-    // Simple JavaScript for toggling mobile menu
-    document.addEventListener('DOMContentLoaded', function() {
-      // Add mobile menu toggle functionality if needed
-      const navItems = document.querySelectorAll('.nav-item');
-
-      navItems.forEach(item => {
-        item.addEventListener('click', function() {
-          // Remove active class from all items
-          navItems.forEach(i => i.classList.remove('active'));
-          // Add active class to clicked item
-          this.classList.add('active');
-        });
-      });
-    });
-  </script>
 
 

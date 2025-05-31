@@ -49,17 +49,6 @@
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
 .app-container {
   margin-top: 5%;
   display: flex;
@@ -76,8 +65,7 @@
 }
 
 .content-header {
-  margin-top: 3%;
-  
+  margin-top: 10%;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
@@ -107,7 +95,7 @@
 } */
 
 .project-path {
-  color: #777; /* Lighter gray */
+  color: #0f2a4a; /* Lighter gray */
   font-size: 20px;
   font-weight: 500; /* Lighter weight */
 }

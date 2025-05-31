@@ -4,10 +4,6 @@
   <app-side-bar></app-side-bar>
       <!-- Main Content -->
       <main class="content">
-        <!-- <div class="custom-success " *ngIf="successMessage" >
-          {{ successMessage }}
-        </div>
-         -->
         <div class="content-header">
           <h1 class="content-title">Create project</h1>
         </div>
@@ -23,6 +19,7 @@
              class="form-error-message active"> 
           <p *ngIf="formProject.get('title')?.hasError('required')">Title is required.</p>
           <p *ngIf="formProject.get('title')?.hasError('minlength')">Title must be at least 3 characters long.</p>
+          <p *ngIf="formProject.get('title')?.hasError('maxlength')">Title must not exceed 10 characters.</p>
           <p *ngIf="formProject.get('title')?.hasError('invalidTitle')">Title must contain only letters, spaces, hyphens or apostrophes.</p>
 
         </div>

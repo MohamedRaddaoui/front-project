@@ -8,6 +8,17 @@
     <div class="filter-section">
       <h3>Filters</h3>
       <div class="filter-grid">
+        <!-- Project Filter -->
+        <div class="filter-item">
+          <label>Project</label>
+          <select [(ngModel)]="filters.projectTitle" (change)="applyFilters()">
+            <option value="">All Projects</option>
+            <option *ngFor="let project of projects" [value]="project.title">
+              {{project.title || 'Untitled Project'}}
+            </option>
+          </select>
+        </div>
+
         <!-- Assigned User Filter -->
         <div class="filter-item">
           <label>Assigned To</label>
