@@ -5,11 +5,16 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TaskService } from '../services/task.service';
 import { CommentService } from '../services/comment.service';
+import { UserService } from '../services/user.service';
+import { ProjectService } from '../services/project.service';
 import { Task, TaskHistory } from '../models/task.model';
+import { AuthService } from '../services/auth.service';
+import { environment } from '../../environment/env';
+import { NavBarComponent } from '../nav-bar/nav-bar.component';
 
 @Component({
   selector: 'app-task-details',
-  imports: [SideBarComponent, CommonModule, FormsModule],
+  imports: [SideBarComponent, CommonModule, FormsModule,NavBarComponent],
   templateUrl: './task-details.component.html',
   styleUrl: './task-details.component.css'
 })
@@ -21,7 +26,8 @@ export class TaskDetailsComponent implements OnInit {
     priority: 'Medium',
     status: 'To Do',
     assignedUser: '',
-    projectId: '', // This should be set based on current project
+    projectId: '',
+    userId: '',
     comments: []
   };
 
@@ -36,27 +42,35 @@ export class TaskDetailsComponent implements OnInit {
     files: [] as File[]
   };
   showCommentForm: boolean = false;
+  editingComment: any = null;
   errorMessage: string = '';
   taskHistory: TaskHistory[] = [];
   activeTab: 'comments' | 'history' = 'comments';
   // Pour utilisation future avec l'authentification
   // currentUserId: string = '';
-
+  isTaskUpdating: boolean = false;
+  isCommentLoading: boolean = false;
+  isCommentUpdating: { [key: string]: boolean } = {};
+  idTask: string = '';
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private taskService: TaskService,
-    private commentService: CommentService
+    private commentService: CommentService,
+    private userService: UserService,
+    private projectService: ProjectService,
+    public authService: AuthService
   ) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       if (params['id']) {
+        this.idTask = params['id'];
         this.fetchTask(params['id']);
       } else {
         this.isCreateMode = true;
-        // Set projectId from route or state management
         this.task.projectId = this.route.snapshot.queryParams['projectId'];
+        this.task.userId = this.authService.getCurrentUserId();
       }
     });
     this.fetchUsers();
@@ -65,12 +79,16 @@ export class TaskDetailsComponent implements OnInit {
   }
 
   fetchProjects() {
-    // Static project list for now
-    this.projects = [
-      { _id: '67f7a640d4ce6fae00468f18', name: 'Application dev' },
-      { _id: '68014b8ea4e327735c69ec8f', name: 'project test mail' },
-      { _id: '68150a984ed88e831b86d362', name: 'test' }
-    ];
+    this.projectService.getAllProject().subscribe({
+      next: (response) => {
+        this.projects = response;
+        console.log('Projects loaded:', this.projects);
+      },
+      error: (error) => {
+        console.error('Error loading projects:', error);
+        this.errorMessage = 'Error loading projects';
+      }
+    });
   }
 
   fetchTask(id: string) {
@@ -91,7 +109,10 @@ export class TaskDetailsComponent implements OnInit {
     this.commentService.getCommentsByTaskId(taskId).subscribe({
       next: (response) => {
         console.log('Comments loaded:', response);
-        this.task.comments = response.comments || [];
+        // Sort comments by date, newest first
+        this.task.comments = (response.comments || []).sort((a: any, b: any) => 
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
       },
       error: (error) => {
         console.error('Error loading comments:', error);
@@ -101,14 +122,23 @@ export class TaskDetailsComponent implements OnInit {
   }
 
   fetchUsers() {
-    // TODO: Implement user service to fetch users
-    this.users = [
-      { _id: '67d99644b4e02ca9a8b0991f', firstname: 'Mohamed', lastname: 'Raddaoui' },
-      { _id: '67dea703b0a765d6ff287d98', firstname: 'jean', lastname: 'philip' }
-    ];
+    this.userService.getAllUsers().subscribe({
+      next: (response) => {
+        this.users = response;
+        console.log('Users loaded:', this.users);
+      },
+      error: (error) => {
+        console.error('Error loading users:', error);
+        this.errorMessage = 'Error loading users';
+      }
+    });
   }
 
   onEdit() {
+    if (!this.authService.canModifyTask(this.task.assignedUser)) {
+      this.errorMessage = 'Vous n\'avez pas la permission de modifier cette tâche';
+      return;
+    }
     this.isEditMode = true;
   }
 
@@ -124,6 +154,11 @@ export class TaskDetailsComponent implements OnInit {
     }
 
     if (this.isCreateMode) {
+      if (!this.authService.canAddTask()) {
+        this.errorMessage = 'Vous n\'avez pas la permission d\'ajouter une nouvelle tâche';
+        return;
+      }
+      this.isTaskUpdating = true;
       this.taskService.createTask(this.task).subscribe({
         next: (response) => {
           console.log('Task created:', response);
@@ -132,28 +167,76 @@ export class TaskDetailsComponent implements OnInit {
         error: (error) => {
           this.errorMessage = error.error.message || 'Error creating task';
           console.error('Error creating task:', error);
+        },
+        complete: () => {
+          this.isTaskUpdating = false;
         }
       });
     } else {
-      this.taskService.updateTask(this.task._id, this.task).subscribe({
+      if (!this.authService.canModifyTask(this.task.assignedUser)) {
+        this.errorMessage = 'Vous n\'avez pas la permission de modifier cette tâche';
+        return;
+      }
+
+      // Create update object with only necessary fields
+      interface TaskUpdate {
+        title: string;
+        description?: string;
+        status: string;
+        priority: string;
+        tags?: string;
+        projectId: string;
+        assignedUser?: string;
+        dueDate?: string;
+      }
+
+      const taskUpdate: TaskUpdate = {
+        title: this.task.title,
+        description: this.task.description,
+        status: this.task.status,
+        priority: this.task.priority,
+        tags: this.task.tags,
+        projectId: this.task.projectId,
+        assignedUser: this.task.assignedUser
+      };
+
+      // Only include dueDate if it exists
+      if (this.task.dueDate) {
+        taskUpdate.dueDate = this.task.dueDate;
+      }
+
+      this.isTaskUpdating = true;
+      this.taskService.updateTask(this.task._id, taskUpdate).subscribe({
         next: (response) => {
           console.log('Task updated:', response);
           this.isEditMode = false;
           this.task = response.task;
+          this.fetchTask(this.idTask);
         },
         error: (error) => {
           this.errorMessage = error.error.message || 'Error updating task';
           console.error('Error updating task:', error);
+        },
+        complete: () => {
+          this.isTaskUpdating = false;
         }
       });
     }
   }
 
   onDelete() {
+    if (!this.authService.canModifyTask(this.task.assignedUser)) {
+      this.errorMessage = 'Vous n\'avez pas la permission de supprimer cette tâche';
+      return;
+    }
     this.showDeleteModal = true;
   }
 
   confirmDelete() {
+    if (!this.authService.canModifyTask(this.task.assignedUser)) {
+      this.errorMessage = 'Vous n\'avez pas la permission de supprimer cette tâche';
+      return;
+    }
     this.taskService.deleteTask(this.task._id).subscribe({
       next: () => {
         console.log('Task deleted successfully');
@@ -170,13 +253,14 @@ export class TaskDetailsComponent implements OnInit {
     if (this.newComment.text.trim() && this.task.assignedUser) {
       const formData = new FormData();
       formData.append('taskId', this.task._id);
-      formData.append('userId', this.task.assignedUser);
+      formData.append('userId', this.authService.getCurrentUserId() ?? this.task.assignedUser);
       formData.append('text', this.newComment.text);
 
       this.newComment.files.forEach((file) => {
-        formData.append('files', file);
+        formData.append('attachments', file);
       });
 
+      this.isCommentLoading = true;
       this.commentService.addComment(formData).subscribe({
         next: (response) => {
           if (response.isFlagged) {
@@ -193,6 +277,9 @@ export class TaskDetailsComponent implements OnInit {
         error: (error) => {
           this.errorMessage = error.error.message || 'Error adding comment';
           console.error('Error adding comment:', error);
+        },
+        complete: () => {
+          this.isCommentLoading = false;
         }
       });
     } else if (!this.task.assignedUser) {
@@ -200,9 +287,48 @@ export class TaskDetailsComponent implements OnInit {
     }
   }
 
-  editComment(comment: any) {
-    // TODO: Implement comment editing
-    console.log('Edit comment:', comment);
+  startEditComment(comment: any) {
+    this.editingComment = {
+      ...comment,
+      editText: comment.text
+    };
+  }
+
+  cancelEditComment() {
+    this.editingComment = null;
+  }
+
+  updateComment(comment: any) {
+    if (!comment.editText.trim()) {
+      this.errorMessage = 'Comment text cannot be empty';
+      return;
+    }
+
+    const updatedComment = {
+      text: comment.editText,
+      taskId: this.task._id,
+      userId: this.authService.getCurrentUserId()
+    };
+
+    this.isCommentUpdating[comment._id] = true;
+    this.commentService.updateComment(comment._id, updatedComment).subscribe({
+      next: (response) => {
+        console.log('Comment updated successfully:', response);
+        this.loadComments(this.task._id);
+        this.editingComment = null;
+      },
+      error: (error) => {
+        console.error('Error updating comment:', error);
+        this.errorMessage = error.error?.message || 'Error updating comment';
+      },
+      complete: () => {
+        this.isCommentUpdating[comment._id] = false;
+      }
+    });
+  }
+
+  canEditComment(comment: any): boolean {
+    return this.authService.canEditComment(comment.userId);
   }
 
   deleteComment(commentId: string) {
@@ -215,6 +341,7 @@ export class TaskDetailsComponent implements OnInit {
     }
 
     if (confirm('Are you sure you want to delete this comment?')) {
+      this.isCommentLoading = true;
       this.commentService.deleteComment(this.task._id, commentId).subscribe({
         next: () => {
           console.log('Comment deleted successfully');
@@ -224,6 +351,9 @@ export class TaskDetailsComponent implements OnInit {
         error: (error) => {
           console.error('Error deleting comment:', error);
           this.errorMessage = error.error?.message || 'Error deleting comment';
+        },
+        complete: () => {
+          this.isCommentLoading = false;
         }
       });
     }
@@ -263,32 +393,59 @@ export class TaskDetailsComponent implements OnInit {
       this.taskService.getTaskHistory(this.task._id).subscribe({
         next: (history) => {
           this.taskHistory = history;
+          console.log('Loaded task history:', history);
         },
         error: (error) => {
           console.error('Error loading task history:', error);
+          this.errorMessage = 'Failed to load task history';
         }
       });
     }
   }
 
-  getFieldLabel(field: string): string {
+  getFieldLabel(key: string): string {
     const labels: { [key: string]: string } = {
-      title: 'Title',
+      title: 'Titre',
       description: 'Description',
-      status: 'Status',
-      priority: 'Priority',
-      assignedUser: 'Assigned User',
-      dueDate: 'Due Date',
-      tags: 'Tags'
+      status: 'Statut',
+      priority: 'Priorité',
+      assignedUser: 'Assigné à',
+      projectId: 'Projet',
+      tags: 'Tags',
+      dueDate: 'Date d\'échéance'
     };
-    return labels[field] || field;
+    return labels[key] || key;
   }
 
-  formatDate(date: string | Date): string {
-    return new Date(date).toLocaleString();
+  formatDate(date: Date): string {
+    if (!date) return '';
+    const d = new Date(date);
+    return d.toLocaleDateString('fr-FR', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
+
+  formatValue(value: any): string {
+    if (value === null || value === undefined) return 'Non défini';
+    if (typeof value === 'boolean') return value ? 'Oui' : 'Non';
+    if (typeof value === 'object' && value._id) {
+      return value.email || value.name || value.title || value._id;
+    }
+    return String(value);
   }
 
   switchTab(tab: 'comments' | 'history') {
     this.activeTab = tab;
+    if (tab === 'history') {
+      this.loadTaskHistory();
+    }
+  }
+
+  getDownloadUrl(commentId: string, attachmentId: string): string {
+    return `${environment.baseUrl}/taskcomments/${commentId}/attachments/${attachmentId}`;
   }
 }
