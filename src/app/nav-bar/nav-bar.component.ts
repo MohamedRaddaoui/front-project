@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component,OnInit  } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ButtonModule } from '@syncfusion/ej2-angular-buttons';
 import { TokenService } from '../services/token.service';
@@ -14,15 +14,20 @@ import { UserService } from '../services/user.service';
   templateUrl: './nav-bar.component.html',
   styleUrl: './nav-bar.component.css'
 })
-export class NavBarComponent  implements OnInit{
- showAddButton = false;
+export class NavBarComponent implements OnInit {
+  showAddButton = false;
   private token: string | null;
   private userId: string | any;
   public user: User | undefined;
   private jwtHelper = new JwtHelperService();
 
-  constructor(private router: Router, private route: ActivatedRoute, private tokenService: TokenService,private userService: UserService) {
-        this.token = this.tokenService.getToken();
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private tokenService: TokenService,
+    private userService: UserService
+  ) {
+    this.token = this.tokenService.getToken();
     if (this.token) {
       const decodedToken = this.jwtHelper.decodeToken(this.token);
       this.userId = decodedToken.userId;
@@ -33,8 +38,14 @@ export class NavBarComponent  implements OnInit{
     this.router.events.subscribe(() => {
       this.showAddButton = this.router.url.includes('task'); 
     });
-    this.userService.getUserById(this.userId).subscribe((user) => this.user = user)
+
+    this.userService.getUserById(this.userId).subscribe((user) => {
+      this.user = user;
+    });
   }
 
-
+  // Méthode de redirection
+  goToProfile(): void {
+    this.router.navigate(['/profile']);
+  }
 }

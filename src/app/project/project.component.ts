@@ -15,10 +15,27 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   templateUrl: './project.component.html',
   styleUrls: ['./project.component.css']
 })
+<<<<<<< HEAD
+export class ProjectComponent implements OnInit {
+  successMessage: string | null = null;
+  token: string | null = null;
+  userId: string = '';
+  role: string = '';
+  listProject: Project[] = [];
+  paginatedProjects: Project[] = [];
+  projectsPerPage = 6;
+  currentPage = 1;
+  totalPages = 1;
+  totalPagesArray: number[] = [];
+  maxVisibleAvatars = 3;
+  projectUsersExpandedState = new Map<string, boolean>();
+
+=======
 export class ProjectComponent {
   successMessage: string | null = null; // ✅ Ajoute cette ligne
     token:string |null;
   userId:string="";
+>>>>>>> 2510ab8337b83e03442459df54cbdbcdcd3007a1
   private jwtHelper = new JwtHelperService();
 
   constructor(private projectService: ProjectService, private router:Router, private route :ActivatedRoute,private tokenService:TokenService) {
@@ -81,6 +98,23 @@ loadAndFilterProjects(filterArchived: boolean) {
     // Optionally handle this case, e.g., redirect to login or show an error
     return;
   }
+<<<<<<< HEAD
+
+  updatePaginatedProjects(): void {
+    const start = (this.currentPage - 1) * this.projectsPerPage;
+    const end = start + this.projectsPerPage;
+    this.paginatedProjects = this.listProject.slice(start, end);
+
+    this.paginatedProjects.forEach(project => {
+      project.showFullDescription = false;
+
+      if (project.id !== undefined && project.id !== null) {
+        if (!this.projectUsersExpandedState.has(project.id)) {
+          this.projectUsersExpandedState.set(project.id, false);
+        }
+      }
+    });
+=======
   this.projectService.getProjectByUser(this.userId).subscribe({
     next: (projects: Project[]) => {
       // Filter the projects based on the archived status
@@ -121,12 +155,8 @@ loadAndFilterProjects(filterArchived: boolean) {
     if (project._id !== undefined && project._id !== null) {
   if (!this.projectUsersExpandedState.has(project._id)) {
     this.projectUsersExpandedState.set(project._id, false);
+>>>>>>> 2510ab8337b83e03442459df54cbdbcdcd3007a1
   }
-}
-  });
-}
-
-
 
   goToPage(page: number): void {
     this.currentPage = page;
@@ -158,6 +188,8 @@ loadAndFilterProjects(filterArchived: boolean) {
     } else {
       alert('Type non pris en charge');
     }
+<<<<<<< HEAD
+=======
   }
   
   // Propriété pour gérer l'affichage de la description complète
@@ -199,24 +231,51 @@ toggleUsersDisplay(event: Event, project: any) {
 getHiddenUsersCount(project: any): number {
   if (!project.usersID || !Array.isArray(project.usersID)) {
     return 0;
+>>>>>>> 2510ab8337b83e03442459df54cbdbcdcd3007a1
   }
-  
-  const totalUsers = project.usersID.length;
-  return Math.max(0, totalUsers - this.maxVisibleAvatars);
-}
 
-// Méthode pour obtenir les utilisateurs visibles
-getVisibleUsers(project: any): any[] {
-  if (!project.usersID || !Array.isArray(project.usersID)) {
-    return [];
+  toggleDescription(event: Event, project: any): void {
+    event.stopPropagation();
+    project.showFullDescription = !project.showFullDescription;
   }
-  
-  // Si la liste est développée, on retourne tous les utilisateurs
-  if (this.isUsersExpanded(project.id)) {
-    return project.usersID;
+
+  isUsersExpanded(projectId: string | undefined): boolean {
+    if (!projectId) return false;
+    return this.projectUsersExpandedState.get(projectId) || false;
   }
+
+  toggleUsersDisplay(event: Event, project: any): void {
+    event.stopPropagation();
+    const currentState = this.projectUsersExpandedState.get(project.id) || false;
+    this.projectUsersExpandedState.set(project.id, !currentState);
+  }
+
+  getHiddenUsersCount(project: any): number {
+    if (!project.usersID || !Array.isArray(project.usersID)) {
+      return 0;
+    }
+
+    const totalUsers = project.usersID.length;
+    return Math.max(0, totalUsers - this.maxVisibleAvatars);
+  }
+
+  getVisibleUsers(project: any): any[] {
+    if (!project.usersID || !Array.isArray(project.usersID)) {
+      return [];
+    }
+
+    if (this.isUsersExpanded(project.id)) {
+      return project.usersID;
+    }
+
+    return project.usersID.slice(0, this.maxVisibleAvatars);
+  }
+<<<<<<< HEAD
+}
+=======
   
   // Sinon, on limite au nombre maximal d'avatars visibles
   return project.usersID.slice(0, this.maxVisibleAvatars);
 }
 }
+>>>>>>> 2510ab8337b83e03442459df54cbdbcdcd3007a1
