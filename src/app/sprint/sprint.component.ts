@@ -228,6 +228,10 @@ export class SprintComponent implements OnInit {
             const createdSprint = Array.isArray(response) ? response[0] : response;
             this.sprintAdded.emit(createdSprint);
             this.close.emit();
+             const currentUrl = this.router.url;
+      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+        this.router.navigate([currentUrl]);
+      });
           },
           error: (error) => {
             console.error("Erreur lors de la création du sprint:", error);
