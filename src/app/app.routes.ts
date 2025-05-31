@@ -27,6 +27,8 @@ import { AskQuestionComponent } from './ask-question/ask-question.component';
 import { QuestionViewComponent } from './question-details/question-details.component';
 import { BacklogComponent } from './backlog/backlog.component';
 import { DetailsBacklogComponent } from './details-backlog/details-backlog.component';
+import { UserDetailsComponent } from './user-details/user-details.component';
+
 import { EditBacklogComponent } from './edit-backlog/edit-backlog.component';
 import { DetailSprintComponent } from './detail-sprint/detail-sprint.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
@@ -74,14 +76,14 @@ export const routes: Routes = [
   {
     path: 'task-details/:id',
     component: TaskDetailsComponent,
-    canActivate: [AuthGuard],
-    data: { roles: ['user', 'manager'] },
   },
   {
     path: 'tasks',
     component: TaskComponent,
-    canActivate: [AuthGuard],
-    data: { roles: ['user', 'manager'] },
+  },
+  {
+    path: 'task-details',
+    component: TaskDetailsComponent,
   },
   {
     path: 'project',
@@ -169,13 +171,74 @@ export const routes: Routes = [
   {
         path: 'backlogDtails/:id',
         component: DetailsBacklogComponent
-       },
+  },
+  { path: 'profile', component: UserDetailsComponent },
 
         {
         path: 'backlogUpdate/:id',
         component: EditBacklogComponent
        },
 
+  // Q&A routes
+  // {
+  //   path: 'questions',
+  //   children: [
+  //     { path: '', component: QuestionsListComponent },
+  //     { path: 'create', component: CreateQuestionComponent, canActivate: [AuthGuard], data: { roles: ['user', 'admin'] } },
+  //     { path: 'search', component: QuestionsListComponent },
+  //     { path: 'search/tags', component: QuestionsListComponent },
+  //     { path: 'search/advanced', component: QuestionsListComponent },
+  //     { path: 'frequent', component: QuestionsListComponent },
+  //     {
+  //       path: ':id',
+  //       component: QuestionDetailComponent,
+  //       children: [
+  //         { path: 'answers', component: QuestionDetailComponent },
+  //       ],
+  //     },
+  //   ],
+  // },
+
+  // Redirection fallback
+//   { path: '**', redirectTo: 'login' },
+// ];
+//       {
+//         path: '',
+//         component: QuestionsListComponent
+//       },
+//       {
+//         path: 'create',
+//         component: CreateQuestionComponent
+//       },
+//       {
+//         path: 'search',
+//         component: QuestionsListComponent
+//       },
+//       {
+//         path: 'search/tags',
+//         component: QuestionsListComponent
+//       },
+//       {
+//         path: 'search/advanced',
+//         component: QuestionsListComponent
+//       },
+//       {
+//         path: 'frequent',
+//         component: QuestionsListComponent
+//       },
+//       // {
+//       //   path: ':id',
+//       //   component: QuestionDetailComponent,
+//       //   children: [
+//       //     {
+//       //       path: 'answers',
+//       //       component: QuestionDetailComponent
+//       //     }
+//       //   ]
+//       // },
+      
+//     ]
+//   }
        {
         path: 'sprintDtails/:id',
         component: DetailSprintComponent
@@ -234,7 +297,7 @@ export const routes: Routes = [
     ],
   },
 ];
-=======
+
       // {
       //   path: ':id',
       //   component: QuestionDetailComponent,

@@ -126,4 +126,7 @@ export class LandingPageComponent {
     );
     this.currentSlide = Math.min(this.currentSlide, maxSlide);
   }
+  requestDemo() {
+    window.open('https://orkestra3.wordpress.com/', '_blank');
+  }
 }

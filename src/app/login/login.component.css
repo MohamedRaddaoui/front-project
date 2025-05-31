@@ -75,7 +75,7 @@
 }
 
 /* Petites formes décoratives */
-.illustration-section::before {
+/* .illustration-section::before {
   content: '';
   position: absolute;
   width: 20px;
@@ -95,7 +95,7 @@
 @keyframes floating-dots {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-10px); }
-}
+} */
 
 .illustration {
   position: relative;

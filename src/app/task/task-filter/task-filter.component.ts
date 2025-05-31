@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class TaskFilterComponent {
   @Input() users: any[] = [];
+  @Input() projects: any[] = [];
   @Input() statuses: string[] = ['To Do', 'In Progress', 'Done'];
   @Input() priorities: string[] = ['Low', 'Medium', 'High'];
   @Output() filterChange = new EventEmitter<any>();
@@ -18,6 +19,7 @@ export class TaskFilterComponent {
   isExpanded = false;
   filters = {
     assignedUser: '',
+    projectTitle: '',
     status: '',
     priority: '',
     dueDate: null as Date | null,
@@ -35,6 +37,7 @@ export class TaskFilterComponent {
   clearFilters() {
     this.filters = {
       assignedUser: '',
+      projectTitle: '',
       status: '',
       priority: '',
       dueDate: null,

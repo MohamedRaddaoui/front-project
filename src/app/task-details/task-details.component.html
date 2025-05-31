@@ -1,3 +1,5 @@
+<app-nav-bar></app-nav-bar>
+
 <div class="app-container">
     <div class="main-container">
         <app-side-bar></app-side-bar>
@@ -11,7 +13,7 @@
                                 <!-- Breadcrumb -->
                                 <div class="breadcrumb">
                                     <i class="fas fa-tasks"></i>
-                                    <a href="#">Tasks</a> / <span>{{ task.id || 'New Task' }}</span>
+                                    <a href="/tasks">Tasks</a> / <span>{{ idTask || 'New Task' }}</span>
                                 </div>
 
                                 <!-- Error Message -->
@@ -38,7 +40,7 @@
                                         </div>
                                     </div>
                                     <div class="action-buttons">
-                                        <button *ngIf="!isEditMode && !isCreateMode" 
+                                        <button *ngIf="!isEditMode && !isCreateMode && authService.canModifyTask(task.assignedUser)" 
                                                 class="btn btn-primary" 
                                                 (click)="onEdit()">
                                             <i class="fas fa-edit"></i>
@@ -46,11 +48,12 @@
                                         </button>
                                         <button *ngIf="isEditMode || isCreateMode" 
                                                 class="btn btn-primary" 
-                                                (click)="onSubmit()">
-                                            <i class="fas fa-save"></i>
-                                            Save
+                                                (click)="onSubmit()"
+                                                [disabled]="isTaskUpdating">
+                                            <i class="fas" [class.fa-spinner]="isTaskUpdating" [class.fa-spin]="isTaskUpdating" [class.fa-save]="!isTaskUpdating"></i>
+                                            {{ isTaskUpdating ? 'Saving...' : 'Save' }}
                                         </button>
-                                        <button *ngIf="isEditMode || !isCreateMode" 
+                                        <button *ngIf="(isEditMode || !isCreateMode) && authService.canModifyTask(task.assignedUser)" 
                                                 class="btn btn-danger" 
                                                 (click)="onDelete()">
                                             <i class="fas fa-trash"></i>
@@ -68,7 +71,7 @@
                                                 <button class="btn" 
                                                         *ngFor="let status of ['To Do', 'In Progress', 'Done']"
                                                         [class.active]="task.status === status"
-                                                        [disabled]="!isEditMode && !isCreateMode"
+                                                        [disabled]="(!isEditMode && !isCreateMode) || !authService.canEditTask(task.userId)"
                                                         (click)="task.status = status">
                                                     <i class="fas" 
                                                        [class.fa-clock]="status === 'To Do'"
@@ -89,7 +92,7 @@
                                             <input [(ngModel)]="task.tags" 
                                                    name="tags"
                                                    placeholder="Enter tags (comma separated)"
-                                                   [disabled]="!isEditMode && !isCreateMode"
+                                                   [disabled]="(!isEditMode && !isCreateMode) || !authService.canEditTask(task.userId)"
                                                    class="input-field" />
                                         </div>
 
@@ -100,10 +103,10 @@
                                             </label>
                                             <select [(ngModel)]="task.priority" 
                                                     name="priority"
-                                                    [disabled]="!isEditMode && !isCreateMode"
+                                                    [disabled]="(!isEditMode && !isCreateMode) || !authService.canEditTask(task.userId)"
                                                     class="select-field">
-                                        <option *ngFor="let p of priorities" [value]="p">{{ p }}</option>
-                                    </select>
+                                                <option *ngFor="let p of priorities" [value]="p">{{ p }}</option>
+                                            </select>
                                         </div>
 
                                         <div class="field-group">
@@ -113,7 +116,7 @@
                                             </label>
                                             <textarea [(ngModel)]="task.description" 
                                                       name="description"
-                                                      [disabled]="!isEditMode && !isCreateMode"
+                                                      [disabled]="(!isEditMode && !isCreateMode) || !authService.canEditTask(task.userId)"
                                                       rows="5"
                                                       placeholder="Enter task description"
                                                       class="textarea-field task-description"></textarea>
@@ -140,49 +143,7 @@
 
                                             <!-- Comments Tab -->
                                             <div *ngIf="activeTab === 'comments'" class="comments-container">
-                                                <div class="comments-list">
-                                                    <div *ngFor="let comment of task.comments" class="comment">
-                                                        <div class="comment-header">
-                                                            <div class="user-info">
-                                                                <img [src]="comment.user?.avatar" class="avatar" alt="User avatar"/>
-                                                                <span class="username">{{ comment.user?.firstname }} {{ comment.user?.lastname }}</span>
-                                                            </div>
-                                                            <div class="comment-metadata">
-                                                                <span class="comment-date">
-                                                                    <i class="far fa-clock"></i>
-                                                                    {{ comment.createdAt | date:'MMM d, y HH:mm' }}
-                                                                </span>
-                                                                <span class="sentiment-badge" [class]="comment.sentiment">
-                                                                    <i class="fas" 
-                                                                       [class.fa-smile]="comment.sentiment === 'positive'"
-                                                                       [class.fa-meh]="comment.sentiment === 'neutral'"
-                                                                       [class.fa-frown]="comment.sentiment === 'negative'">
-                                                                    </i>
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="comment-content">
-                                                            <p [class.flagged]="comment.isFlagged">{{ comment.text }}</p>
-                                                            <div *ngIf="comment.attachments?.length" class="attachments">
-                                                                <div *ngFor="let attachment of comment.attachments" class="attachment">
-                                                                    <i class="fas fa-file"></i>
-                                                                    <span class="filename">{{ attachment.filename }}</span>
-                                                                    <button class="btn-icon" 
-                                                                            (click)="deleteAttachment(comment._id, attachment._id)">
-                                                                        <i class="fas fa-times"></i>
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="comment-actions">
-                                                            <button (click)="deleteComment(comment._id)">
-                                                                <i class="fas fa-trash"></i>
-                                                                Delete
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
+                                                <!-- Add Comment Button -->
                                                 <div class="add-comment">
                                                     <button class="btn-add-comment" 
                                                             (click)="showCommentForm = true" 
@@ -196,7 +157,7 @@
                                                             <textarea [(ngModel)]="newComment.text" 
                                                                       name="commentText" 
                                                                       placeholder="Add a comment..."
-                                            required></textarea>
+                                                                      required></textarea>
                                                         </div>
                                                         <div class="form-actions">
                                                             <div class="file-upload">
@@ -225,13 +186,97 @@
                                                                 </button>
                                                                 <button type="submit" 
                                                                         class="btn-submit"
-                                                                        [disabled]="!newComment.text.trim()">
-                                                                    <i class="fas fa-paper-plane"></i>
-                                                                    Submit
+                                                                        [disabled]="!newComment.text.trim() || isCommentLoading">
+                                                                    <i class="fas" [class.fa-spinner]="isCommentLoading" [class.fa-spin]="isCommentLoading" [class.fa-paper-plane]="!isCommentLoading"></i>
+                                                                    {{ isCommentLoading ? 'Submitting...' : 'Submit' }}
                                                                 </button>
                                                             </div>
                                                         </div>
-                                    </form>
+                                                    </form>
+                                                </div>
+
+                                                <!-- Comments List -->
+                                                <div class="comments-list">
+                                                    <div *ngFor="let comment of task.comments" class="comment">
+                                                        <div class="comment-header">
+                                                            <div class="user-info">
+                                                                <div class="avatar">
+                                                                    {{ comment.user?.firstname?.[0] }}{{ comment.user?.lastname?.[0] }}
+                                                                </div>
+                                                                <span class="username">{{ comment.user?.firstname }} {{ comment.user?.lastname }}</span>
+                                                            </div>
+                                                            <div class="comment-metadata">
+                                                                <span class="comment-date">
+                                                                    <i class="far fa-clock"></i>
+                                                                    {{ comment.createdAt | date:'MMM d, y HH:mm' }}
+                                                                </span>
+                                                                <span class="sentiment-badge" [class]="comment.sentiment">
+                                                                    <i class="fas" 
+                                                                       [class.fa-smile]="comment.sentiment === 'positive'"
+                                                                       [class.fa-meh]="comment.sentiment === 'neutral'"
+                                                                       [class.fa-frown]="comment.sentiment === 'negative'">
+                                                                    </i>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="comment-content">
+                                                            <!-- Normal View -->
+                                                            <div *ngIf="editingComment?._id !== comment._id">
+                                                                <p [class.flagged]="comment.isFlagged">{{ comment.text }}</p>
+                                                                <div *ngIf="comment.attachments?.length" class="attachments">
+                                                                    <div *ngFor="let attachment of comment.attachments" class="attachment">
+                                                                        <i class="fas fa-file"></i>
+                                                                        <span class="filename">{{ attachment.filename }}</span>
+                                                                        <a [href]="getDownloadUrl(comment._id, attachment._id)" 
+                                                                           target="_blank" 
+                                                                           class="download-link">
+                                                                            <i class="fas fa-download"></i>
+                                                                        </a>
+                                                                        <button class="btn-icon" 
+                                                                                *ngIf="authService.canDeleteAttachment(comment.userId)"
+                                                                                (click)="deleteAttachment(comment._id, attachment._id)">
+                                                                            <i class="fas fa-times"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- Edit View -->
+                                                            <div *ngIf="editingComment?._id === comment._id" class="edit-comment-form">
+                                                                <textarea [(ngModel)]="editingComment.editText"
+                                                                          name="editText"
+                                                                          class="edit-textarea"
+                                                                          required></textarea>
+                                                                <div class="edit-actions">
+                                                                    <button type="button" 
+                                                                            class="btn-cancel" 
+                                                                            (click)="cancelEditComment()">
+                                                                        <i class="fas fa-times"></i>
+                                                                        Cancel
+                                                                    </button>
+                                                                    <button type="button" 
+                                                                            class="btn-submit"
+                                                                            (click)="updateComment(editingComment)"
+                                                                            [disabled]="!editingComment.editText.trim() || isCommentUpdating[editingComment._id]">
+                                                                        <i class="fas" [class.fa-spinner]="isCommentUpdating[editingComment._id]" [class.fa-spin]="isCommentUpdating[editingComment._id]" [class.fa-check]="!isCommentUpdating[editingComment._id]"></i>
+                                                                        {{ isCommentUpdating[editingComment._id] ? 'Saving...' : 'Save' }}
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="comment-actions">
+                                                            <button *ngIf="canEditComment(comment) && editingComment?._id !== comment._id"
+                                                                    (click)="startEditComment(comment)">
+                                                                <i class="fas fa-edit"></i>
+                                                                Edit
+                                                            </button>
+                                                            <button *ngIf="canEditComment(comment)"
+                                                                    (click)="deleteComment(comment._id)">
+                                                                <i class="fas fa-trash"></i>
+                                                                Delete
+                                                            </button>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -241,18 +286,23 @@
                                                     <div *ngFor="let entry of taskHistory" class="history-entry">
                                                         <div class="history-header">
                                                             <div class="user-info">
+                                                                <i class="fas fa-user-edit"></i>
                                                                 <span class="user-name">{{ entry.updatedBy.email }}</span>
                                                                 <span class="timestamp">{{ formatDate(entry.createdAt) }}</span>
                                                             </div>
                                                         </div>
                                                         <div class="changes">
-                                                            <div *ngFor="let field of entry.changes | keyvalue" class="change-item">
-                                                                <div class="field-name">{{ getFieldLabel(field.key) }}</div>
+                                                            <div *ngFor="let change of entry.changes | keyvalue" class="change-item">
+                                                                <div class="field-name">{{ getFieldLabel(change.key) }}</div>
                                                                 <div class="change-details">
                                                                     <div class="old-value">
-                                                                        <span class="value">{{ field.value.oldValue || 'Not set' }}</span>
-                                                                        <span class="arrow">→</span>
-                                                                        <span class="value new">{{ field.value.newValue }}</span>
+                                                                        <span class="label">Ancien :</span>
+                                                                        <span class="value">{{ formatValue(change.value.oldValue) }}</span>
+                                                                    </div>
+                                                                    <div class="arrow">→</div>
+                                                                    <div class="new-value">
+                                                                        <span class="label">Nouveau :</span>
+                                                                        <span class="value">{{ formatValue(change.value.newValue) }}</span>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -260,7 +310,8 @@
                                                     </div>
                                                     
                                                     <div *ngIf="taskHistory.length === 0" class="no-history">
-                                                        No changes have been recorded for this task.
+                                                        <i class="fas fa-history"></i>
+                                                        <p>Aucun historique disponible pour cette tâche.</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -297,7 +348,7 @@
                                                         required>
                                                     <option value="">Select a project</option>
                                                     <option *ngFor="let project of projects" [value]="project._id">
-                                                        {{ project.name }}
+                                                        {{ project.title }}
                                                     </option>
                                                 </select>
                                             </div>
@@ -359,6 +410,14 @@
                 Delete
             </button>
         </div>
+    </div>
+</div>
+
+<!-- Add a loading overlay for the entire task when updating -->
+<div class="loading-overlay" *ngIf="isTaskUpdating">
+    <div class="loading-spinner">
+        <i class="fas fa-spinner fa-spin"></i>
+        <span>Updating task...</span>
     </div>
 </div>
 
