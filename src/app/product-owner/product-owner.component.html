@@ -178,7 +178,7 @@
                     <h3>{{ sprint.title }}</h3>
                     <div class="backlog-actions">
                       <!-- <i class="fas fa-edit" title="Modifier le sprint"></i> -->
-                      <i class="fas fa-trash-alt" title="Supprimer le sprint"></i>
+                      <i class="fas fa-trash-alt" title="Supprimer le sprint" (click)="openPopup(sprint._id!)"></i>
                       <i class="fas fa-eye" title="Voir détail" [routerLink]="['/sprintDtails', sprint._id]"></i>
                     </div>
                   </div>
@@ -246,5 +246,16 @@
   [confirmLabel]="'Oui, Supprimer'" 
   [cancelLabel]="'Annuler'" 
   (onConfirm)="confirmDelete()"
+  (onCancel)="cancelDelete()">
+</app-delete-project>
+
+
+<app-delete-project
+  [visible]="popupVisible"
+  [title]="'Supprimer le sprint?'" 
+  [message]="'Êtes-vous sûr de vouloir supprimer ce sprint et toutes ses User Stories associées ? Cette action est irréversible.'" 
+  [confirmLabel]="'Oui, Supprimer'" 
+  [cancelLabel]="'Annuler'" 
+  (onConfirm)="confirmDeleteSprint()"
   (onCancel)="cancelDelete()">
 </app-delete-project>

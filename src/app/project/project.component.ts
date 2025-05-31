@@ -7,7 +7,7 @@ import { Project } from '../models/project.model';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
 import { TokenService } from '../services/token.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
-
+ 
 @Component({
   selector: 'app-project',
   standalone: true,
@@ -15,36 +15,19 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   templateUrl: './project.component.html',
   styleUrls: ['./project.component.css']
 })
-<<<<<<< HEAD
-export class ProjectComponent implements OnInit {
-  successMessage: string | null = null;
-  token: string | null = null;
-  userId: string = '';
-  role: string = '';
-  listProject: Project[] = [];
-  paginatedProjects: Project[] = [];
-  projectsPerPage = 6;
-  currentPage = 1;
-  totalPages = 1;
-  totalPagesArray: number[] = [];
-  maxVisibleAvatars = 3;
-  projectUsersExpandedState = new Map<string, boolean>();
-
-=======
 export class ProjectComponent {
   successMessage: string | null = null; // ✅ Ajoute cette ligne
     token:string |null;
   userId:string="";
->>>>>>> 2510ab8337b83e03442459df54cbdbcdcd3007a1
   private jwtHelper = new JwtHelperService();
-
+ 
   constructor(private projectService: ProjectService, private router:Router, private route :ActivatedRoute,private tokenService:TokenService) {
-
+ 
      this.token = this.tokenService.getToken();
       if (this.token) {
         const decodedToken = this.jwtHelper.decodeToken(this.token);
         this.userId = decodedToken.userId;
-
+ 
     this.route.queryParams.subscribe(params => {
       this.successMessage = params['message'] || null;
       if (this.successMessage) {
@@ -55,11 +38,11 @@ export class ProjectComponent {
     });
   }}
   listProject: Project[]=[]
-
+ 
   //extraire le date d'un date de type iso
   formatDate(isoDate: String | undefined): string {
     if (!isoDate) return 'Date invalide';
-
+ 
     const date = new Date(isoDate.toString()); // <- conversion explicite
     return date.toLocaleDateString('fr-FR', {
       day: '2-digit',
@@ -67,13 +50,13 @@ export class ProjectComponent {
       year: 'numeric',
     });
   }
-
+ 
   projectsPerPage = 6; // 2 rows × 3 columns
   currentPage = 1;
   paginatedProjects: Project[] = [];
   totalPages = 1;
   totalPagesArray: number[] = [];
-
+ 
   ngOnInit() {
   this.route.queryParams.subscribe(params => {
     this.successMessage = params["message"] || null;
@@ -81,7 +64,7 @@ export class ProjectComponent {
     const filterArchived = params["archived"] === "true";
     // Load and filter projects based on the status
     this.loadAndFilterProjects(filterArchived);
-
+ 
     // Handle success message display
     if (this.successMessage) {
       setTimeout(() => {
@@ -90,7 +73,7 @@ export class ProjectComponent {
     }
   });
 }
-
+ 
 // Load and filter projects based on archived status
 loadAndFilterProjects(filterArchived: boolean) {
   if (!this.userId) {
@@ -98,31 +81,14 @@ loadAndFilterProjects(filterArchived: boolean) {
     // Optionally handle this case, e.g., redirect to login or show an error
     return;
   }
-<<<<<<< HEAD
-
-  updatePaginatedProjects(): void {
-    const start = (this.currentPage - 1) * this.projectsPerPage;
-    const end = start + this.projectsPerPage;
-    this.paginatedProjects = this.listProject.slice(start, end);
-
-    this.paginatedProjects.forEach(project => {
-      project.showFullDescription = false;
-
-      if (project.id !== undefined && project.id !== null) {
-        if (!this.projectUsersExpandedState.has(project.id)) {
-          this.projectUsersExpandedState.set(project.id, false);
-        }
-      }
-    });
-=======
   this.projectService.getProjectByUser(this.userId).subscribe({
     next: (projects: Project[]) => {
       // Filter the projects based on the archived status
       // Assumes projects without an "archived" property are not archived (false)
       this.listProject = projects.filter(project => (project.archived || false) === filterArchived);
-
+ 
       console.log(`Loaded ${filterArchived ? "archived" : "active"} projects:`, this.listProject);
-
+ 
       // Update pagination based on the filtered list
       this.totalPages = Math.ceil(this.listProject.length / this.projectsPerPage);
       this.totalPagesArray = Array.from({ length: this.totalPages }, (_, i) => i + 1);
@@ -140,45 +106,49 @@ loadAndFilterProjects(filterArchived: boolean) {
     }
   });
 }
-
-
+ 
+ 
  updatePaginatedProjects() {
   const start = (this.currentPage - 1) * this.projectsPerPage;
   const end = start + this.projectsPerPage;
   this.paginatedProjects = this.listProject.slice(start, end);
-  
+ 
   // Initialiser la propriété showFullDescription pour chaque projet
   this.paginatedProjects.forEach(project => {
     project.showFullDescription = false;
-    
+   
     // Initialiser l'état pour l'affichage des utilisateurs
     if (project._id !== undefined && project._id !== null) {
   if (!this.projectUsersExpandedState.has(project._id)) {
     this.projectUsersExpandedState.set(project._id, false);
->>>>>>> 2510ab8337b83e03442459df54cbdbcdcd3007a1
   }
-
+}
+  });
+}
+ 
+ 
+ 
   goToPage(page: number): void {
     this.currentPage = page;
     this.updatePaginatedProjects();
   }
-
+ 
   nextPage(): void {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
       this.updatePaginatedProjects();
     }
   }
-
+ 
   prevPage(): void {
     if (this.currentPage > 1) {
       this.currentPage--;
       this.updatePaginatedProjects();
     }
   }
-
  
-
+ 
+ 
   onProjectClick(project: Project): void {
     console.log('Projet cliqué:', project);
     if (project.type === 'Scrum') {
@@ -188,94 +158,65 @@ loadAndFilterProjects(filterArchived: boolean) {
     } else {
       alert('Type non pris en charge');
     }
-<<<<<<< HEAD
-=======
   }
-  
+ 
   // Propriété pour gérer l'affichage de la description complète
-
+ 
 // Méthode pour basculer l'affichage de la description complète
 toggleDescription(event: Event, project: any) {
   // Empêcher la propagation du clic pour éviter d'autres actions
   event.stopPropagation();
-  
+ 
   // Inverser l'état d'affichage de la description complète pour ce projet uniquement
   project.showFullDescription = !project.showFullDescription;
 }
-
+ 
 // Nombre maximum d'avatars à afficher avant le badge "+"
 maxVisibleAvatars = 3;
-
+ 
 // Map pour stocker l'état d'affichage des utilisateurs par projet
 projectUsersExpandedState = new Map<string, boolean>();
-
+ 
 // Méthode pour vérifier si la liste complète des utilisateurs est affichée
 // Méthode pour vérifier si la liste complète des utilisateurs est affichée
 isUsersExpanded(projectId: string | undefined): boolean {
   if (!projectId) return false;
   return this.projectUsersExpandedState.get(projectId) || false;
 }
-
-
+ 
+ 
 // Méthode pour basculer l'affichage complet des utilisateurs
 toggleUsersDisplay(event: Event, project: any) {
   // Empêcher la propagation du clic
   event.stopPropagation();
-  
+ 
   // Inverser l'état d'affichage des utilisateurs pour ce projet uniquement
   const currentState = this.projectUsersExpandedState.get(project.id) || false;
   this.projectUsersExpandedState.set(project.id, !currentState);
 }
-
+ 
 // Méthode pour obtenir le nombre d'utilisateurs supplémentaires (non affichés)
 getHiddenUsersCount(project: any): number {
   if (!project.usersID || !Array.isArray(project.usersID)) {
     return 0;
->>>>>>> 2510ab8337b83e03442459df54cbdbcdcd3007a1
   }
-
-  toggleDescription(event: Event, project: any): void {
-    event.stopPropagation();
-    project.showFullDescription = !project.showFullDescription;
-  }
-
-  isUsersExpanded(projectId: string | undefined): boolean {
-    if (!projectId) return false;
-    return this.projectUsersExpandedState.get(projectId) || false;
-  }
-
-  toggleUsersDisplay(event: Event, project: any): void {
-    event.stopPropagation();
-    const currentState = this.projectUsersExpandedState.get(project.id) || false;
-    this.projectUsersExpandedState.set(project.id, !currentState);
-  }
-
-  getHiddenUsersCount(project: any): number {
-    if (!project.usersID || !Array.isArray(project.usersID)) {
-      return 0;
-    }
-
-    const totalUsers = project.usersID.length;
-    return Math.max(0, totalUsers - this.maxVisibleAvatars);
-  }
-
-  getVisibleUsers(project: any): any[] {
-    if (!project.usersID || !Array.isArray(project.usersID)) {
-      return [];
-    }
-
-    if (this.isUsersExpanded(project.id)) {
-      return project.usersID;
-    }
-
-    return project.usersID.slice(0, this.maxVisibleAvatars);
-  }
-<<<<<<< HEAD
+ 
+  const totalUsers = project.usersID.length;
+  return Math.max(0, totalUsers - this.maxVisibleAvatars);
 }
-=======
-  
+ 
+// Méthode pour obtenir les utilisateurs visibles
+getVisibleUsers(project: any): any[] {
+  if (!project.usersID || !Array.isArray(project.usersID)) {
+    return [];
+  }
+ 
+  // Si la liste est développée, on retourne tous les utilisateurs
+  if (this.isUsersExpanded(project.id)) {
+    return project.usersID;
+  }
+ 
   // Sinon, on limite au nombre maximal d'avatars visibles
   return project.usersID.slice(0, this.maxVisibleAvatars);
 }
 }
->>>>>>> 2510ab8337b83e03442459df54cbdbcdcd3007a1

@@ -95,12 +95,9 @@ export class SideBarComponent implements OnInit {
     this.router.navigate(['/login']);
   }
 
-   isDropdownOpen = false;
+isDropdownOpen = false;
 
   toggleDropdown(): void {
     this.isDropdownOpen = !this.isDropdownOpen;
-  }
-
- 
- 
-}
+  }}
+  

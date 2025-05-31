@@ -30,7 +30,17 @@ export class TokenService {
     return token ? !this.jwtHelper.isTokenExpired(token) : false;
   }
 
-  setToken(token: string): void {    localStorage.setItem('token', token);  }  getToken(): string | null {    return localStorage.getItem('token');  }  removeToken(): void {    localStorage.removeItem('token');  }
+  setToken(token: string): void {
+    localStorage.setItem('token', token);
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+
+  removeToken(): void {
+    localStorage.removeItem('token');
+  }
 
   decodeToken(): any | null {
     const token = this.getToken();

@@ -22,14 +22,14 @@
 
 /* Navbar */
 .navbar {
-  background: #ffffff;
-  color: #007bff;
-  padding: 16px 0;
-  position: sticky;
+  position: fixed;
   top: 0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  left: 0;
+  right: 0;
   z-index: 1000;
-  transition: box-shadow 0.3s ease;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  height: 70px;
 }
 
 .navbar.scrolled {
@@ -40,12 +40,17 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
 }
 
 .navbar-brand {
   display: flex;
   align-items: center;
   gap: 12px;
+  margin-right: auto; /* Push everything else to the right */
 }
 
 .logo {
@@ -61,8 +66,8 @@
 
 .navbar-links {
   display: flex;
-  align-items: center;
-  gap: 16px;
+  gap: 24px;
+  margin: 0 48px; /* Add margin on both sides of the links */
 }
 
 .nav-link {
@@ -82,7 +87,8 @@
 
 .navbar-auth {
   display: flex;
-  gap: 12px;
+  gap: 16px;
+  margin-left: auto; /* Push auth buttons to the far right */
 }
 
 .navbar-auth .mat-stroked-button {
