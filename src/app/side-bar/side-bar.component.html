@@ -2,157 +2,28 @@
   <nav class="sidebar-nav">
     <ul class="nav-list">
 
-      <!-- Dashboard -->
-
-      <!-- <li class="nav-item" *ngIf="role === 'user'">
-  <a class="nav-link" [routerLink]="'/event-dashboard'">
-    <div class="icon-container">
-      <div class="icon project-icon"></div>
-    </div>
-    <span class="link-text">Dashboard</span>
-  </a>
-</li> -->
-
-<!-- Dashboard for admin -->
-<!-- <li class="nav-item" *ngIf="role === 'admin'">
-  <a class="nav-link" [routerLink]="'/user-dashboard'">
-    <div class="icon-container">
-      <div class="icon project-icon"></div>
-    </div>
-    <span class="link-text">Dashboard</span>
-  </a>
-</li> -->
-
-    <!-- Dashboard -->
-      <li class="nav-item">
-        <a href="" class="nav-link">
-          <div class="icon-container">
-            <div class="icon dashboard-icon"></div>
-          </div>
-          <span class="link-text">Dashboard</span>
-        </a>
-      </li>
-      <!-- Project avec liste déroulante -->
-
-<!--      <li class="nav-item has-dropdown">
-  <div class="nav-link dropdown-toggle" (click)="toggleDropdown()">  -->
-    <div class="icon-container">
-      <div class="icon project-icon"></div>
-    </div>
-    <span class="link-text">Dashboard</span>
-  </a>
-</li>
-
-<!-- Dashboard for admin -->
-<li class="nav-item" *ngIf="role === 'admin'">
-  <a class="nav-link" [routerLink]="'/user-dashboard'">
-    <div class="icon-container">
-      <div class="icon project-icon"></div>
-    </div>
-    <span class="link-text">Espace-Admin</span>
-  </a>
-</li>
-
-
-      <!-- Project Dropdown -->
-     <!-- Project avec liste déroulante -->
-     <li class="nav-item has-dropdown">
-  <div class="nav-link dropdown-toggle" (click)="toggleDropdown()">
-    <div class="icon-container">
-      <div class="icon project-icon" routerLink="/add"></div>
-    </div>
-    <span class="link-text" >Project</span>
-    <span class="arrow" [class.rotated]="isDropdownOpen">&#9662;</span>
-  </div>
-   <ul class="dropdown-menu" [class.show]="isDropdownOpen">
-    <div class="dropdown-item">
-      <a routerLink="/project" [queryParams]="{ archived: false }" class="nav-link">
-        <div class="icon-container">
-          <i class="fas fa-list-alt"></i>
-        </div>
-        <span class="link-text">Active Projects</span>
-      </a>
-    </div>
-    <div class="dropdown-item">
-      <a routerLink="/project" [queryParams]="{ archived: true }" class="nav-link">
-        <div class="icon-container">
-          <i class="fas fa-archive"></i>
-        </div>
-        <span class="link-text">Archived Projects</span>
-      </a>
-    </div>
-  </ul>
-</li>
-
-      <!-- Tasks -->
-      <li class="nav-item">
-        <a routerLink="/tasks" class="nav-link">
-          <div class="icon-container">
-            <div class="icon tasks-icon"></div>
-          </div>
-          <span class="link-text">Tasks</span>
-        </a>
-
-      </li>     
-       <!-- Q&A -->
-       <li class="nav-item">
-          <a routerLink="/forum" class="nav-link">
-            <div class="icon-container">
-              <div class="icon qa-icon"></div>
-            </div>
-            <span class="link-text">Q&A</span>
-          </a>
-        </li>
-
-      <!-- Settings -->
-      <li class="nav-item">
-        <a routerLink="/questions" class="nav-link">
-          <div class="icon-container">
-            <div class="icon qa-icon"></div>
-          </div>
-          <span class="link-text">Q&A</span>
-        </a>
-      </li>
-
-      <aside class="sidebar" *ngIf="isRoleLoaded"> 
-  <nav class="sidebar-nav">
-    <ul class="nav-list">
-
-      <!-- Dashboard -->
-
+      <!-- Dashboard for user -->
       <li class="nav-item" *ngIf="role === 'user'">
-  <a class="nav-link" [routerLink]="'/event-dashboard'">
-<!-- 
-      <li class="nav-item">
-        <a href="" class="nav-link">
+        <a class="nav-link" [routerLink]="'/event-dashboard'">
           <div class="icon-container">
             <div class="icon dashboard-icon"></div>
           </div>
           <span class="link-text">Dashboard</span>
         </a>
       </li>
-      <!-- Project avec liste déroulante -->
-<!--      <li class="nav-item has-dropdown">
-  <div class="nav-link dropdown-toggle" (click)="toggleDropdown()">  -->
-    <div class="icon-container">
-      <div class="icon project-icon"></div>
-    </div>
-    <span class="link-text">Dashboard</span>
-  </a>
-</li>
 
-<!-- Dashboard for admin -->
-<li class="nav-item" *ngIf="role === 'admin'">
-  <a class="nav-link" [routerLink]="'/user-dashboard'">
-    <div class="icon-container">
-      <div class="icon project-icon"></div>
-    </div>
-    <span class="link-text">Espace-Admin</span>
-  </a>
-</li>
+      <!-- Dashboard for admin -->
+      <li class="nav-item" *ngIf="role === 'admin'">
+        <a class="nav-link" [routerLink]="'/user-dashboard'">
+          <div class="icon-container">
+            <div class="icon dashboard-icon"></div>
+          </div>
+          <span class="link-text">Espace-Admin</span>
+        </a>
+      </li>
 
       <!-- Project Dropdown -->
-      <li class="nav-item has-dropdown project">
+      <li class="nav-item has-dropdown">
         <div class="nav-link dropdown-toggle" (click)="toggleProjectDropdown()">
           <div class="icon-container">
             <div class="icon project-icon"></div>
@@ -189,61 +60,56 @@
           <span class="link-text">Tasks</span>
         </a>
       </li>     
-       <!-- Q&A -->
 
-      </li>      <!-- Q&A -->
-
-       <li class="nav-item">
-          <a routerLink="/forum" class="nav-link">
-            <div class="icon-container">
-              <div class="icon qa-icon"></div>
-            </div>
-            <span class="link-text">Q&A</span>
-          </a>
-        </li>
-
+      <!-- Q&A -->
+      <li class="nav-item">
+        <a routerLink="/forum" class="nav-link">
+          <div class="icon-container">
+            <div class="icon qa-icon"></div>
+          </div>
+          <span class="link-text">Q&A</span>
+        </a>
+      </li>
 
       <!-- Settings Dropdown -->
-<li class="nav-item has-dropdown settings">
-  <div class="nav-link dropdown-toggle" (click)="toggleSettingsDropdown()">
-    <div class="icon-container">
-      <div class="icon settings-icon"></div>
-    </div>
-    <span class="link-text">Settings</span>
-    <span class="arrow" [class.rotated]="isSettingsDropdownOpen">&#9662;</span>
-  </div>
-  <ul class="dropdown-menu" [class.show]="isSettingsDropdownOpen">
-    <!-- Language Settings -->
-    <li class="dropdown-item">
-      <a routerLink="/language" class="nav-link">
-        <div class="icon-container">
-          <i class="fas fa-language"></i>
+      <li class="nav-item has-dropdown settings">
+        <div class="nav-link dropdown-toggle" (click)="toggleSettingsDropdown()">
+          <div class="icon-container">
+            <div class="icon settings-icon"></div>
+          </div>
+          <span class="link-text">Settings</span>
+          <span class="arrow" [class.rotated]="isSettingsDropdownOpen">&#9662;</span>
         </div>
-        <span class="link-text">Language</span>
-      </a>
-    </li>
-    <!-- Dark/Light Mode Toggle -->
-    <li class="dropdown-item">
-      <a class="nav-link" (click)="toggleTheme()">
-        <div class="icon-container">
-          <i class="fas fa-moon" *ngIf="!isDarkMode"></i>
-          <i class="fas fa-sun" *ngIf="isDarkMode"></i>
-        </div>
-        <span class="link-text">{{ isDarkMode ? 'Mode Clair' : 'Mode Sombre' }}</span>
-      </a>
-    </li>
-  </ul>
-</li>
+        <ul class="dropdown-menu" [class.show]="isSettingsDropdownOpen">
+          <li class="dropdown-item">
+            <a routerLink="/language" class="nav-link">
+              <div class="icon-container">
+                <i class="fas fa-language"></i>
+              </div>
+              <span class="link-text">Language</span>
+            </a>
+          </li>
+          <li class="dropdown-item">
+            <a class="nav-link" (click)="toggleTheme()">
+              <div class="icon-container">
+                <i class="fas fa-moon" *ngIf="!isDarkMode"></i>
+                <i class="fas fa-sun" *ngIf="isDarkMode"></i>
+              </div>
+              <span class="link-text">{{ isDarkMode ? 'Mode Clair' : 'Mode Sombre' }}</span>
+            </a>
+          </li>
+        </ul>
+      </li>
 
-<!-- Espace-Admin en dehors, juste en dessous -->
-<li class="nav-item" *ngIf="isAdmin">
-  <a routerLink="/statistiques" class="nav-link">
-    <div class="icon-container">
-      <div class="icon admin-icon"></div>
-    </div>
-    <span class="link-text">Dashboard</span>
-  </a>
-</li>
+      <!-- Statistiques for admin -->
+      <li class="nav-item" *ngIf="isAdmin">
+        <a routerLink="/statistiques" class="nav-link">
+          <div class="icon-container">
+            <div class="icon admin-icon"></div>
+          </div>
+          <span class="link-text">Statistiques</span>
+        </a>
+      </li>
 
       <!-- Logout -->
       <li class="nav-item">
